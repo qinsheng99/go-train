@@ -1,8 +1,8 @@
 package customer
 
 import (
-	drequest "gin/api/entity/drainage/request"
-	"gin/internal/model"
+	drequest "github.com/qinsheng99/goWeb/api/entity/drainage/request"
+	"github.com/qinsheng99/goWeb/internal/model"
 
 	"gorm.io/gorm"
 )

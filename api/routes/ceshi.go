@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"gin/api"
-	"gin/api/handel/ceshi"
-	"gin/api/middleware"
+	"github.com/qinsheng99/goWeb/api"
+	"github.com/qinsheng99/goWeb/api/handel/ceshi"
+	"github.com/qinsheng99/goWeb/api/middleware"
 
 	"github.com/gin-gonic/gin"
 )

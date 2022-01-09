@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"gin/api"
+	"github.com/qinsheng99/goWeb/api"
 
 	"github.com/gin-gonic/gin"
 )

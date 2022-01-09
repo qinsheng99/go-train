@@ -1,8 +1,9 @@
 package funcTest
 
 import (
-	"gin/internal/model"
 	"strconv"
+
+	"github.com/qinsheng99/goWeb/internal/model"
 )
 
 func IntSliceToInf(s []int) []interface{} {

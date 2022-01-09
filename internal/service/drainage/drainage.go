@@ -1,12 +1,13 @@
 package drainage
 
 import (
-	drequest "gin/api/entity/drainage/request"
-	"gin/api/entity/drainage/response"
-	"gin/internal/dao/idao/customer"
-	"gin/internal/model"
-	"gin/library/funcTest"
 	"strings"
+
+	drequest "github.com/qinsheng99/goWeb/api/entity/drainage/request"
+	"github.com/qinsheng99/goWeb/api/entity/drainage/response"
+	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
+	"github.com/qinsheng99/goWeb/internal/model"
+	"github.com/qinsheng99/goWeb/library/funcTest"
 )
 
 type Drainage interface {

@@ -2,13 +2,14 @@ package customer
 
 import (
 	"fmt"
-	drequest "gin/api/entity/drainage/request"
-	"gin/internal/dao/idao"
-	"gin/internal/dao/idao/customer"
-	"gin/internal/model"
-	"gin/library/db"
-	"gin/library/funcTest"
 	"time"
+
+	drequest "github.com/qinsheng99/goWeb/api/entity/drainage/request"
+	"github.com/qinsheng99/goWeb/internal/dao/idao"
+	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
+	"github.com/qinsheng99/goWeb/internal/model"
+	"github.com/qinsheng99/goWeb/library/db"
+	"github.com/qinsheng99/goWeb/library/funcTest"
 
 	"gorm.io/gorm"
 )

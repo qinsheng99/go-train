@@ -1,14 +1,15 @@
 package redis
 
 import (
-	"gin/api/entity/redis/request"
-	"gin/api/tools/common"
-	"gin/internal/service/ceshi"
-	"gin/library/funcTest"
-	"gin/library/redisClient"
-	timeFun "gin/library/time"
 	"strconv"
 	"time"
+
+	"github.com/qinsheng99/goWeb/api/entity/redis/request"
+	"github.com/qinsheng99/goWeb/api/tools/common"
+	"github.com/qinsheng99/goWeb/internal/service/ceshi"
+	"github.com/qinsheng99/goWeb/library/funcTest"
+	"github.com/qinsheng99/goWeb/library/redisClient"
+	timeFun "github.com/qinsheng99/goWeb/library/time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"

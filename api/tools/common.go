@@ -1,7 +1,7 @@
 package tools
 
 // import (
-// 	"gin/err"
+// 	"github.com/qinsheng99/goWeb/err"
 // 	"net/http"
 //
 // 	"github.com/gin-gonic/gin"

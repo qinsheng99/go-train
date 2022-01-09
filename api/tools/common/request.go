@@ -1,10 +1,11 @@
 package common
 
 import (
-	"gin/api/errno"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/qinsheng99/goWeb/api/errno"
 
 	"github.com/gin-gonic/gin"
 )

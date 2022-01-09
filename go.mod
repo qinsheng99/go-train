@@ -1,4 +1,4 @@
-module gin
+module github.com/qinsheng99/goWeb
 
 go 1.16
 

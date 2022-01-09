@@ -1,12 +1,13 @@
 package mysql
 
 import (
-	"gin/api/tools/common"
-	"gin/internal/dao/idao/customer"
-	"gin/internal/model"
-	"gin/library/pool"
 	"strconv"
 	"time"
+
+	"github.com/qinsheng99/goWeb/api/tools/common"
+	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
+	"github.com/qinsheng99/goWeb/internal/model"
+	"github.com/qinsheng99/goWeb/library/pool"
 
 	"github.com/gin-gonic/gin"
 )

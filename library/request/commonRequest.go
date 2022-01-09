@@ -3,10 +3,11 @@ package httprequest
 import (
 	"bytes"
 	"errors"
-	"gin/library/try"
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/qinsheng99/goWeb/library/try"
 )
 
 var (

@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"gin/api"
-	"gin/api/handel/mysql"
-	"gin/api/middleware"
+	"github.com/qinsheng99/goWeb/api"
+	"github.com/qinsheng99/goWeb/api/handel/mysql"
+	"github.com/qinsheng99/goWeb/api/middleware"
 
 	"github.com/gin-gonic/gin"
 )

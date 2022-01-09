@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gin/api/entity/ceshi/request"
-	crequest "gin/api/entity/ceshi/request"
-	"gin/api/entity/ceshi/response"
-	Err "gin/err"
-	"gin/internal/dao/idao"
-	"gin/internal/model"
-	"gin/library/elasticsearch"
 	"strconv"
+
+	"github.com/qinsheng99/goWeb/api/entity/ceshi/request"
+	crequest "github.com/qinsheng99/goWeb/api/entity/ceshi/request"
+	"github.com/qinsheng99/goWeb/api/entity/ceshi/response"
+	Err "github.com/qinsheng99/goWeb/err"
+	"github.com/qinsheng99/goWeb/internal/dao/idao"
+	"github.com/qinsheng99/goWeb/internal/model"
+	"github.com/qinsheng99/goWeb/library/elasticsearch"
 
 	"github.com/olivere/elastic/v7"
 )

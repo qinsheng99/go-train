@@ -5,17 +5,17 @@
 package api
 
 import (
-	"gin/api/handel/ceshi"
-	"gin/api/handel/mysql"
-	"gin/api/handel/redis"
-	"gin/internal/dao/persistence"
-	"gin/internal/dao/persistence/customer"
-	ceshi2 "gin/internal/service/ceshi"
-	"gin/internal/service/drainage"
-	ServiceMysql "gin/internal/service/mysql"
-	"gin/library/db"
-	"gin/library/elasticsearch"
-	"gin/library/redisClient"
+	"github.com/qinsheng99/goWeb/api/handel/ceshi"
+	"github.com/qinsheng99/goWeb/api/handel/mysql"
+	"github.com/qinsheng99/goWeb/api/handel/redis"
+	"github.com/qinsheng99/goWeb/internal/dao/persistence"
+	"github.com/qinsheng99/goWeb/internal/dao/persistence/customer"
+	ceshi2 "github.com/qinsheng99/goWeb/internal/service/ceshi"
+	"github.com/qinsheng99/goWeb/internal/service/drainage"
+	ServiceMysql "github.com/qinsheng99/goWeb/internal/service/mysql"
+	"github.com/qinsheng99/goWeb/library/db"
+	"github.com/qinsheng99/goWeb/library/elasticsearch"
+	"github.com/qinsheng99/goWeb/library/redisClient"
 )
 
 func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis) (*Entry, error) {

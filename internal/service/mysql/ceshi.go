@@ -1,9 +1,9 @@
 package ServiceMysql
 
 import (
-	"gin/internal/dao/idao/customer"
-	"gin/internal/model"
-	"gin/library/db"
+	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
+	"github.com/qinsheng99/goWeb/internal/model"
+	"github.com/qinsheng99/goWeb/library/db"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

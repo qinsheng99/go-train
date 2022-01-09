@@ -1,8 +1,8 @@
 package internal
 
 import (
-	"gin/internal/dao"
-	"gin/internal/service"
+	"github.com/qinsheng99/goWeb/internal/dao"
+	"github.com/qinsheng99/goWeb/internal/service"
 
 	"github.com/google/wire"
 )

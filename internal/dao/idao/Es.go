@@ -1,11 +1,11 @@
 package idao
 
 import (
-	"gin/api/entity/ceshi/request"
-	crequest "gin/api/entity/ceshi/request"
-	"gin/api/entity/ceshi/response"
-	"gin/internal/model"
-	"gin/library/funcTest"
+	"github.com/qinsheng99/goWeb/api/entity/ceshi/request"
+	crequest "github.com/qinsheng99/goWeb/api/entity/ceshi/request"
+	"github.com/qinsheng99/goWeb/api/entity/ceshi/response"
+	"github.com/qinsheng99/goWeb/internal/model"
+	"github.com/qinsheng99/goWeb/library/funcTest"
 
 	"github.com/olivere/elastic/v7"
 )

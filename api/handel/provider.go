@@ -1,8 +1,8 @@
 package handel
 
 import (
-	"gin/api/handel/ceshi"
-	"gin/api/handel/redis"
+	"github.com/qinsheng99/goWeb/api/handel/ceshi"
+	"github.com/qinsheng99/goWeb/api/handel/redis"
 
 	"github.com/google/wire"
 )

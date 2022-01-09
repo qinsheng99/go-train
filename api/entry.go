@@ -1,9 +1,9 @@
 package api
 
 import (
-	"gin/api/handel/ceshi"
-	"gin/api/handel/mysql"
-	"gin/api/handel/redis"
+	"github.com/qinsheng99/goWeb/api/handel/ceshi"
+	"github.com/qinsheng99/goWeb/api/handel/mysql"
+	"github.com/qinsheng99/goWeb/api/handel/redis"
 )
 
 type Entry struct {

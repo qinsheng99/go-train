@@ -2,11 +2,12 @@ package funcTest
 
 import (
 	"context"
-	"gin/api/entity/grpc/response"
 	"io"
 	"log"
 	"sync"
 	"time"
+
+	"github.com/qinsheng99/goWeb/api/entity/grpc/response"
 
 	"github.com/gin-gonic/gin"
 	pb "github.com/qinsheng99/example/grpc-example/route"

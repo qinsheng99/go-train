@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"gin/api"
-	"gin/api/routes"
-	"gin/library/db"
-	"gin/library/elasticsearch"
-	"gin/library/redisClient"
+
+	"github.com/qinsheng99/goWeb/api"
+	"github.com/qinsheng99/goWeb/api/routes"
+	"github.com/qinsheng99/goWeb/library/db"
+	"github.com/qinsheng99/goWeb/library/elasticsearch"
+	"github.com/qinsheng99/goWeb/library/redisClient"
 
 	"github.com/gin-gonic/gin"
 )

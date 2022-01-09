@@ -3,11 +3,11 @@
 package api
 
 import (
-	"gin/api/handel"
-	"gin/internal"
-	"gin/library/db"
-	"gin/library/elasticsearch"
-	"gin/library/redisClient"
+	"github.com/qinsheng99/goWeb/api/handel"
+	"github.com/qinsheng99/goWeb/internal"
+	"github.com/qinsheng99/goWeb/library/db"
+	"github.com/qinsheng99/goWeb/library/elasticsearch"
+	"github.com/qinsheng99/goWeb/library/redisClient"
 
 	"github.com/google/wire"
 )

@@ -1,8 +1,8 @@
 package service
 
 import (
-	"gin/internal/service/drainage"
-	ServiceMysql "gin/internal/service/mysql"
+	"github.com/qinsheng99/goWeb/internal/service/drainage"
+	ServiceMysql "github.com/qinsheng99/goWeb/internal/service/mysql"
 
 	"github.com/google/wire"
 )
