@@ -3,8 +3,8 @@ package ceshi
 import (
 	"encoding/json"
 	_ "net/http"
-	"strconv"
 
+	"github.com/gin-gonic/gin"
 	"github.com/qinsheng99/goWeb/api/entity"
 	crequest "github.com/qinsheng99/goWeb/api/entity/ceshi/request"
 	drequest "github.com/qinsheng99/goWeb/api/entity/drainage/request"
@@ -12,15 +12,9 @@ import (
 	Err "github.com/qinsheng99/goWeb/err"
 	"github.com/qinsheng99/goWeb/internal/dao/idao"
 	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
-	"github.com/qinsheng99/goWeb/internal/model"
 	"github.com/qinsheng99/goWeb/internal/service/drainage"
-	"github.com/qinsheng99/goWeb/library/db"
 	"github.com/qinsheng99/goWeb/library/pool"
-	"github.com/qinsheng99/goWeb/library/redisClient"
 	httprequest "github.com/qinsheng99/goWeb/library/request"
-	timeFun "github.com/qinsheng99/goWeb/library/time"
-
-	"github.com/gin-gonic/gin"
 	"github.com/qinsheng99/hello"
 )
 
@@ -28,17 +22,13 @@ type Handler struct {
 	customer customer.CustomerImp
 	esImp    idao.EsImp
 	drainage drainage.Drainage
-	Db       *db.BundleDb
-	r        *redisClient.Redis
 }
 
-func NewHandler(customer customer.CustomerImp, esImp idao.EsImp, drainage drainage.Drainage, Db *db.BundleDb, r *redisClient.Redis) *Handler {
+func NewHandler(customer customer.CustomerImp, esImp idao.EsImp, drainage drainage.Drainage) *Handler {
 	return &Handler{
 		customer: customer,
 		esImp:    esImp,
 		drainage: drainage,
-		Db:       Db,
-		r:        r,
 	}
 }
 
@@ -285,16 +275,4 @@ func (h *Handler) LiKou(c *gin.Context) {
 	// 	}
 	// }
 	// common.Success(c, max)
-	var a []*model.Record
-	if err := h.Db.Db.Model(model.Record{}).Find(&a).Error; err != nil {
-		common.Failure(c, err)
-		return
-	}
-	for _, v := range a {
-		Cint, _ := strconv.Atoi(v.CreateTime)
-		Ctime := timeFun.TimeIntToString(int64(Cint))
-		v.CreateTime = Ctime
-		//v.CreateTime =
-	}
-	common.Success(c, a)
 }

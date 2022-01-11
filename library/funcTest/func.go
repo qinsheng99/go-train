@@ -1,6 +1,9 @@
 package funcTest
 
 import (
+	"crypto/md5"
+	"crypto/sha1"
+	"encoding/hex"
 	"strconv"
 
 	"github.com/qinsheng99/goWeb/internal/model"
@@ -69,4 +72,24 @@ func GetTagIdListByTagList(tags []model.QyCustomerTag) []int {
 	}
 
 	return tagIds
+}
+
+// MD5 生成md5
+func MD5(str string) string {
+	c := md5.New()
+	_, err := c.Write([]byte(str))
+	if nil != err {
+		return ""
+	}
+	return hex.EncodeToString(c.Sum(nil))
+}
+
+// SHA1 生成sha1
+func SHA1(str string) string {
+	c := sha1.New()
+	_, err := c.Write([]byte(str))
+	if nil != err {
+		return ""
+	}
+	return hex.EncodeToString(c.Sum(nil))
 }
