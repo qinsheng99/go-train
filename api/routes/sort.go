@@ -14,6 +14,9 @@ func Sort(e *api.Entry, c *gin.Engine) {
 		{
 			group.GET("/select-sort", s.SelectSort)
 			group.GET("/bubbling-sort", s.BubblingSort)
+			group.GET("/insert-sort", s.InsertSort)
+			group.GET("/shell-sort", s.ShellSort)
+			group.GET("/merge-sort", s.MergeSort)
 		}
 	}(e.NewSort)
 }

@@ -15,7 +15,6 @@ func SelectSort(arr []int)  {
 
 
 // BubblingSort 冒泡排序
-
 func BubblingSort(arr []int)  {
 	for i := len(arr) - 1; i > 0 ; i-- {
 		for j := 0; j < i; j++ {
@@ -23,5 +22,80 @@ func BubblingSort(arr []int)  {
 				arr[j], arr[j + 1] = arr[j + 1], arr[j]
 			}
 		}
+	}
+}
+
+// InsertSort 插入排序
+func InsertSort(arr []int)  {
+	for i := 1;i < len(arr);i++ {
+		for j := i; j > 0; j-- {
+			if arr[j] > arr[j - 1] {
+				arr[j], arr[j - 1] = arr[j - 1], arr[j]
+			}
+		}
+	}
+}
+
+// ShellSort 希尔排序
+func ShellSort(arr []int)  {
+	var h = 1
+	for h <= len(arr)/3 {
+		h = h*3 + 1
+	}
+	for gap := h;gap > 0;gap = (gap - 1)/3 {
+		for i := gap;i < len(arr);i++ {
+			for j := i; j > gap - 1; j -= gap {
+				if arr[j] < arr[j - gap] {
+					arr[j], arr[j - gap] = arr[j - gap], arr[j]
+				}
+			}
+		}
+	}
+}
+
+func MergeSort(arr []int, left, right int)  {
+	if left == right {
+		return
+	}
+	//分成两部分，左右排序，左右merge
+	var mid = left + (right-left)/2
+
+	MergeSort(arr, left, mid)
+	MergeSort(arr, mid+1, right)
+
+	merge(arr, left, mid+1, right)
+}
+
+func merge(arr []int, leftPtr, rightPtr, rightBound int) {
+	var mid = rightPtr - 1
+	var newArr = make([]int, rightBound-leftPtr+1)
+
+	var i, j, k = leftPtr, rightPtr, 0
+
+	for i <= mid && j <= rightBound {
+		if arr[i] <= arr[j] {
+			newArr[k] = arr[i]
+			k++
+			i++
+		} else {
+			newArr[k] = arr[j]
+			k++
+			j++
+		}
+	}
+
+	for i <= mid {
+		newArr[k] = arr[i]
+		k++
+		i++
+	}
+
+	for j <= rightBound {
+		newArr[k] = arr[j]
+		k++
+		j++
+	}
+	for ii := 0; ii < len(newArr); ii++ {
+		arr[leftPtr+ii] = newArr[ii]
 	}
 }
