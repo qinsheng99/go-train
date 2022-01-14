@@ -41,3 +41,15 @@ func (s *SortHandler) MergeSort(c *gin.Context)  {
 	sort.MergeSort(arr, 0, len(arr) - 1)
 	common.Success(c, arr)
 }
+
+func (s *SortHandler) QuickSort(c *gin.Context)  {
+	var arr = []int{9,6,11,3,5,12,8,7,10,15,14,4,1,13,2}
+	sort.QuickSort(arr, 0, len(arr) - 1)
+	common.Success(c, arr)
+}
+
+func (s *SortHandler) CountSort(c *gin.Context)  {
+	var arr = []int{2,4,2,3,4,1,1,0,0,5,6,9,8,5,7,4,0,9}
+	sort.CountSort(arr)
+	common.Success(c, arr)
+}

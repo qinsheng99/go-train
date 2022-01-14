@@ -99,3 +99,51 @@ func merge(arr []int, leftPtr, rightPtr, rightBound int) {
 		arr[leftPtr+ii] = newArr[ii]
 	}
 }
+
+func QuickSort(arr []int, left , right int)  {
+	if left >= right {
+		return
+	}
+	mid := partition(arr, left, right)
+	QuickSort(arr, left, mid-1)
+	QuickSort(arr, mid+1, right)
+}
+
+func partition(arr []int, leftBound, rightBound int) int {
+	var pivot = arr[rightBound]
+	var left, right = leftBound, rightBound - 1
+	for left <= right {
+		for left <= right && arr[left] <= pivot {
+			left++
+		}
+		for left <= right && arr[right] > pivot {
+			right--
+		}
+
+		if left < right {
+			arr[left], arr[right] = arr[right], arr[left]
+		}
+	}
+	arr[left], arr[rightBound] = arr[rightBound], arr[left]
+	return left
+}
+
+func CountSort(arr []int) []int  {
+	var count = make([]int, 10)
+	var result = make([]int, len(arr))
+
+	for i := 0; i < len(arr); i++ {
+		count[arr[i]]++
+	}
+
+	for i := 1; i < len(count); i++ {
+		count[i] = count[i] + count[i-1]
+	}
+
+	for i := len(arr) - 1; i >= 0; i-- {
+		count[arr[i]] -= 1
+		result[count[arr[i]]] = arr[i]
+	}
+
+	return result
+}
