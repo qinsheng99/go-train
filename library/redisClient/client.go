@@ -1,9 +1,10 @@
 package redisClient
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 )
 
 type Redis struct {
@@ -30,7 +31,7 @@ func GetRedis() (*Redis, error) {
 		DB:       0,
 		Password: "",
 	})
-	s, err := conn.Ping().Result()
+	s, err := conn.Ping(context.Background()).Result()
 	if err != nil {
 		fmt.Print(s)
 		return nil, err

@@ -1,9 +1,10 @@
 package redisClient
 
 import (
+	"context"
 	"time"
 
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 )
 
 type RedisStruct struct {
@@ -17,8 +18,8 @@ func NewRedisStruct(r *Redis) RedisInterface {
 }
 
 // Set 命令用于设置给定 key 的值。如果 key 已经存储其他值， SET 就覆写旧值，且无视类型。	//SET KEY_NAME VALUE
-func (r *RedisStruct) Set(key string, value interface{}, expiration time.Duration) (bool, error) {
-	res, err := r.r.RE.Set(key, value, expiration).Result()
+func (r *RedisStruct) Set(ctx context.Context, key string, value interface{}, expiration time.Duration) (bool, error) {
+	res, err := r.r.RE.Set(ctx, key, value, expiration).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
@@ -29,8 +30,8 @@ func (r *RedisStruct) Set(key string, value interface{}, expiration time.Duratio
 }
 
 // SetNx 命令在指定的 key 不存在时，为 key 设置指定的值。 //SETNX KEY_NAME VALUE
-func (r *RedisStruct) SetNx(key string, value interface{}, expiration time.Duration) (bool, error) {
-	res, err := r.r.RE.SetNX(key, value, expiration).Result()
+func (r *RedisStruct) SetNx(ctx context.Context, key string, value interface{}, expiration time.Duration) (bool, error) {
+	res, err := r.r.RE.SetNX(ctx , key, value, expiration).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
@@ -38,8 +39,8 @@ func (r *RedisStruct) SetNx(key string, value interface{}, expiration time.Durat
 }
 
 // Get 命令用于获取指定 key 的值。如果 key 不存在，返回 nil 。如果key 储存的值不是字符串类型，返回一个错误。	//GET KEY_NAME
-func (r *RedisStruct) Get(key string) (string, error) {
-	res, err := r.r.RE.Get(key).Result()
+func (r *RedisStruct) Get(ctx context.Context, key string) (string, error) {
+	res, err := r.r.RE.Get(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -50,8 +51,8 @@ func (r *RedisStruct) Get(key string) (string, error) {
 }
 
 // Del 命令用于删除已存在的键。不存在的 key 会被忽略。	//DEL KEY_NAME
-func (r *RedisStruct) Del(key string) (int64, error) {
-	res, err := r.r.RE.Del(key).Result()
+func (r *RedisStruct) Del(ctx context.Context, key string) (int64, error) {
+	res, err := r.r.RE.Del(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -59,8 +60,8 @@ func (r *RedisStruct) Del(key string) (int64, error) {
 }
 
 // Exists 命令用于检查给定 key 是否存在。	//EXISTS KEY_NAME
-func (r *RedisStruct) Exists(key string) (int64, error) {
-	res, err := r.r.RE.Exists(key).Result()
+func (r *RedisStruct) Exists(ctx context.Context, key string) (int64, error) {
+	res, err := r.r.RE.Exists(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return res, err
 	}
@@ -68,8 +69,8 @@ func (r *RedisStruct) Exists(key string) (int64, error) {
 }
 
 // Incr 命令将 key 中储存的数字值增一,如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作 //INCR KEY_NAME
-func (r *RedisStruct) Incr(key string) (int64, error) {
-	res, err := r.r.RE.Incr(key).Result()
+func (r *RedisStruct) Incr(ctx context.Context, key string) (int64, error) {
+	res, err := r.r.RE.Incr(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -77,8 +78,8 @@ func (r *RedisStruct) Incr(key string) (int64, error) {
 }
 
 //Decr decr:命令将 key 中储存的数字值减一。//DECR KEY_NAME
-func (r *RedisStruct) Decr(key string) (int64, error) {
-	res, err := r.r.RE.Decr(key).Result()
+func (r *RedisStruct) Decr(ctx context.Context, key string) (int64, error) {
+	res, err := r.r.RE.Decr(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -86,8 +87,8 @@ func (r *RedisStruct) Decr(key string) (int64, error) {
 }
 
 // IncrBy 命令将 key 中储存的数字值增加任意数值
-func (r *RedisStruct) IncrBy(key string, value int64) (int64, error) {
-	res, err := r.r.RE.IncrBy(key, value).Result()
+func (r *RedisStruct) IncrBy(ctx context.Context, key string, value int64) (int64, error) {
+	res, err := r.r.RE.IncrBy(ctx , key, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -95,8 +96,8 @@ func (r *RedisStruct) IncrBy(key string, value int64) (int64, error) {
 }
 
 //DecrBy decrBy:命令将 key 所储存的值减去指定的减量值。	//DECRBY KEY_NAME DECREMENT_AMOUNT
-func (r *RedisStruct) DecrBy(key string, value int64) (int64, error) {
-	res, err := r.r.RE.DecrBy(key, value).Result()
+func (r *RedisStruct) DecrBy(ctx context.Context, key string, value int64) (int64, error) {
+	res, err := r.r.RE.DecrBy(ctx , key, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -104,8 +105,8 @@ func (r *RedisStruct) DecrBy(key string, value int64) (int64, error) {
 }
 
 // Expire 命令用于设置 key 的过期时间，key 过期后将不再可用。单位以秒计。//Expire KEY_NAME TIME_IN_SECONDS
-func (r *RedisStruct) Expire(key string, expiration time.Duration) (bool, error) {
-	res, err := r.r.RE.Expire(key, expiration).Result()
+func (r *RedisStruct) Expire(ctx context.Context, key string, expiration time.Duration) (bool, error) {
+	res, err := r.r.RE.Expire(ctx , key, expiration).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
@@ -113,12 +114,12 @@ func (r *RedisStruct) Expire(key string, expiration time.Duration) (bool, error)
 }
 
 //HSet 用于为哈希表中的字段赋值,如果哈希表不存在,一个新的哈希表被创建并进行HSET操作。字段已经存在,旧值被覆盖。HSET KEY_NAME FIELD VALUE
-func (r *RedisStruct) HSet(key string, field string, data interface{}) (bool, error) {
-	_, err := r.r.RE.HSet(key, field, data).Result()
+func (r *RedisStruct) HSet(ctx context.Context, key string, field string, data interface{}) (bool, error) {
+	_, err := r.r.RE.HSet(ctx , key, field, data).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
-	bo, err := r.Expire(key, time.Minute)
+	bo, err := r.Expire(ctx , key, time.Minute)
 	if err != nil {
 		return false, err
 	}
@@ -126,12 +127,12 @@ func (r *RedisStruct) HSet(key string, field string, data interface{}) (bool, er
 }
 
 // HSetNX 命令用于为哈希表中不存在的的字段赋值 。如果字段已经存在于哈希表中，操作无效。
-func (r *RedisStruct) HSetNX(key string, field string, value interface{}) (bool, error) {
-	_, err := r.r.RE.HSetNX(key, field, value).Result()
+func (r *RedisStruct) HSetNX(ctx context.Context, key string, field string, value interface{}) (bool, error) {
+	_, err := r.r.RE.HSetNX(ctx , key, field, value).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
-	bo, err := r.Expire(key, time.Minute)
+	bo, err := r.Expire(ctx , key, time.Minute)
 	if err != nil {
 		return false, err
 	}
@@ -139,8 +140,8 @@ func (r *RedisStruct) HSetNX(key string, field string, value interface{}) (bool,
 }
 
 // HDel 命令用于删除哈希表 key 中的一个或多个指定字段，不存在的字段将被忽略。
-func (r *RedisStruct) HDel(key string, field ...string) (int64, error) {
-	res, err := r.r.RE.HDel(key, field...).Result()
+func (r *RedisStruct) HDel(ctx context.Context, key string, field ...string) (int64, error) {
+	res, err := r.r.RE.HDel(ctx , key, field...).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -148,8 +149,8 @@ func (r *RedisStruct) HDel(key string, field ...string) (int64, error) {
 }
 
 // HExists 命令用于查看哈希表的指定字段是否存在。
-func (r *RedisStruct) HExists(key string, field string) (bool, error) {
-	res, err := r.r.RE.HExists(key, field).Result()
+func (r *RedisStruct) HExists(ctx context.Context, key string, field string) (bool, error) {
+	res, err := r.r.RE.HExists(ctx , key, field).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
@@ -157,8 +158,8 @@ func (r *RedisStruct) HExists(key string, field string) (bool, error) {
 }
 
 // HGet 命令用于返回哈希表中指定字段的值。	//HGET KEY_NAME FIELD_NAME
-func (r *RedisStruct) HGet(key string, value string) (string, error) {
-	res, err := r.r.RE.HGet(key, value).Result()
+func (r *RedisStruct) HGet(ctx context.Context, key string, value string) (string, error) {
+	res, err := r.r.RE.HGet(ctx , key, value).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -166,8 +167,8 @@ func (r *RedisStruct) HGet(key string, value string) (string, error) {
 }
 
 // HGetAll 命令用于返回哈希表中，所有的字段和值。//HGETALL KEY_NAME
-func (r *RedisStruct) HGetAll(key string) (map[string]string, error) {
-	res, err := r.r.RE.HGetAll(key).Result()
+func (r *RedisStruct) HGetAll(ctx context.Context, key string) (map[string]string, error) {
+	res, err := r.r.RE.HGetAll(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return nil, err
 	}
@@ -175,8 +176,8 @@ func (r *RedisStruct) HGetAll(key string) (map[string]string, error) {
 }
 
 //Hkeys 命令用于获取哈希表中的所有域（field）
-func (r *RedisStruct) Hkeys(key string) ([]string, error) {
-	res, err := r.r.RE.HKeys(key).Result()
+func (r *RedisStruct) Hkeys(ctx context.Context, key string) ([]string, error) {
+	res, err := r.r.RE.HKeys(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return nil, err
 	}
@@ -184,8 +185,8 @@ func (r *RedisStruct) Hkeys(key string) ([]string, error) {
 }
 
 // Hlen 命令用于获取哈希表中字段的数量。
-func (r *RedisStruct) Hlen(key string) (int64, error) {
-	res, err := r.r.RE.HLen(key).Result()
+func (r *RedisStruct) Hlen(ctx context.Context, key string) (int64, error) {
+	res, err := r.r.RE.HLen(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -193,8 +194,8 @@ func (r *RedisStruct) Hlen(key string) (int64, error) {
 }
 
 // HMGet 命令用于返回哈希表中，一个或多个给定字段的值。如果指定的字段不存在于哈希表，那么返回一个 nil 值。
-func (r *RedisStruct) HMGet(key string, fields ...string) ([]interface{}, error) {
-	res, err := r.r.RE.HMGet(key, fields...).Result()
+func (r *RedisStruct) HMGet(ctx context.Context, key string, fields ...string) ([]interface{}, error) {
+	res, err := r.r.RE.HMGet(ctx , key, fields...).Result()
 	if err != nil && err != redis.Nil {
 		return nil, err
 	}
@@ -202,8 +203,8 @@ func (r *RedisStruct) HMGet(key string, fields ...string) ([]interface{}, error)
 }
 
 // HVals 命令返回哈希表所有的值。
-func (r *RedisStruct) HVals(key string) ([]string, error) {
-	res, err := r.r.RE.HVals(key).Result()
+func (r *RedisStruct) HVals(ctx context.Context, key string) ([]string, error) {
+	res, err := r.r.RE.HVals(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return nil, err
 	}
@@ -211,8 +212,8 @@ func (r *RedisStruct) HVals(key string) ([]string, error) {
 }
 
 // SAdd 命令将一个或多个成员元素加入到集合中，已经存在于集合的成员元素将被忽略。//SADD KEY_NAME VALUE1..VALUEN
-func (r *RedisStruct) SAdd(key string, members ...interface{}) (int64, error) {
-	res, err := r.r.RE.SAdd(key, members...).Result()
+func (r *RedisStruct) SAdd(ctx context.Context, key string, members ...interface{}) (int64, error) {
+	res, err := r.r.RE.SAdd(ctx , key, members...).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -220,8 +221,8 @@ func (r *RedisStruct) SAdd(key string, members ...interface{}) (int64, error) {
 }
 
 // SRem 命令用于移除集合中的一个或多个成员元素，不存在的成员元素会被忽略。//SREM KEY MEMBER1..MEMBERN
-func (r *RedisStruct) SRem(key string, members ...interface{}) (int64, error) {
-	res, err := r.r.RE.SRem(key, members).Result()
+func (r *RedisStruct) SRem(ctx context.Context, key string, members ...interface{}) (int64, error) {
+	res, err := r.r.RE.SRem(ctx , key, members).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -229,8 +230,8 @@ func (r *RedisStruct) SRem(key string, members ...interface{}) (int64, error) {
 }
 
 // SMembers 命令返回集合中的所有的成员。 不存在的集合 key 被视为空集合。//SMEMBERS key
-func (r *RedisStruct) SMembers(key string) ([]string, error) {
-	res, err := r.r.RE.SMembers(key).Result()
+func (r *RedisStruct) SMembers(ctx context.Context, key string) ([]string, error) {
+	res, err := r.r.RE.SMembers(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return []string{}, err
 	}
@@ -238,8 +239,8 @@ func (r *RedisStruct) SMembers(key string) ([]string, error) {
 }
 
 // SIsMembers 命令判断成员元素是否是集合的成员。//SISMEMBER KEY VALUE
-func (r *RedisStruct) SIsMembers(key string, member string) (bool, error) {
-	res, err := r.r.RE.SIsMember(key, member).Result()
+func (r *RedisStruct) SIsMembers(ctx context.Context, key string, member string) (bool, error) {
+	res, err := r.r.RE.SIsMember(ctx , key, member).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
@@ -247,8 +248,8 @@ func (r *RedisStruct) SIsMembers(key string, member string) (bool, error) {
 }
 
 // SRandMemberN 命令用于返回集合中的一个随机元素。//SRANDMEMBER KEY [count]
-func (r *RedisStruct) SRandMemberN(key string, count int64) ([]string, error) {
-	res, err := r.r.RE.SRandMemberN(key, count).Result()
+func (r *RedisStruct) SRandMemberN(ctx context.Context, key string, count int64) ([]string, error) {
+	res, err := r.r.RE.SRandMemberN(ctx , key, count).Result()
 	if err != nil && err != redis.Nil {
 		return []string{}, err
 	}
@@ -256,8 +257,8 @@ func (r *RedisStruct) SRandMemberN(key string, count int64) ([]string, error) {
 }
 
 // Llen 命令用于返回列表的长度	//LLEN KEY_NAME
-func (r *RedisStruct) Llen(key string) (int64, error) {
-	res, err := r.r.RE.LLen(key).Result()
+func (r *RedisStruct) Llen(ctx context.Context, key string) (int64, error) {
+	res, err := r.r.RE.LLen(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -265,8 +266,8 @@ func (r *RedisStruct) Llen(key string) (int64, error) {
 }
 
 // Lpush 命令将一个或多个值插入到列表头部。 如果 key 不存在，一个空列表会被创建并执行 LPUSH 操作。
-func (r *RedisStruct) Lpush(key string, value ...interface{}) (int64, error) {
-	res, err := r.r.RE.LPush(key, value).Result()
+func (r *RedisStruct) Lpush(ctx context.Context, key string, value ...interface{}) (int64, error) {
+	res, err := r.r.RE.LPush(ctx , key, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -274,8 +275,8 @@ func (r *RedisStruct) Lpush(key string, value ...interface{}) (int64, error) {
 }
 
 //LPushX 将一个值插入到已存在的列表头部，列表不存在时操作无效。
-func (r *RedisStruct) LPushX(key string, value ...interface{}) (int64, error) {
-	res, err := r.r.RE.LPushX(key, value).Result()
+func (r *RedisStruct) LPushX(ctx context.Context, key string, value ...interface{}) (int64, error) {
+	res, err := r.r.RE.LPushX(ctx , key, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -283,8 +284,8 @@ func (r *RedisStruct) LPushX(key string, value ...interface{}) (int64, error) {
 }
 
 // Rpush 命令用于将一个或多个值插入到列表的尾部(最右边)。//RPUSH KEY_NAME VALUE1..VALUEN
-func (r *RedisStruct) Rpush(key string, value string) (int64, error) {
-	res, err := r.r.RE.RPush(key, value).Result()
+func (r *RedisStruct) Rpush(ctx context.Context, key string, value string) (int64, error) {
+	res, err := r.r.RE.RPush(ctx , key, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -292,8 +293,8 @@ func (r *RedisStruct) Rpush(key string, value string) (int64, error) {
 }
 
 // LRange 返回列表中指定区间内的元素，区间以偏移量 START 和 END 指定。 其中 0 表示列表的第一个元素， 1表示列表的第二个元素，以此类推。
-func (r *RedisStruct) LRange(key string, start, stop int64) ([]string, error) {
-	res, err := r.r.RE.LRange(key, start, stop).Result()
+func (r *RedisStruct) LRange(ctx context.Context, key string, start, stop int64) ([]string, error) {
+	res, err := r.r.RE.LRange(ctx , key, start, stop).Result()
 	if err != nil && err != redis.Nil {
 		return []string{}, err
 	}
@@ -301,8 +302,8 @@ func (r *RedisStruct) LRange(key string, start, stop int64) ([]string, error) {
 }
 
 //RPop 命令用于移除列表的最后一个元素，返回值为移除的元素。	//RPOP KEY_NAME
-func (r *RedisStruct) RPop(key string) (string, error) {
-	res, err := r.r.RE.RPop(key).Result()
+func (r *RedisStruct) RPop(ctx context.Context, key string) (string, error) {
+	res, err := r.r.RE.RPop(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -310,8 +311,8 @@ func (r *RedisStruct) RPop(key string) (string, error) {
 }
 
 // BRpop 命令移出并获取列表的最后一个元素， 如果列表没有元素会阻塞列表直到等待超时或发现可弹出元素为止。
-func (r *RedisStruct) BRpop(timeout time.Duration, keys ...string) ([]string, error) {
-	res, err := r.r.RE.BRPop(timeout, keys...).Result()
+func (r *RedisStruct) BRpop(ctx context.Context,timeout time.Duration, keys ...string) ([]string, error) {
+	res, err := r.r.RE.BRPop(ctx,timeout, keys...).Result()
 	if err != nil && err != redis.Nil {
 		return nil, err
 	}
@@ -319,8 +320,8 @@ func (r *RedisStruct) BRpop(timeout time.Duration, keys ...string) ([]string, er
 }
 
 //LPop 命令用于移除并返回列表的第一个元素。//Lpop KEY_NAME
-func (r *RedisStruct) LPop(key string) (string, error) {
-	res, err := r.r.RE.LPop(key).Result()
+func (r *RedisStruct) LPop(ctx context.Context, key string) (string, error) {
+	res, err := r.r.RE.LPop(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -328,24 +329,24 @@ func (r *RedisStruct) LPop(key string) (string, error) {
 }
 
 //LIndex 命令用于通过索引获取列表中的元素。你也可以使用负数下标，以 -1 表示列表的最后一个元素， -2 表示列表的倒数第二个元素，以此类推。
-func (r *RedisStruct) LIndex(key string, index int64) (string, error) {
-	res, err := r.r.RE.LIndex(key, index).Result()
+func (r *RedisStruct) LIndex(ctx context.Context, key string, index int64) (string, error) {
+	res, err := r.r.RE.LIndex(ctx , key, index).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
 	return res, nil
 }
 
-func (r *RedisStruct) LInsertBefore(key string, pivot, value interface{}) (int64, error) {
-	res, err := r.r.RE.LInsertBefore(key, pivot, value).Result()
+func (r *RedisStruct) LInsertBefore(ctx context.Context, key string, pivot, value interface{}) (int64, error) {
+	res, err := r.r.RE.LInsertBefore(ctx , key, pivot, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
 	return res, nil
 }
 
-func (r *RedisStruct) LInsertAfter(key string, pivot, value interface{}) (int64, error) {
-	res, err := r.r.RE.LInsertAfter(key, pivot, value).Result()
+func (r *RedisStruct) LInsertAfter(ctx context.Context, key string, pivot, value interface{}) (int64, error) {
+	res, err := r.r.RE.LInsertAfter(ctx , key, pivot, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -353,8 +354,8 @@ func (r *RedisStruct) LInsertAfter(key string, pivot, value interface{}) (int64,
 }
 
 // LRem 根据参数 COUNT 的值，移除列表中与参数 VALUE 相等的元素。count>0从头开始移除count，count<0从尾移除count，count=0，移除所有
-func (r *RedisStruct) LRem(key string, count int64, value interface{}) (int64, error) {
-	res, err := r.r.RE.LRem(key, count, value).Result()
+func (r *RedisStruct) LRem(ctx context.Context, key string, count int64, value interface{}) (int64, error) {
+	res, err := r.r.RE.LRem(ctx , key, count, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -362,8 +363,8 @@ func (r *RedisStruct) LRem(key string, count int64, value interface{}) (int64, e
 }
 
 // LSet 通过索引来设置元素的值。 当索引参数超出范围，或对一个空列表进行 LSET 时，返回一个错误。 LSET KEY_NAME INDEX VALUE
-func (r *RedisStruct) LSet(key string, index int64, value interface{}) (string, error) {
-	res, err := r.r.RE.LSet(key, index, value).Result()
+func (r *RedisStruct) LSet(ctx context.Context, key string, index int64, value interface{}) (string, error) {
+	res, err := r.r.RE.LSet(ctx , key, index, value).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -371,8 +372,8 @@ func (r *RedisStruct) LSet(key string, index int64, value interface{}) (string, 
 }
 
 //LTrim 对一个列表进行修剪(trim)，就是说，让列表只保留指定区间内的元素，不在指定区间之内的元素都将被删除。
-func (r *RedisStruct) LTrim(key string, start, stop int64) (string, error) {
-	res, err := r.r.RE.LTrim(key, start, stop).Result()
+func (r *RedisStruct) LTrim(ctx context.Context, key string, start, stop int64) (string, error) {
+	res, err := r.r.RE.LTrim(ctx , key, start, stop).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -380,8 +381,8 @@ func (r *RedisStruct) LTrim(key string, start, stop int64) (string, error) {
 }
 
 // Dump 命令用于序列化给定 key ，并返回被序列化的值。
-func (r *RedisStruct) Dump(key string) (string, error) {
-	res, err := r.r.RE.Dump(key).Result()
+func (r *RedisStruct) Dump(ctx context.Context, key string) (string, error) {
+	res, err := r.r.RE.Dump(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -389,8 +390,8 @@ func (r *RedisStruct) Dump(key string) (string, error) {
 }
 
 // Keys 命令用于查找所有符合给定模式 pattern 的 key   key*  *
-func (r *RedisStruct) Keys(pattern string) ([]string, error) {
-	res, err := r.r.RE.Keys(pattern).Result()
+func (r *RedisStruct) Keys(ctx context.Context, pattern string) ([]string, error) {
+	res, err := r.r.RE.Keys(ctx,pattern).Result()
 	if err != nil && err != redis.Nil {
 		return []string{}, err
 	}
@@ -398,8 +399,8 @@ func (r *RedisStruct) Keys(pattern string) ([]string, error) {
 }
 
 // Persist 命令用于移除给定 key 的过期时间，使得 key 永不过期。
-func (r *RedisStruct) Persist(key string) (bool, error) {
-	res, err := r.r.RE.Persist(key).Result()
+func (r *RedisStruct) Persist(ctx context.Context, key string) (bool, error) {
+	res, err := r.r.RE.Persist(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
@@ -407,8 +408,8 @@ func (r *RedisStruct) Persist(key string) (bool, error) {
 }
 
 // FlushDB 删除当前数据库所有 key
-func (r *RedisStruct) FlushDB() (string, error) {
-	res, err := r.r.RE.FlushDB().Result()
+func (r *RedisStruct) FlushDB(ctx context.Context) (string, error) {
+	res, err := r.r.RE.FlushDB(ctx).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -416,8 +417,8 @@ func (r *RedisStruct) FlushDB() (string, error) {
 }
 
 // MGet 命令返回所有(一个或多个)给定 key 的值。 //MGET KEY1 KEY2 .. KEYN
-func (r *RedisStruct) MGet(keys ...string) ([]interface{}, error) {
-	res, err := r.r.RE.MGet(keys...).Result()
+func (r *RedisStruct) MGet(ctx context.Context,keys ...string) ([]interface{}, error) {
+	res, err := r.r.RE.MGet(ctx,keys...).Result()
 	if err != nil && err != redis.Nil {
 		return nil, err
 	}
@@ -425,8 +426,8 @@ func (r *RedisStruct) MGet(keys ...string) ([]interface{}, error) {
 }
 
 //MSet 命令用于同时设置一个或多个 key-value 对。//MSET key1 value1 key2 value2 .. keyN valueN
-func (r *RedisStruct) MSet(values ...interface{}) (string, error) {
-	res, err := r.r.RE.MSet(values...).Result()
+func (r *RedisStruct) MSet(ctx context.Context, values ...interface{}) (string, error) {
+	res, err := r.r.RE.MSet(ctx,values...).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -434,8 +435,8 @@ func (r *RedisStruct) MSet(values ...interface{}) (string, error) {
 }
 
 //MSetNX 命令用于所有给定 key 都不存在时，同时设置一个或多个 key-value 对。//MSETNX key1 value1 key2 value2 ..
-func (r *RedisStruct) MSetNX(values ...interface{}) (bool, error) {
-	res, err := r.r.RE.MSetNX(values).Result()
+func (r *RedisStruct) MSetNX(ctx context.Context,values ...interface{}) (bool, error) {
+	res, err := r.r.RE.MSetNX(ctx,values).Result()
 	if err != nil && err != redis.Nil {
 		return false, err
 	}
@@ -443,8 +444,8 @@ func (r *RedisStruct) MSetNX(values ...interface{}) (bool, error) {
 }
 
 // RandomKey 命令从当前数据库中随机返回一个 key 。
-func (r *RedisStruct) RandomKey() (string, error) {
-	res, err := r.r.RE.RandomKey().Result()
+func (r *RedisStruct) RandomKey(ctx context.Context) (string, error) {
+	res, err := r.r.RE.RandomKey(ctx).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -452,8 +453,8 @@ func (r *RedisStruct) RandomKey() (string, error) {
 }
 
 // Rename 命令用于修改 key 的名称 。
-func (r *RedisStruct) Rename(key, newkey string) (string, error) {
-	res, err := r.r.RE.Rename(key, newkey).Result()
+func (r *RedisStruct) Rename(ctx context.Context, key, newkey string) (string, error) {
+	res, err := r.r.RE.Rename(ctx , key, newkey).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -461,8 +462,8 @@ func (r *RedisStruct) Rename(key, newkey string) (string, error) {
 }
 
 // Type 命令用于返回 key 所储存的值的类型。
-func (r *RedisStruct) Type(key string) (string, error) {
-	res, err := r.r.RE.Type(key).Result()
+func (r *RedisStruct) Type(ctx context.Context, key string) (string, error) {
+	res, err := r.r.RE.Type(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -470,8 +471,8 @@ func (r *RedisStruct) Type(key string) (string, error) {
 }
 
 //GetRange 命令用于获取存储在指定 key 中字符串的子字符串。字符串的截取范围由 start 和 end 两个偏移量决定(包括 start 和 end 在内)。
-func (r *RedisStruct) GetRange(key string, start, end int64) (string, error) {
-	res, err := r.r.RE.GetRange(key, start, end).Result()
+func (r *RedisStruct) GetRange(ctx context.Context, key string, start, end int64) (string, error) {
+	res, err := r.r.RE.GetRange(ctx , key, start, end).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -479,8 +480,8 @@ func (r *RedisStruct) GetRange(key string, start, end int64) (string, error) {
 }
 
 // Zadd 命令用于将一个或多个成员元素及其分数值加入到有序集当中。
-func (r *RedisStruct) Zadd(key string, members ...*redis.Z) (int64, error) {
-	res, err := r.r.RE.ZAdd(key, members...).Result()
+func (r *RedisStruct) Zadd(ctx context.Context, key string, members ...*redis.Z) (int64, error) {
+	res, err := r.r.RE.ZAdd(ctx , key, members...).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -488,8 +489,8 @@ func (r *RedisStruct) Zadd(key string, members ...*redis.Z) (int64, error) {
 }
 
 // ZRevrange Zrevrange 命令返回有序集中，指定区间内的成员。 其中成员的位置按分数值递减(从大到小)来排列。
-func (r *RedisStruct) ZRevrange(key string, start, stop int64) ([]string, error) {
-	res, err := r.r.RE.ZRevRange(key, start, stop).Result()
+func (r *RedisStruct) ZRevrange(ctx context.Context, key string, start, stop int64) ([]string, error) {
+	res, err := r.r.RE.ZRevRange(ctx , key, start, stop).Result()
 	if err != nil && err != redis.Nil {
 		return nil, err
 	}
@@ -497,8 +498,8 @@ func (r *RedisStruct) ZRevrange(key string, start, stop int64) ([]string, error)
 }
 
 // ZRange 命令返回有序集中，指定区间内的成员。 其中成员的位置按分数值递增(从小到大)来排列。
-func (r *RedisStruct) ZRange(key string, start, stop int64) ([]string, error) {
-	res, err := r.r.RE.ZRange(key, start, stop).Result()
+func (r *RedisStruct) ZRange(ctx context.Context, key string, start, stop int64) ([]string, error) {
+	res, err := r.r.RE.ZRange(ctx , key, start, stop).Result()
 	if err != nil && err != redis.Nil {
 		return nil, err
 	}
@@ -506,8 +507,8 @@ func (r *RedisStruct) ZRange(key string, start, stop int64) ([]string, error) {
 }
 
 // ZRevRank 命令返回有序集中成员的排名。其中有序集成员按分数值递减(从大到小)排序。 排名以 0 为底，也就是说， 分数值最大的成员排名为 0 。
-func (r *RedisStruct) ZRevRank(key, member string) (int64, error) {
-	res, err := r.r.RE.ZRevRank(key, member).Result()
+func (r *RedisStruct) ZRevRank(ctx context.Context, key, member string) (int64, error) {
+	res, err := r.r.RE.ZRevRank(ctx , key, member).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -516,12 +517,12 @@ func (r *RedisStruct) ZRevRank(key, member string) (int64, error) {
 }
 
 // ZRank 命令可以获得成员按分数值递增(从小到大)排列的排名。
-func (r *RedisStruct) ZRank(key, member string) (int64, error) {
-	res, err := r.r.RE.ZRank(key, member).Result()
+func (r *RedisStruct) ZRank(ctx context.Context, key, member string) (int64, error) {
+	res, err := r.r.RE.ZRank(ctx , key, member).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
-	count, err := r.zcard(key)
+	count, err := r.zcard(ctx,key)
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -530,8 +531,8 @@ func (r *RedisStruct) ZRank(key, member string) (int64, error) {
 }
 
 //Zcard 命令用于计算集合中元素的数量。
-func (r *RedisStruct) zcard(key string) (int64, error) {
-	res, err := r.r.RE.ZCard(key).Result()
+func (r *RedisStruct) zcard(ctx context.Context, key string) (int64, error) {
+	res, err := r.r.RE.ZCard(ctx,key).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}
@@ -539,8 +540,8 @@ func (r *RedisStruct) zcard(key string) (int64, error) {
 }
 
 // GetSet 命令用于设置指定 key 的值，并返回 key 的旧值。
-func (r *RedisStruct) GetSet(key string, value interface{}) (string, error) {
-	res, err := r.r.RE.GetSet(key, value).Result()
+func (r *RedisStruct) GetSet(ctx context.Context, key string, value interface{}) (string, error) {
+	res, err := r.r.RE.GetSet(ctx , key, value).Result()
 	if err != nil && err != redis.Nil {
 		return "", err
 	}
@@ -550,8 +551,8 @@ func (r *RedisStruct) GetSet(key string, value interface{}) (string, error) {
 // Append 命令用于为指定的 key 追加值。
 //如果 key 已经存在并且是一个字符串， APPEND 命令将 value 追加到 key 原来的值的末尾。
 //如果 key 不存在， APPEND 就简单地将给定 key 设为 value ，就像执行 SET key value 一样。
-func (r *RedisStruct) Append(key string, value string) (int64, error) {
-	res, err := r.r.RE.Append(key, value).Result()
+func (r *RedisStruct) Append(ctx context.Context, key string, value string) (int64, error) {
+	res, err := r.r.RE.Append(ctx , key, value).Result()
 	if err != nil && err != redis.Nil {
 		return int64(0), err
 	}

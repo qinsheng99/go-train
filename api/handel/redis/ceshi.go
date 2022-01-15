@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"context"
 	"strconv"
 	"time"
 
@@ -13,7 +14,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 	pb "github.com/qinsheng99/example/grpc-example/route"
 	"google.golang.org/grpc"
 )
@@ -22,6 +23,8 @@ type Handle struct {
 	c  ceshi.CeShiService
 	ri redisClient.RedisInterface
 }
+
+var ctx = context.Background()
 
 func NewH(c ceshi.CeShiService, ri redisClient.RedisInterface) *Handle {
 	return &Handle{
@@ -32,12 +35,12 @@ func NewH(c ceshi.CeShiService, ri redisClient.RedisInterface) *Handle {
 
 func (h *Handle) SetR(c *gin.Context) {
 	var re redisClient.RE
-	err := c.ShouldBind(&re)
+	err := c.ShouldBindWith(&re, binding.Query)
 	if err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
-	b, err := h.ri.Set(re.Name, re.Data, time.Minute*5)
+	b, err := h.ri.Set(ctx, re.Name, re.Data, time.Minute*5)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -47,12 +50,12 @@ func (h *Handle) SetR(c *gin.Context) {
 
 func (h *Handle) GetR(c *gin.Context) {
 	var re redisClient.RE
-	err := c.ShouldBind(&re)
+	err := c.ShouldBindWith(&re, binding.Query)
 	if err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
-	b, err := h.ri.Get(re.Name)
+	b, err := h.ri.Get(ctx, re.Name)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -62,12 +65,12 @@ func (h *Handle) GetR(c *gin.Context) {
 
 func (h *Handle) ExistsR(c *gin.Context) {
 	var re redisClient.RE
-	err := c.ShouldBind(&re)
+	err := c.ShouldBindWith(&re, binding.Query)
 	if err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
-	b, err := h.ri.Exists(re.Name)
+	b, err := h.ri.Exists(ctx, re.Name)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -77,12 +80,12 @@ func (h *Handle) ExistsR(c *gin.Context) {
 
 func (h *Handle) DelR(c *gin.Context) {
 	var re redisClient.RE
-	err := c.ShouldBind(&re)
+	err := c.ShouldBindWith(&re, binding.Query)
 	if err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
-	b, err := h.ri.Del(re.Name)
+	b, err := h.ri.Del(ctx, re.Name)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -97,7 +100,7 @@ func (h *Handle) Hset(c *gin.Context) {
 		common.QueryFailure(c, err)
 		return
 	}
-	b, err := h.ri.HSet(re.Name, re.Field, re.Data)
+	b, err := h.ri.HSet(ctx, re.Name, re.Field, re.Data)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -113,7 +116,7 @@ func (h *Handle) HGetOrAll(c *gin.Context) {
 		return
 	}
 	if re.Bo == false {
-		all, err := h.ri.HGetAll(re.Name)
+		all, err := h.ri.HGetAll(ctx, re.Name)
 		if err != nil {
 			common.Failure(c, err)
 			return
@@ -121,7 +124,7 @@ func (h *Handle) HGetOrAll(c *gin.Context) {
 		common.Success(c, all)
 		return
 	}
-	get, err := h.ri.HGet(re.Name, re.Field)
+	get, err := h.ri.HGet(ctx, re.Name, re.Field)
 
 	if err != nil {
 		common.Failure(c, err)
@@ -172,7 +175,7 @@ func (h *Handle) Sadd(c *gin.Context) {
 	for i := 0; i < 10; i++ {
 		now := time.Now().Unix()
 		timeString := timeFun.TimeIntToString(now)
-		_, err := h.ri.SAdd("ceshi", timeString)
+		_, err := h.ri.SAdd(ctx, "ceshi", timeString)
 		if err != nil {
 			common.Failure(c, err)
 			return
@@ -184,7 +187,7 @@ func (h *Handle) Sadd(c *gin.Context) {
 }
 
 func (h *Handle) SMembers(c *gin.Context) {
-	res, err := h.ri.SMembers("ceshi")
+	res, err := h.ri.SMembers(ctx, "ceshi")
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -195,11 +198,11 @@ func (h *Handle) SMembers(c *gin.Context) {
 
 func (h *Handle) SRandMember(c *gin.Context) {
 	var count request.RandMember
-	if err := c.ShouldBind(&count); err != nil {
+	if err := c.ShouldBindWith(&count, binding.Query); err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
-	res, err := h.ri.SRandMemberN("ceshi", count.Count)
+	res, err := h.ri.SRandMemberN(ctx, "ceshi", count.Count)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -209,7 +212,7 @@ func (h *Handle) SRandMember(c *gin.Context) {
 }
 
 func (h *Handle) Llen(c *gin.Context) {
-	res, err := h.ri.Llen("ceshi")
+	res, err := h.ri.Llen(ctx, "ceshi")
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -220,12 +223,12 @@ func (h *Handle) Llen(c *gin.Context) {
 
 func (h *Handle) Lpush(c *gin.Context) {
 	var re redisClient.RE
-	if err := c.ShouldBind(&re); err != nil {
+	if err := c.ShouldBindWith(&re, binding.Query); err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
 	if re.PushType == "1" {
-		res, err := h.ri.Rpush("ceshi", re.Data)
+		res, err := h.ri.Rpush(ctx, "ceshi", re.Data)
 		if err != nil {
 			common.Failure(c, err)
 			return
@@ -233,7 +236,7 @@ func (h *Handle) Lpush(c *gin.Context) {
 		common.Success(c, res)
 		return
 	}
-	res, err := h.ri.Lpush("ceshi", re.Data)
+	res, err := h.ri.Lpush(ctx, "ceshi", re.Data)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -243,11 +246,11 @@ func (h *Handle) Lpush(c *gin.Context) {
 
 func (h *Handle) LRange(c *gin.Context) {
 	var re redisClient.RE
-	if err := c.ShouldBind(&re); err != nil {
+	if err := c.ShouldBindWith(&re, binding.Query); err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
-	res, err := h.ri.LRange("ceshi", re.Start, re.Stop)
+	res, err := h.ri.LRange(ctx, "ceshi", re.Start, re.Stop)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -258,12 +261,12 @@ func (h *Handle) LRange(c *gin.Context) {
 
 func (h *Handle) Lpop(c *gin.Context) {
 	var re redisClient.RE
-	if err := c.ShouldBind(&re); err != nil {
+	if err := c.ShouldBindWith(&re, binding.Query); err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
 	if re.PushType == "1" {
-		res, err := h.ri.RPop("ceshi")
+		res, err := h.ri.RPop(ctx, "ceshi")
 		if err != nil {
 			common.Failure(c, err)
 			return
@@ -271,7 +274,7 @@ func (h *Handle) Lpop(c *gin.Context) {
 		common.Success(c, res)
 		return
 	}
-	res, err := h.ri.LPop("ceshi")
+	res, err := h.ri.LPop(ctx, "ceshi")
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -281,11 +284,11 @@ func (h *Handle) Lpop(c *gin.Context) {
 
 func (h *Handle) Dump(c *gin.Context) {
 	var re redisClient.RE
-	if err := c.ShouldBind(&re); err != nil {
+	if err := c.ShouldBindWith(&re, binding.Query); err != nil {
 		common.QueryFailure(c, err)
 		return
 	}
-	b, err := h.ri.Dump(re.Name)
+	b, err := h.ri.Dump(ctx, re.Name)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -294,7 +297,7 @@ func (h *Handle) Dump(c *gin.Context) {
 }
 
 func (h *Handle) MSet(c *gin.Context) {
-	res, err := h.ri.MSet("fruit", "apple", "drink", "beer", "food", "cookies")
+	res, err := h.ri.MSet(ctx, "fruit", "apple", "drink", "beer", "food", "cookies")
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -303,7 +306,7 @@ func (h *Handle) MSet(c *gin.Context) {
 }
 
 func (h *Handle) MGet(c *gin.Context) {
-	res, err := h.ri.MGet("fruit", "food")
+	res, err := h.ri.MGet(ctx, "fruit", "food")
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -322,7 +325,7 @@ func (h *Handle) Zadd(c *gin.Context) {
 			Member: "店铺号:" + strconv.Itoa(v),
 		})
 	}
-	res, err := h.ri.Zadd("score", b...)
+	res, err := h.ri.Zadd(ctx, "score", b...)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -331,7 +334,7 @@ func (h *Handle) Zadd(c *gin.Context) {
 }
 
 func (h *Handle) Zrange(c *gin.Context) {
-	res, err := h.ri.ZRevrange("score", 0, -1)
+	res, err := h.ri.ZRevrange(ctx, "score", 0, -1)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -340,7 +343,7 @@ func (h *Handle) Zrange(c *gin.Context) {
 }
 
 func (h *Handle) Zrank(c *gin.Context) {
-	res, err := h.ri.ZRank("score", "店铺号:456")
+	res, err := h.ri.ZRank(ctx, "score", "店铺号:456")
 	if err != nil {
 		common.Failure(c, err)
 		return
