@@ -8,11 +8,11 @@ type GoFuncPool struct {
 	sy        sync.WaitGroup
 }
 
-var GoFunc *GoFuncPool
-
-func init() {
-	GoFunc = NewGoPool(WithMaxLimit(10))
-}
+//var GoFunc *GoFuncPool
+//
+//func init() {
+//	GoFunc = NewGoPool(WithMaxLimit(10))
+//}
 
 type GoFuncPoolOptions func(pool *GoFuncPool)
 

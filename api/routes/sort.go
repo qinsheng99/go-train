@@ -19,6 +19,7 @@ func Sort(e *api.Entry, c *gin.Engine) {
 			group.GET("/merge-sort", s.MergeSort)
 			group.GET("/quick-sort", s.QuickSort)
 			group.GET("/count-sort", s.CountSort)
+			group.GET("/radix-sort", s.RadixSort)
 		}
 	}(e.NewSort)
 }

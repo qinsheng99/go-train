@@ -1,5 +1,9 @@
 package sort
 
+import (
+	"math"
+)
+
 // SelectSort 选择排序
 func SelectSort(arr []int)  {
 	for i := 0; i < len(arr); i++ {
@@ -140,10 +144,66 @@ func CountSort(arr []int) []int  {
 		count[i] = count[i] + count[i-1]
 	}
 
+	//for i, j := 0, 0; i < len(count); i++ {
+	//	for ; count[i] > 0; count[i]-- {
+	//		result[j] = i
+	//		j++
+	//	}
+	//}
+
 	for i := len(arr) - 1; i >= 0; i-- {
 		count[arr[i]] -= 1
 		result[count[arr[i]]] = arr[i]
 	}
 
 	return result
+}
+
+func RadixSort(arr []int) []int  {
+	var count = make([]int, 10)
+	var mirror = make([]int, 10)
+
+	var cArr = make([]int, len(arr))
+	copy(cArr, arr)
+
+	for i := 0; i < findMax(getSliceMax(arr)); i++ {
+		pow := int(math.Pow(10, float64(i)))
+		for j := 0; j < len(arr); j++ {
+			num := arr[j] / pow % 10
+			count[num]++
+		}
+		for m := 1; m < len(count); m++ {
+			count[m] = count[m] + count[m-1]
+		}
+
+		for nx := len(arr) - 1; nx >= 0; nx-- {
+			num := arr[nx] / pow % 10
+			count[num] -= 1
+			cArr[count[num]] = arr[nx]
+		}
+		copy(arr, cArr)
+		copy(count, mirror)
+	}
+
+	return cArr
+}
+
+func findMax(num int) (length int) {
+	if num == 0 {
+		return 1
+	}
+	for i := num; int(i) != 0; i /= 10 {
+		length++
+	}
+	return
+}
+
+func getSliceMax(arr []int) (max int) {
+	max = arr[0]
+	for i := 1; i < len(arr); i++ {
+		if arr[i] > max {
+			max = arr[i]
+		}
+	}
+	return
 }
