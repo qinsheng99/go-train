@@ -1,6 +1,8 @@
 package sortHandler
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/qinsheng99/goWeb/api/tools/common"
 	"github.com/qinsheng99/goWeb/library/sort"
@@ -65,3 +67,47 @@ func (s *SortHandler) RadixSort(c *gin.Context)  {
 	var arr = []int{421, 240, 1115, 532, 2305, 430, 4124}
 	common.Success(c, sort.RadixSort(arr))
 }
+
+// Exclusive 异或
+func (s *SortHandler) Exclusive (c *gin.Context)  {
+	//找出数组中个数为奇数的数
+	var arr = []int{1,2,3,2,4,3,1,123123213}
+	//var eor = 0
+	//
+	//for i := 0; i < len(arr); i++ {
+	//	eor ^= arr[i]
+	//}
+	//common.Success(c,eor)
+
+	//找出数组中奇数，两个
+
+	var eor = 0
+	var eor1 = 0
+	var once = 0
+
+	for i := 0; i < len(arr); i++ {
+		eor ^= arr[i]
+	}
+	once = eor & (^eor + 1)
+
+	for i := 0; i < len(arr); i++ {
+		if once & arr[i] == 1 {
+			eor1 ^= arr[i]
+		}
+	}
+
+	common.Success(c,fmt.Sprintf("first num:%d, second num:%d", eor1, eor ^ eor1))
+}
+
+// XiaoHe 小和问题，一个数的左边有比它小的数相加，最后求和
+func (s *SortHandler) XiaoHe(c *gin.Context)  {
+	var arr = []int{1,3,4,2,5}
+	common.Success(c, sort.XiaoHeMerge(arr, 0, len(arr) - 1))
+}
+
+
+
+
+
+
+

@@ -67,16 +67,15 @@ func MergeSort(arr []int, left, right int)  {
 	MergeSort(arr, left, mid)
 	MergeSort(arr, mid+1, right)
 
-	merge(arr, left, mid+1, right)
+	merge(arr, left, mid, right)
 }
 
-func merge(arr []int, leftPtr, rightPtr, rightBound int) {
-	var mid = rightPtr - 1
-	var newArr = make([]int, rightBound-leftPtr+1)
+func merge(arr []int, l, m, r int) {
+	var newArr = make([]int, r-l+1)
 
-	var i, j, k = leftPtr, rightPtr, 0
+	var i, j, k = l, m+1, 0
 
-	for i <= mid && j <= rightBound {
+	for i <= m && j <= r {
 		if arr[i] <= arr[j] {
 			newArr[k] = arr[i]
 			k++
@@ -88,19 +87,19 @@ func merge(arr []int, leftPtr, rightPtr, rightBound int) {
 		}
 	}
 
-	for i <= mid {
+	for i <= m {
 		newArr[k] = arr[i]
 		k++
 		i++
 	}
 
-	for j <= rightBound {
+	for j <= r {
 		newArr[k] = arr[j]
 		k++
 		j++
 	}
 	for ii := 0; ii < len(newArr); ii++ {
-		arr[leftPtr+ii] = newArr[ii]
+		arr[l+ii] = newArr[ii]
 	}
 }
 
@@ -206,4 +205,50 @@ func getSliceMax(arr []int) (max int) {
 		}
 	}
 	return
+}
+
+func XiaoHeMerge(arr []int, left, right int) int {
+	if left == right {
+		return 0
+	}
+	//分成两部分，左右排序，左右merge
+	var mid = left + (right-left)/2
+
+	return  XiaoHeMerge(arr, left, mid) + XiaoHeMerge(arr, mid+1, right) + XiaoheM(arr, left, mid, right)
+}
+
+func XiaoheM(arr []int, l, m, r int) int {
+	var newArr = make([]int, r-l+1)
+	var i, j, k = l, m+1, 0
+	var res = 0
+
+	for i <= m && j <= r {
+		if arr[i] < arr[j] {
+			res += (r - j + 1) * arr[i]
+			newArr[k] = arr[i]
+			k++
+			i++
+		} else {
+			res += 0
+			newArr[k] = arr[j]
+			k++
+			j++
+		}
+	}
+
+	for i <= m {
+		newArr[k] = arr[i]
+		k++
+		i++
+	}
+
+	for j <= r {
+		newArr[k] = arr[j]
+		k++
+		j++
+	}
+	for ii := 0; ii < len(newArr); ii++ {
+		arr[l+ii] = newArr[ii]
+	}
+	return res
 }
