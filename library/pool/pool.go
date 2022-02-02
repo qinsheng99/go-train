@@ -48,7 +48,7 @@ func (p *GoFuncPool) Submit(fn func()) {
 	p.sy.Wait()
 }
 
-func (p *GoFuncPool) Wait() {
+func (p *GoFuncPool) Close() {
 	for i := 0; i < p.MaxLimit; i++ {
 		<-p.Gochannel
 	}

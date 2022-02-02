@@ -252,3 +252,48 @@ func XiaoheM(arr []int, l, m, r int) int {
 	}
 	return res
 }
+
+func HeapSort(arr []int) []int {
+	var heapSize = len(arr)
+	//3, 5, 8, 1, 4, 7, 0
+	//for i := 0; i < len(arr); i++ {
+	//	heapInsert(arr, i)
+	//}
+
+	for i := len(arr) - 1; i >= 0 ; i-- {
+		heapify(arr, i, heapSize)
+	}
+	for heapSize > 0 {
+		arr[0], arr[heapSize-1] = arr[heapSize-1], arr[0]
+		heapSize--
+		heapify(arr, 0, heapSize)
+	}
+	return arr
+}
+func heapInsert(arr []int, index int) {
+	for arr[index] > arr[(index-1)/2] {
+		arr[index], arr[(index-1)/2] = arr[(index-1)/2], arr[index]
+		index = (index - 1) / 2
+	}
+}
+
+func heapify(arr []int, index, heapSize int) {
+	var left = index*2 + 1
+	for left < heapSize {
+		var largest = 0
+		if left+1 < heapSize && arr[left+1] > arr[left] {
+			largest = left + 1
+		} else {
+			largest = left
+		}
+		if arr[largest] > arr[index] {} else {
+			largest = index
+		}
+		if index == largest {
+			break
+		}
+		arr[index], arr[largest] = arr[largest], arr[index]
+		index = largest
+		left = index*2 + 1
+	}
+}

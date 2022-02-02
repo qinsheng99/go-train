@@ -18,6 +18,9 @@ type EsImp interface {
 	DeleteEs() error
 	InsertElastic(list []*model.CustomerFollowerUserEs)
 	Get(q crequest.CeShiGetRequest) (*elastic.SearchResult, error)
+
+	RefreshCeshi(datas []*model.CeshiEs)
+	GetAllEsData() ([]model.CeshiEs, error)
 }
 
 func PQuery(q request.CeShiRequest) *elastic.BoolQuery {

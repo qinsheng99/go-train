@@ -23,10 +23,11 @@ func IsDelete() func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-type MysqlImp interface {
+type CeshiMysqlImp interface {
 	GetCeshiData() ([]*model.CeshiWith, error)
 	GetFirstData() (data *model.CeshiDemo1, err error)
 	InsertData(data *model.Ceshi, updateStringArr []string) (err error)
 	JoinData() (datas []*model.CeshiJoin, err error)
 	UpdateData(id int, data string) (err error)
+	GetCeshiEsData() (data []*model.CeshiEs, err error)
 }

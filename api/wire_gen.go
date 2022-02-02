@@ -6,6 +6,7 @@ package api
 
 import (
 	"github.com/qinsheng99/goWeb/api/handel/ceshi"
+	esHandle "github.com/qinsheng99/goWeb/api/handel/es"
 	"github.com/qinsheng99/goWeb/api/handel/mysql"
 	"github.com/qinsheng99/goWeb/api/handel/redis"
 	sortHandler "github.com/qinsheng99/goWeb/api/handel/sort"
@@ -30,12 +31,14 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis) (*E
 	NewMysqlImp := ServiceMysql.NewMysqlService(bundleDb)
 	NewMysql := mysql.NewMysql(NewMysqlImp)
 	NewSort := sortHandler.NewSort()
+	NewEs := esHandle.NewEsHandle(NewEsDao, NewMysqlImp)
 
 	e := &Entry{
 		NewHandler: NewHandlerDao,
 		NewH:       NewH,
 		NewMysql:   NewMysql,
 		NewSort: NewSort,
+		NewEs: NewEs,
 	}
 
 	return e, nil

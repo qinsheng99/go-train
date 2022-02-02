@@ -20,6 +20,7 @@ func Sort(e *api.Entry, c *gin.Engine) {
 			group.GET("/quick-sort", s.QuickSort)
 			group.GET("/count-sort", s.CountSort)
 			group.GET("/radix-sort", s.RadixSort)
+			group.GET("/heap-sort", s.HeapSort)
 
 			group.GET("/exclusive", s.Exclusive)
 			group.GET("/xiao-he-problem", s.XiaoHe)

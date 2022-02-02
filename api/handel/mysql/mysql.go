@@ -13,10 +13,10 @@ import (
 )
 
 type Handler struct {
-	m customer.MysqlImp
+	m customer.CeshiMysqlImp
 }
 
-func NewMysql(m customer.MysqlImp) *Handler {
+func NewMysql(m customer.CeshiMysqlImp) *Handler {
 	return &Handler{m: m}
 }
 
@@ -49,7 +49,7 @@ func (m *Handler) IntertData(c *gin.Context) {
 			}
 		}
 	})
-	defer p.Wait()
+	defer p.Close()
 	common.Success(c, gin.H{})
 }
 

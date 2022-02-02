@@ -11,4 +11,5 @@ func Route(e *api.Entry, c *gin.Engine) {
 	Credis(e, c)
 	Mysql(e, c)
 	Sort(e, c)
+	Es(e, c)
 }

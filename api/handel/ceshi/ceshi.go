@@ -93,7 +93,7 @@ func (h *Handler) Index(c *gin.Context) {
 		p.Submit(func() {
 		})
 	}
-	defer p.Wait()
+	defer p.Close()
 	//defer pool.GoFunc.Wait()
 	common.Success(c, gin.H{})
 	// var a = []int{1, 2, 3, 4}

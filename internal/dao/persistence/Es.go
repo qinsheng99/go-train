@@ -19,6 +19,7 @@ import (
 
 const (
 	EsIndexCustomerFollowerUserListIndex = "customer_follower_user_list_index"
+	EsIndexCeshi = "ceshi_index"
 )
 
 type EsDao struct {
@@ -182,4 +183,33 @@ func (e *EsDao) Get(q crequest.CeShiGetRequest) (*elastic.SearchResult, error) {
 		return nil, err
 	}
 	return res, nil
+}
+
+func (e *EsDao) RefreshCeshi(datas []*model.CeshiEs){
+	for _, v := range datas {
+		_, err := e.Es.Client.Index().
+			Index(EsIndexCeshi).
+			Id(strconv.Itoa(v.Id)).
+			BodyJson(v).
+			Do(context.Background())
+		if err != nil {
+			continue
+		}
+	}
+}
+
+func (e *EsDao) GetAllEsData() (datas []model.CeshiEs,err error) {
+	var data model.CeshiEs
+	res, err := e.Es.Client.Search().Index(EsIndexCeshi).
+		Sort("id", true).
+		Size(20).
+		Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	for _, v := range res.Hits.Hits {
+		_ = json.Unmarshal(v.Source, &data)
+		datas = append(datas, data)
+	}
+	return
 }

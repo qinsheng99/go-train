@@ -13,7 +13,7 @@ type MysqlService struct {
 	db *db.BundleDb
 }
 
-func NewMysqlService(db *db.BundleDb) customer.MysqlImp {
+func NewMysqlService(db *db.BundleDb) customer.CeshiMysqlImp {
 	return &MysqlService{
 		db: db,
 	}
@@ -65,5 +65,38 @@ func (m *MysqlService) JoinData() (datas []*model.CeshiJoin, err error) {
 
 func (m *MysqlService) UpdateData(id int, data string) (err error) {
 	err = m.db.Db.Model(&model.Ceshi{}).Where("id = ?", id).Update("back_name", data).Error
+	return
+}
+
+func (m *MysqlService) GetCeshiEsData() (datas []*model.CeshiEs, err error) {
+	var pageSize , page, id, count = 10 ,1, 0, 200
+	var ceshi []*model.Ceshi
+	for  {
+		err = m.db.Db.Model(&model.Ceshi{}).
+			Where("id > ?", id).
+			Limit(pageSize).
+			Order("id asc").
+			Find(&ceshi).Error
+		if err != nil {
+			return nil, err
+		}
+		for _, v := range ceshi {
+			datas = append(datas, &model.CeshiEs{
+				Id: v.Id,
+				Uri: v.Uri,
+				Tag: v.Tag,
+				BackName: v.BackName,
+				IsDelete: v.IsDelete,
+				CreateTime: v.CreateTime,
+				DeleteTime: v.DeleteTime,
+			})
+			id = v.Id
+		}
+		page++
+
+		if id == count {
+			break
+		}
+	}
 	return
 }

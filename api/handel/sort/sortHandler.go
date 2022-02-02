@@ -105,6 +105,13 @@ func (s *SortHandler) XiaoHe(c *gin.Context)  {
 	common.Success(c, sort.XiaoHeMerge(arr, 0, len(arr) - 1))
 }
 
+// HeapSort 基数排序
+func (s *SortHandler) HeapSort(c *gin.Context)  {
+	var arr = []int{421, 240, 1115, 532, 2305, 430, 4124}
+	//var arr = []int{9,6,11,3,5,12,8,7,10,15,14,4,1,13,2}
+	common.Success(c, sort.HeapSort(arr))
+}
+
 
 
 
