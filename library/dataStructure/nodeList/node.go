@@ -1,4 +1,4 @@
-package sort
+package nodeList
 
 import "fmt"
 
@@ -7,10 +7,10 @@ type Node struct {
 	next *Node
 }
 
-func newNode(val int) *Node  {
+func newNode(val int) *Node {
 	return &Node{val: val}
 }
-func newNodeNil()*Node  {
+func newNodeNil() *Node {
 	return nil
 }
 

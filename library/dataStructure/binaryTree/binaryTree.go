@@ -1,9 +1,9 @@
-package sort
+package binaryTree
 
 import (
 	"fmt"
 
-	stack2 "github.com/qinsheng99/goWeb/library/stack"
+	stack2 "github.com/qinsheng99/goWeb/library/dataStructure/stack"
 )
 
 type BinaryNode struct {

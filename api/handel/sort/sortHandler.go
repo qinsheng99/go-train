@@ -5,7 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/qinsheng99/goWeb/api/tools/common"
-	"github.com/qinsheng99/goWeb/library/sort"
+	"github.com/qinsheng99/goWeb/library/dataStructure/nodeList"
+	"github.com/qinsheng99/goWeb/library/dataStructure/sort"
 )
 
 type SortHandler struct {}
@@ -114,12 +115,12 @@ func (s *SortHandler) HeapSort(c *gin.Context)  {
 
 func (s *SortHandler) NodeList(c *gin.Context)  {
 	//回文链表
-	common.Success(c,sort.NodeList())
+	common.Success(c, nodeList.NodeList())
 }
 
 func (s *SortHandler) BinaryTree(c *gin.Context)  {
 	//回文链表
-	common.Success(c,sort.NodeList())
+	//common.Success(c, sort.NodeList())
 }
 
 
