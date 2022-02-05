@@ -1,5 +1,6 @@
 package queue
 
+// Queue 队列
 type Queue []interface{}
 
 func NewQueue() *Queue {

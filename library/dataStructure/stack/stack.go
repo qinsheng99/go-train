@@ -1,5 +1,6 @@
 package stack
 
+// Stack 栈
 type Stack struct {
 	size int
 	top  int

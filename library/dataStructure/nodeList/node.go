@@ -2,6 +2,7 @@ package nodeList
 
 import "fmt"
 
+// Node 链表
 type Node struct {
 	val int
 	next *Node
