@@ -267,6 +267,7 @@ func CBT(node *BinaryNode) bool {
 	return true
 }
 func balance(node *BinaryNode) (res bool, high int) {
+	// 判断是否是平衡二叉树
 	if node == nil {
 		return true, 0
 	}
@@ -277,6 +278,67 @@ func balance(node *BinaryNode) (res bool, high int) {
 	// 左数是平衡二叉树  右树是平衡二叉树  左右高度差小于2
 	res = leftB && rightB && int(math.Abs(float64(leftH-rightH))) < 2
 	return
+}
+
+func fullBinaryTree(node *BinaryNode) (high, nodes int) {
+	// 判断是否是满二叉树
+	//int(math.Pow(2, float64(high)))-1 == nodes
+	if node == nil {
+		return 0, 0
+	}
+	leftH, leftN := fullBinaryTree(node.left)
+	rightH, rightN := fullBinaryTree(node.right)
+
+	nodes = leftN + rightN + 1
+	high = int(math.Max(float64(leftH), float64(rightH))) + 1
+	return
+}
+
+func lowAncestors(node, o1, o2 *BinaryNode) *BinaryNode {
+	//找到两个点的最低公共祖先
+	if node == nil || node == o1 || node == o2 {
+		return node
+	}
+	left := lowAncestors(node.left, o1, o2)
+	right := lowAncestors(node.right, o1, o2)
+	//o1和o2不互为祖先，返回交点
+	if left != nil && right != nil {
+		return node
+	}
+
+	// o1和o2，有一个是另一个的祖先，那么另一面一定返回nil
+	if left != nil {
+		return left
+	} else {
+		return right
+	}
+}
+
+func subsequent(node *NBinaryNode) *NBinaryNode {
+	//找后继节点：中序遍历每个节点的下一个节点
+	if node == nil {
+		return node
+	}
+	if node.right != nil { //有右子树，则右子树的左子树为后继节点
+		return f(node.right)
+	} else {
+		parent := node.parent
+		for parent.left != node && parent != nil {
+			node = parent
+			parent = node.parent
+		}
+		return parent
+	}
+}
+
+func f(node *NBinaryNode) *NBinaryNode {
+	if node == nil {
+		return node
+	}
+	for node.left != nil {
+		node = node.left
+	}
+	return node
 }
 func BTest1() {
 	var binary = NewBinary(1)
@@ -326,4 +388,36 @@ func BTest4() {
 	//binary.right.left = NewBinary(6)
 	//binary.right.right = NewBinary(7)
 	fmt.Println(balance(binary))
+}
+
+func BTest5() {
+	var binary = NewBinary(1)
+	binary.left = NewBinary(2)
+	binary.right = NewBinary(3)
+	binary.left.left = NewBinary(4)
+	binary.left.right = NewBinary(5)
+	binary.right.left = NewBinary(6)
+	fmt.Println(lowAncestors(binary, binary.left.left, binary.left))
+}
+
+func BTest6() {
+	var binary = NewNBinary(1)
+	binary.parent = nil
+	binary.left = NewNBinary(2)
+	binary.left.parent = binary
+	binary.left.left = NewNBinary(4)
+	binary.left.left.parent = binary.left
+	binary.left.right = NewNBinary(5)
+	binary.left.right.parent = binary.left
+	binary.left.right.left = NewNBinary(10)
+	binary.left.right.left.parent = binary.left.right
+	binary.left.right.right = NewNBinary(100)
+	binary.left.right.right.parent = binary.left.right
+
+	binary.right = NewNBinary(3)
+	binary.right.parent = binary
+	binary.right.left = NewNBinary(6)
+	binary.right.left.parent = binary.right
+
+	fmt.Println(subsequent(binary.left.right.right))
 }
