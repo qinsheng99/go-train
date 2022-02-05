@@ -112,6 +112,16 @@ func (s *SortHandler) HeapSort(c *gin.Context)  {
 	common.Success(c, sort.HeapSort(arr))
 }
 
+func (s *SortHandler) NodeList(c *gin.Context)  {
+	//回文链表
+	common.Success(c,sort.NodeList())
+}
+
+func (s *SortHandler) BinaryTree(c *gin.Context)  {
+	//回文链表
+	common.Success(c,sort.NodeList())
+}
+
 
 
 

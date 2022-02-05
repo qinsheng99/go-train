@@ -12,6 +12,7 @@ func Sort(e *api.Entry, c *gin.Engine) {
 		Use(middleware.AuthMiddleware())
 	func(s *sortHandler.SortHandler) {
 		{
+			//排序
 			group.GET("/select-sort", s.SelectSort)
 			group.GET("/bubbling-sort", s.BubblingSort)
 			group.GET("/insert-sort", s.InsertSort)
@@ -22,8 +23,15 @@ func Sort(e *api.Entry, c *gin.Engine) {
 			group.GET("/radix-sort", s.RadixSort)
 			group.GET("/heap-sort", s.HeapSort)
 
+			//算法
 			group.GET("/exclusive", s.Exclusive)
 			group.GET("/xiao-he-problem", s.XiaoHe)
+
+			//链表
+			group.GET("/node-list", s.NodeList)
+
+			//二叉树
+			group.GET("/binary-tree", s.BinaryTree)
 		}
 	}(e.NewSort)
 }
