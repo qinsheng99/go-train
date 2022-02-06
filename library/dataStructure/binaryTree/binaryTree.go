@@ -3,6 +3,8 @@ package binaryTree
 import (
 	"fmt"
 	"math"
+	"strconv"
+	"strings"
 
 	"github.com/qinsheng99/goWeb/library/dataStructure/queue"
 	stack2 "github.com/qinsheng99/goWeb/library/dataStructure/stack"
@@ -22,8 +24,8 @@ func NewBinaryNoVal() *BinaryNode {
 	return nil
 }
 
+// Recursive1 先序遍历  先打印头结点，在打印左节点，在打印右节点  递归方式
 func Recursive1(node *BinaryNode) {
-	//先序遍历  先打印头结点，在打印左节点，在打印右节点  递归方式
 	if node == nil {
 		return
 	}
@@ -32,8 +34,8 @@ func Recursive1(node *BinaryNode) {
 	Recursive1(node.right)
 }
 
+// NoRecursive1 先序遍历  先打印头结点，在打印左节点，在打印右节点 非递归   使用头右左压栈
 func NoRecursive1(node *BinaryNode) {
-	//先序遍历  先打印头结点，在打印左节点，在打印右节点 非递归   使用头右左压栈
 	stack := stack2.CreateStack(20)
 	if node != nil {
 		stack.Push(node)
@@ -51,8 +53,8 @@ func NoRecursive1(node *BinaryNode) {
 	defer stack.Clear()
 }
 
+// Recursive2 中序遍历  先打印左结点，在打印头节点，在打印右节点 递归方式
 func Recursive2(node *BinaryNode) {
-	//中序遍历  先打印左结点，在打印头节点，在打印右节点 递归方式
 	if node == nil {
 		return
 	}
@@ -62,8 +64,8 @@ func Recursive2(node *BinaryNode) {
 
 }
 
+// NoRecursive2 中序遍历  先打印左结点，在打印头节点，在打印右节点   左右头压栈
 func NoRecursive2(node *BinaryNode) {
-	//中序遍历  先打印左结点，在打印头节点，在打印右节点   左右头压栈
 	stack := stack2.CreateStack(20)
 	if node != nil {
 		for !stack.IsEmpty() || node != nil {
@@ -79,8 +81,8 @@ func NoRecursive2(node *BinaryNode) {
 	}
 }
 
+// Recursive3 后序遍历:先打印左结点，在打印右节点，在打印头节点 递归方式
 func Recursive3(node *BinaryNode) {
-	//后序遍历:先打印左结点，在打印右节点，在打印头节点 递归方式
 	if node == nil {
 		return
 	}
@@ -88,8 +90,9 @@ func Recursive3(node *BinaryNode) {
 	Recursive3(node.right)
 	fmt.Print(node.val)
 }
+
+// NoRecursive3 后序遍历:先打印左结点，在打印右节点，在打印头节点 非递归方式 头右左使用头左右压栈
 func NoRecursive3(node *BinaryNode) {
-	//后序遍历:先打印左结点，在打印右节点，在打印头节点 非递归方式 头右左使用头左右压栈
 	stack := stack2.CreateStack(20)
 	stack1 := stack2.CreateStack(20)
 	if node != nil {
@@ -112,8 +115,8 @@ func NoRecursive3(node *BinaryNode) {
 	defer stack1.Clear()
 }
 
+// getWidthUseMap 获取二叉树的最大宽度，使用map
 func getWidthUseMap(node *BinaryNode) {
-	// 获取二叉树的最大宽度
 	var m = make(map[interface{}]int, 20)
 	var max, level, nodes = -1, 1, 0
 	q:= queue.NewQueue()
@@ -142,8 +145,8 @@ func getWidthUseMap(node *BinaryNode) {
 	fmt.Println(max)
 }
 
-func getWidthNoUseMap(node *BinaryNode) {
-	// 获取二叉树的最大宽度  不使用map
+// getWidthNoUseMap 获取二叉树的最大宽度  不使用map
+func getWidthNoUseMap(node *BinaryNode) int {
 	var max, curLevel, curEnd, curNextEnd = 0, 0, node, NewBinaryNoVal()
 	q := queue.NewQueue()
 	q.Add(node)
@@ -164,10 +167,12 @@ func getWidthNoUseMap(node *BinaryNode) {
 			curEnd = curNextEnd
 		}
 	}
-	fmt.Println(max)
+	return max
 }
+
+// souSuoBinaryTree 搜索二叉树：根节点左子树不为空，那么它左子树上面的所有节点的值都小于它的根节点的值，
+//如果它的右子树不为空，那么它右子树任意节点的值都大于他的根节点的值
 func souSuoBinaryTree(node *BinaryNode) bool {
-	//搜索二叉树：根节点左子树不为空，那么它左子树上面的所有节点的值都小于它的根节点的值，如果它的右子树不为空，那么它右子树任意节点的值都大于他的根节点的值
 	var MIN = math.MinInt
 	if node == nil {
 		return true
@@ -207,9 +212,9 @@ type SouSuo struct {
 	min, max int
 }
 
+// souSuoBinaryTree1 递归实现搜索二叉树
+// 左右都是搜索二叉树，左边最大值小于根，右边最小值大于根
 func souSuoBinaryTree1(node *BinaryNode) *SouSuo {
-	// 递归实现搜索二叉树
-	// 左右都是搜索二叉树，左边最大值小于根，右边最小值大于根
 	if node == nil {
 		return nil
 	}
@@ -238,11 +243,13 @@ func souSuoBinaryTree1(node *BinaryNode) *SouSuo {
 
 	return &SouSuo{res: res, max: max, min: min}
 }
+
+// CBT
+/**
+1、一个节点，左孩子为空，右孩子不为空，不是满二叉树
+2、一个节点左右都空，或者左不为空右为空，剩下的节点必须都是子节点(不存在左右孩子)
+*/
 func CBT(node *BinaryNode) bool {
-	/**
-			1、一个节点，左孩子为空，右孩子不为空，不是满二叉树
-			2、一个节点左右都空，或者左不为空右为空，剩下的节点必须都是子节点(不存在左右孩子)
-	 */
 	var b = false // 是否遇到第一个孩子不全的节点
 	q := queue.NewQueue()
 	q.Add(node)
@@ -266,8 +273,9 @@ func CBT(node *BinaryNode) bool {
 	}
 	return true
 }
+
+// balance 判断是否是平衡二叉树
 func balance(node *BinaryNode) (res bool, high int) {
-	// 判断是否是平衡二叉树
 	if node == nil {
 		return true, 0
 	}
@@ -280,8 +288,8 @@ func balance(node *BinaryNode) (res bool, high int) {
 	return
 }
 
+// fullBinaryTree 判断是否是满二叉树
 func fullBinaryTree(node *BinaryNode) (high, nodes int) {
-	// 判断是否是满二叉树
 	//int(math.Pow(2, float64(high)))-1 == nodes
 	if node == nil {
 		return 0, 0
@@ -294,8 +302,8 @@ func fullBinaryTree(node *BinaryNode) (high, nodes int) {
 	return
 }
 
+//lowAncestors 找到两个点的最低公共祖先
 func lowAncestors(node, o1, o2 *BinaryNode) *BinaryNode {
-	//找到两个点的最低公共祖先
 	if node == nil || node == o1 || node == o2 {
 		return node
 	}
@@ -314,8 +322,8 @@ func lowAncestors(node, o1, o2 *BinaryNode) *BinaryNode {
 	}
 }
 
+//subsequent 找后继节点：中序遍历每个节点的下一个节点
 func subsequent(node *NBinaryNode) *NBinaryNode {
-	//找后继节点：中序遍历每个节点的下一个节点
 	if node == nil {
 		return node
 	}
@@ -339,6 +347,54 @@ func f(node *NBinaryNode) *NBinaryNode {
 		node = node.left
 	}
 	return node
+}
+
+// serialTree 序列化一个二叉树，使用前序遍历
+func serialTree(node *BinaryNode) (res string) {
+	if node == nil {
+		return "#_"
+	}
+	res = strconv.Itoa(node.val) + "_"
+	res += serialTree(node.left)
+	res += serialTree(node.right)
+	return
+}
+
+func UnSerial(res []string) *BinaryNode {
+	q := queue.NewQueue()
+	for i := 0; i < len(res); i++ {
+		q.Add(res[i])
+	}
+	return UnSerialTree(q)
+}
+
+func UnSerialTree(queue *queue.Queue) *BinaryNode {
+	v := queue.Pop()
+	if v.(string) == "#" {
+		return nil
+	}
+	vv, _ := strconv.Atoi(v.(string))
+	//fmt.Println(vv)
+	var binary = NewBinary(vv)
+	binary.left = UnSerialTree(queue)
+	binary.right = UnSerialTree(queue)
+	return binary
+}
+
+// i 为当前层数  n为总层数 down true为凹 false为凸
+// 微软的折纸问题，一个纸条对折，凹折痕为凹，凸折痕为凸，求对折n此，凹凸个数
+func paperFold(i, n int, down bool) {
+	if i > n {
+		return
+	}
+
+	paperFold(i+1, n, true)
+	if down {
+		fmt.Print("凹", " ")
+	} else {
+		fmt.Print("凸", " ")
+	}
+	paperFold(i+1, n, false)
 }
 func BTest1() {
 	var binary = NewBinary(1)
@@ -420,4 +476,24 @@ func BTest6() {
 	binary.right.left.parent = binary.right
 
 	fmt.Println(subsequent(binary.left.right.right))
+}
+func BTest7() {
+	//var binary = NewBinary(1)
+	//binary.right = NewBinary(3)
+	//binary.right.left = NewBinary(2)
+	var binary = NewBinary(1)
+	binary.left = NewBinary(2)
+	binary.right = NewBinary(3)
+	binary.left.left = NewBinary(4)
+	binary.left.right = NewBinary(5)
+	binary.right.left = NewBinary(6)
+	binary.right.right = NewBinary(7)
+	res := strings.Split(serialTree(binary), "_")
+	Recursive1(binary)
+	fmt.Println()
+	Recursive1(UnSerial(res[0 : len(res)-1]))
+}
+
+func BTest8() {
+	paperFold(1, 2, true)
 }
