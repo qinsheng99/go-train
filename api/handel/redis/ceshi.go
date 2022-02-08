@@ -355,7 +355,7 @@ func (h *Handle) Zrank(c *gin.Context) {
 }
 
 func (h *Handle) SetEtcd(c *gin.Context) {
-	_, err := h.e.Client.Put(context.Background(), "z", "jm")
+	_, err := etcd.Put(context.Background(), "zz", "jm")
 
 	if err != nil {
 		common.Failure(c,err)
@@ -365,7 +365,7 @@ func (h *Handle) SetEtcd(c *gin.Context) {
 
 func (h *Handle) GetEtcd(c *gin.Context) {
 	var m = make(map[string]string)
-	get, err := h.e.Client.Get(context.Background(), "z")
+	get, err := etcd.Get(context.Background(), "zz")
 	if err != nil {
 		common.Failure(c,err)
 	}

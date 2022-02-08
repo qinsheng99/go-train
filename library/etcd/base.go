@@ -9,6 +9,7 @@ import (
 type Etcd struct {
 	Client *clientv3.Client
 }
+var EClient *clientv3.Client
 
 func GetEtcd() (*Etcd, error) {
 	client, err := clientv3.New(clientv3.Config{
@@ -19,6 +20,7 @@ func GetEtcd() (*Etcd, error) {
 	if err != nil {
 		return nil ,err
 	}
+	EClient = client
 	return &Etcd{Client: client}, nil
 }
 
