@@ -7,6 +7,7 @@ import (
 	"github.com/qinsheng99/goWeb/api/routes"
 	"github.com/qinsheng99/goWeb/library/db"
 	"github.com/qinsheng99/goWeb/library/elasticsearch"
+	etcd2 "github.com/qinsheng99/goWeb/library/etcd"
 	"github.com/qinsheng99/goWeb/library/redisClient"
 
 	"github.com/gin-gonic/gin"
@@ -18,21 +19,27 @@ func main() {
 	bundleDB, err := db.GetBundleDb()
 
 	if err != nil {
-		fmt.Printf("Mysql connect failed , error is %v", err)
+		fmt.Printf("Mysql connect failed , error is %v\n", err)
 		panic(err)
 	}
 	es, err := elasticsearch.GetES()
 	if err != nil {
-		fmt.Printf("ES connect failed ,  error is %v", err)
+		fmt.Printf("ES connect failed , error is %v\n", err)
 		panic(err)
 	}
-	conn, err := redisClient.GetRedis()
+	redis, err := redisClient.GetRedis()
 	if err != nil {
-		fmt.Printf("Redis connect failed ,  error is %v", err)
+		fmt.Printf("Redis connect failed , error is %v\n", err)
 		panic(err)
 	}
 
-	e, err := api.Init(bundleDB, es, conn)
+	etcd, err := etcd2.GetEtcd()
+	if err != nil {
+		fmt.Printf("Etcd connect failed , error is %v\n", err)
+		panic(err)
+	}
+
+	e, err := api.Init(bundleDB, es, redis, etcd)
 
 	if err != nil {
 		panic(err)

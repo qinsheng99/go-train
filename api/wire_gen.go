@@ -17,17 +17,18 @@ import (
 	ServiceMysql "github.com/qinsheng99/goWeb/internal/service/mysql"
 	"github.com/qinsheng99/goWeb/library/db"
 	"github.com/qinsheng99/goWeb/library/elasticsearch"
+	"github.com/qinsheng99/goWeb/library/etcd"
 	"github.com/qinsheng99/goWeb/library/redisClient"
 )
 
-func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis) (*Entry, error) {
+func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, etcd *etcd.Etcd) (*Entry, error) {
 	NewEsDao := persistence.NewEsDao(es)
 	NewCustomerDao := customer.NewCustomerDao(bundleDb, NewEsDao)
 	Drainage := drainage.NewDS(NewCustomerDao)
 	NewHandlerDao := ceshi.NewHandler(NewCustomerDao, NewEsDao, Drainage)
 	NewCeshi := ceshi2.NewCeshi()
 	NewRedis := redisClient.NewRedisStruct(r)
-	NewH := redis.NewH(NewCeshi, NewRedis)
+	NewH := redis.NewH(NewCeshi, NewRedis, etcd)
 	NewMysqlImp := ServiceMysql.NewMysqlService(bundleDb)
 	NewMysql := mysql.NewMysql(NewMysqlImp)
 	NewSort := sortHandler.NewSort()

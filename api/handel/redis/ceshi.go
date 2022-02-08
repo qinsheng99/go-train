@@ -8,6 +8,7 @@ import (
 	"github.com/qinsheng99/goWeb/api/entity/redis/request"
 	"github.com/qinsheng99/goWeb/api/tools/common"
 	"github.com/qinsheng99/goWeb/internal/service/ceshi"
+	"github.com/qinsheng99/goWeb/library/etcd"
 	"github.com/qinsheng99/goWeb/library/funcTest"
 	"github.com/qinsheng99/goWeb/library/redisClient"
 	timeFun "github.com/qinsheng99/goWeb/library/time"
@@ -22,14 +23,16 @@ import (
 type Handle struct {
 	c  ceshi.CeShiService
 	ri redisClient.RedisInterface
+	e *etcd.Etcd
 }
 
 var ctx = context.Background()
 
-func NewH(c ceshi.CeShiService, ri redisClient.RedisInterface) *Handle {
+func NewH(c ceshi.CeShiService, ri redisClient.RedisInterface, e *etcd.Etcd) *Handle {
 	return &Handle{
 		c:  c,
 		ri: ri,
+		e: e,
 	}
 }
 
@@ -349,4 +352,26 @@ func (h *Handle) Zrank(c *gin.Context) {
 		return
 	}
 	common.Success(c, res)
+}
+
+func (h *Handle) SetEtcd(c *gin.Context) {
+	_, err := h.e.Client.Put(context.Background(), "z", "jm")
+
+	if err != nil {
+		common.Failure(c,err)
+	}
+	common.Success(c, "")
+}
+
+func (h *Handle) GetEtcd(c *gin.Context) {
+	var m = make(map[string]string)
+	get, err := h.e.Client.Get(context.Background(), "z")
+	if err != nil {
+		common.Failure(c,err)
+	}
+	for _, v := range get.Kvs {
+		m[string(v.Key)] = string(v.Value)
+	}
+	common.Success(c,m)
+
 }

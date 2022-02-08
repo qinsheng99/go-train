@@ -11,6 +11,7 @@ require (
 	github.com/olivere/elastic/v7 v7.0.27
 	github.com/qinsheng99/example v1.0.2
 	github.com/qinsheng99/hello v0.2.0
+	go.etcd.io/etcd/client/v3 v3.5.2
 	google.golang.org/grpc v1.42.0
 	gorm.io/driver/mysql v1.0.5
 	gorm.io/gorm v1.22.4

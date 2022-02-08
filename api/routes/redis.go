@@ -39,6 +39,12 @@ func Credis(e *api.Entry, c *gin.Engine) {
 			group.GET("/zrank", h.Zrank)
 
 			group.GET("/grpc", h.Grpc)
+
+
+			group.GET("/putEtcd", h.SetEtcd)
+			group.GET("/getEtcd", h.GetEtcd)
+
+
 		}
 	}(e.NewH)
 }
