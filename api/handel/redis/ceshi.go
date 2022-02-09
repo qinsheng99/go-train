@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"errors"
 	"strconv"
 	"time"
 
@@ -37,18 +38,39 @@ func NewH(c ceshi.CeShiService, ri redisClient.RedisInterface, e *etcd.Etcd) *Ha
 }
 
 func (h *Handle) SetR(c *gin.Context) {
-	var re redisClient.RE
-	err := c.ShouldBindWith(&re, binding.Query)
+	//var re redisClient.RE
+	//err := c.ShouldBindWith(&re, binding.Query)
+	//if err != nil {
+	//	common.QueryFailure(c, err)
+	//	return
+	//}
+	//b, err := h.ri.Set(ctx, re.Name, re.Data, time.Minute*5)
+	//if err != nil {
+	//	common.Failure(c, err)
+	//	return
+	//}
+	//common.Success(c, b)
+	lock, err := redisClient.Lock(context.Background(), "out", 1, time.Second*60)
 	if err != nil {
-		common.QueryFailure(c, err)
+		common.Failure(c,err)
 		return
 	}
-	b, err := h.ri.Set(ctx, re.Name, re.Data, time.Minute*5)
-	if err != nil {
-		common.Failure(c, err)
+
+	if !lock {
+		common.Failure(c, errors.New("请勿多次请求"))
 		return
 	}
-	common.Success(c, b)
+
+	time.Sleep(time.Second * 10)
+
+	unLock, err := redisClient.UnLock(context.Background(), []string{"out"}, 1)
+
+	if err != nil {
+		common.Failure(c,err)
+		return
+	}
+
+	common.Success(c,unLock)
 }
 
 func (h *Handle) GetR(c *gin.Context) {

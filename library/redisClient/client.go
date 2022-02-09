@@ -11,6 +11,8 @@ type Redis struct {
 	RE *redis.Client
 }
 
+var RedisC *redis.Client
+
 type RE struct {
 	Name     string `json:"name" form:"name"`
 	Data     string `json:"data" form:"data"`
@@ -36,6 +38,7 @@ func GetRedis() (*Redis, error) {
 		fmt.Print(s)
 		return nil, err
 	}
+	RedisC = conn
 	return &Redis{
 		RE: conn,
 	}, nil

@@ -9,7 +9,7 @@ import (
 type Etcd struct {
 	Client *clientv3.Client
 }
-var EClient *clientv3.Client
+var EClient  = new(clientv3.Client)
 
 func GetEtcd() (*Etcd, error) {
 	client, err := clientv3.New(clientv3.Config{

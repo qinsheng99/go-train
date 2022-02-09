@@ -41,7 +41,7 @@ func SuccessReturn(data interface{}, c *gin.Context, options ...RespOption) map[
 func HandleBadReturn(err error, data interface{}) map[string]interface{} {
 	var info = make(map[string]interface{})
 	info["code"] = errno.Error
-	info["msg"] = err
+	info["msg"] = err.Error()
 	info["nowTime"] = time.Now().Unix()
 	info["data"] = data
 	return info
