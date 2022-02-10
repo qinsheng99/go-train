@@ -16,7 +16,8 @@ var (
 )
 
 func init() {
-	client = &http.Client{Timeout: 2 * time.Second,
+	client = &http.Client{
+		Timeout: 2 * time.Second,
 		Transport: &http.Transport{
 			MaxIdleConns:        250,
 			MaxIdleConnsPerHost: 250,

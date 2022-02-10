@@ -70,6 +70,9 @@ github.com/mattn/go-isatty
 github.com/modern-go/concurrent
 # github.com/modern-go/reflect2 v1.0.1
 github.com/modern-go/reflect2
+# github.com/natefinch/lumberjack v2.0.0+incompatible
+## explicit
+github.com/natefinch/lumberjack
 # github.com/olivere/elastic/v7 v7.0.27
 ## explicit
 github.com/olivere/elastic/v7
@@ -107,6 +110,7 @@ go.uber.org/atomic
 # go.uber.org/multierr v1.6.0
 go.uber.org/multierr
 # go.uber.org/zap v1.17.0
+## explicit
 go.uber.org/zap
 go.uber.org/zap/buffer
 go.uber.org/zap/internal/bufferpool

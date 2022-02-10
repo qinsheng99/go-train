@@ -43,8 +43,6 @@ func Credis(e *api.Entry, c *gin.Engine) {
 
 			group.GET("/putEtcd", h.SetEtcd)
 			group.GET("/getEtcd", h.GetEtcd)
-
-
 		}
 	}(e.NewH)
 }

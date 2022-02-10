@@ -1,6 +1,7 @@
 package etcd
 
 import (
+	"fmt"
 	"time"
 
 	clientv3 "go.etcd.io/etcd/client/v3"
@@ -8,6 +9,14 @@ import (
 
 type Etcd struct {
 	Client *clientv3.Client
+}
+
+func init()  {
+	_, err := GetEtcd()
+	if err != nil {
+		fmt.Printf("Etcd connect failed , error is %v\n", err)
+		panic(err)
+	}
 }
 var EClient  = new(clientv3.Client)
 

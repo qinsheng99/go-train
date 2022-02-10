@@ -1,0 +1,11 @@
+{
+  "mode": "debug",
+  "port": 111,
+  "log": {
+    "level": "debug",
+    "filename": "../library/logger/app.log",
+    "maxsize": 200,
+    "max_age": 7,
+    "max_backups": 10
+  }
+}

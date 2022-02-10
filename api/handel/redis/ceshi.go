@@ -6,6 +6,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-redis/redis/v8"
+	pb "github.com/qinsheng99/example/grpc-example/route"
 	"github.com/qinsheng99/goWeb/api/entity/redis/request"
 	"github.com/qinsheng99/goWeb/api/tools/common"
 	"github.com/qinsheng99/goWeb/internal/service/ceshi"
@@ -13,27 +17,20 @@ import (
 	"github.com/qinsheng99/goWeb/library/funcTest"
 	"github.com/qinsheng99/goWeb/library/redisClient"
 	timeFun "github.com/qinsheng99/goWeb/library/time"
-
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
-	"github.com/go-redis/redis/v8"
-	pb "github.com/qinsheng99/example/grpc-example/route"
 	"google.golang.org/grpc"
 )
 
 type Handle struct {
 	c  ceshi.CeShiService
 	ri redisClient.RedisInterface
-	e *etcd.Etcd
 }
 
 var ctx = context.Background()
 
-func NewH(c ceshi.CeShiService, ri redisClient.RedisInterface, e *etcd.Etcd) *Handle {
+func NewH(c ceshi.CeShiService, ri redisClient.RedisInterface) *Handle {
 	return &Handle{
 		c:  c,
 		ri: ri,
-		e: e,
 	}
 }
 
@@ -377,7 +374,7 @@ func (h *Handle) Zrank(c *gin.Context) {
 }
 
 func (h *Handle) SetEtcd(c *gin.Context) {
-	_, err := etcd.Put(context.Background(), "zz", "jm")
+	_, err := etcd.Put(context.Background(), "conf", "{\"mode\":\"debug\",\"port\":111,\"log\":{\"level\":\"debug\",\"filename\":\"../library/logger/app.log\",\"maxsize\":200,\"max_age\":7,\"max_backups\":10}}")
 
 	if err != nil {
 		common.Failure(c,err)
@@ -390,6 +387,7 @@ func (h *Handle) GetEtcd(c *gin.Context) {
 	get, err := etcd.Get(context.Background(), "zz")
 	if err != nil {
 		common.Failure(c,err)
+		return
 	}
 	for _, v := range get.Kvs {
 		m[string(v.Key)] = string(v.Value)
