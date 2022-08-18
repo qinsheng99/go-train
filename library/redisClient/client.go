@@ -30,13 +30,12 @@ func GetKey(key string, args ...interface{}) string {
 
 func GetRedis(cfg *config.RedisConfig) (*Redis, error) {
 	conn := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", cfg.Host, &cfg.Port),
+		Addr:     fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		DB:       0,
 		Password: "",
 	})
-	s, err := conn.Ping(context.Background()).Result()
+	_, err := conn.Ping(context.Background()).Result()
 	if err != nil {
-		fmt.Print(s)
 		return nil, err
 	}
 	RedisC = conn

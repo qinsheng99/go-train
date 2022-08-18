@@ -19,6 +19,7 @@ type Config struct {
 	*MysqlConfig `json:"mysql"`
 	*EsConfig    `json:"es"`
 	*RedisConfig `json:"redis"`
+	*MongoConfig `json:"mongo"`
 }
 
 // LogConfig 日志配置
@@ -48,6 +49,13 @@ type EsConfig struct {
 type RedisConfig struct {
 	Host string `json:"host"`
 	Port int64  `json:"port"`
+}
+
+type MongoConfig struct {
+	Host       string `json:"host"`
+	Port       int64  `json:"port"`
+	Database   string `json:"database"`
+	Collection string `json:"collection"`
 }
 
 // Conf 全局配置变量

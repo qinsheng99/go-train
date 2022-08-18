@@ -11,6 +11,9 @@ func Mon(e *api.Entry, c *gin.Engine) {
 	func(e *mongo.Handle) {
 		{
 			group.POST("/insert-one", e.InsertOne)
+			group.POST("/insert-many", e.InsertMany)
+			group.GET("/find", e.Find)
+			group.GET("/find-one", e.FindOne)
 		}
 	}(e.NewMgo)
 }

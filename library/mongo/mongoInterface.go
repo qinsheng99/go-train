@@ -8,8 +8,11 @@ import (
 )
 
 type MongoInterface interface {
-	Database(name string, opts ...*options.DatabaseOptions) MongoInterface
 	Collection(name string, opts ...*options.CollectionOptions) MongoInterface
 
 	InsertOne(ctx context.Context, document interface{}, opts ...*options.InsertOneOptions) (insertOne *mongo.InsertOneResult, err error)
+	InsertMany(ctx context.Context, document []interface{}, opts ...*options.InsertManyOptions) (insertOne *mongo.InsertManyResult, err error)
+
+	Find(ctx context.Context, filter interface{}, data interface{}, opts ...*options.FindOptions) (err error)
+	FindOne(ctx context.Context, filter interface{}, data interface{}, column ...string) (err error)
 }
