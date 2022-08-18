@@ -50,7 +50,7 @@ func main() {
 		panic(err)
 	}
 
-	mo, err := mongoClient.InitMongo()
+	mo, err := mongoClient.InitMongo(config.Conf.MongoConfig)
 	must(err)
 
 	e, err := api.Init(bundleDB, es, redis, mo)
