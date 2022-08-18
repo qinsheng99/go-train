@@ -30,7 +30,7 @@ func SuccessReturn(data interface{}, c *gin.Context, options ...RespOption) map[
 	info["code"] = errno.OK.Code
 	info["msg"] = errno.ErrorMsg(errno.OK.Code)
 	info["nowTime"] = time.Now().Unix()
-	info["costTime"] = strconv.Itoa(int(time.Now().Sub(start).Seconds())) + "s"
+	info["costTime"] = strconv.Itoa(int(time.Now().Sub(start).Milliseconds())) + "ms"
 	info["data"] = data
 	for _, option := range options {
 		option(info)

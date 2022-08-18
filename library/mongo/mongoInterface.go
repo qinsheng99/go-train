@@ -15,4 +15,6 @@ type MongoInterface interface {
 
 	Find(ctx context.Context, filter interface{}, data interface{}, opts ...*options.FindOptions) (err error)
 	FindOne(ctx context.Context, filter interface{}, data interface{}, column ...string) (err error)
+
+	Update(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (updates *mongo.UpdateResult, err error)
 }

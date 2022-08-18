@@ -125,3 +125,12 @@ func (m *MongoStruct) findOneOpt(column ...string) bson.M {
 
 	return result
 }
+
+func (m *MongoStruct) Update(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (updates *mongo.UpdateResult, err error) {
+	if m.collection == nil {
+		err = errors.New("mongo collection is nil")
+		return
+	}
+	updates, err = m.collection.UpdateMany(ctx, filter, update, opts...)
+	return
+}

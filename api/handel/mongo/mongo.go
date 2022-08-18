@@ -110,3 +110,36 @@ func (h *Handle) FindOne(c *gin.Context) {
 
 	common.Success(c, data)
 }
+
+func (h *Handle) Update(c *gin.Context) {
+	name, ok := c.GetQuery("name")
+	if !ok {
+		common.QueryFailure(c, nil)
+		return
+	}
+
+	filter := bson.M{
+		"name": name,
+	}
+	//update := bson.M{
+	//	"$set": bson.M{
+	//		"age": 24,
+	//	},
+	//}
+	update := bson.M{
+		"$inc": bson.M{
+			"age": 1,
+		},
+	}
+	_, err := h.mo.Collection("").Update(
+		context.Background(),
+		filter,
+		update,
+	)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	common.Success(c, "")
+}
