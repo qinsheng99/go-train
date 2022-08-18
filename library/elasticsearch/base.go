@@ -1,7 +1,10 @@
 package elasticsearch
 
 import (
+	"fmt"
+
 	"github.com/olivere/elastic/v7"
+	"github.com/qinsheng99/goWeb/library/config"
 )
 
 type (
@@ -25,9 +28,9 @@ const (
 	ESHighlightPostTag = "</span>"
 )
 
-func GetES() (*ES, error) {
+func GetES(cfg *config.EsConfig) (*ES, error) {
 	var c = Config{
-		URL:      "http://localhost:9200",
+		URL:      fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		Password: "",
 		Username: "",
 	}

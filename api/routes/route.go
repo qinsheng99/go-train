@@ -12,4 +12,5 @@ func Route(e *api.Entry, c *gin.Engine) {
 	Mysql(e, c)
 	Sort(e, c)
 	Es(e, c)
+	Mon(e, c)
 }

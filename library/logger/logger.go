@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"io"
 	"net"
 	"net/http"
 	"net/http/httputil"
@@ -10,33 +11,56 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/natefinch/lumberjack"
 	"github.com/qinsheng99/goWeb/library/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-var lg *zap.Logger
+var Log *zap.Logger
+var SLog *zap.SugaredLogger
 
 // InitLogger 初始化Logger
 func InitLogger(cfg *config.LogConfig) (err error) {
-	writeSyncer := getLogWriter(cfg.Filename, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge)
+	writeSyncer, err := getWriter("../" + cfg.Filename)
+	if err != nil {
+		return err
+	}
 	encoder := getEncoder()
 	var l = new(zapcore.Level)
 	err = l.UnmarshalText([]byte(cfg.Level))
 	if err != nil {
 		return
 	}
-	core := zapcore.NewCore(encoder, writeSyncer, l)
 
-	lg = zap.New(core, zap.AddCaller())
-	zap.ReplaceGlobals(lg) // 替换zap包中全局的logger实例，后续在其他包中只需使用zap.L()调用即可
+	w := zapcore.NewMultiWriteSyncer(zapcore.AddSync(writeSyncer))
+	core := zapcore.NewCore(encoder, w, l)
+
+	Log = zap.New(core, zap.AddCaller())
+	zap.ReplaceGlobals(Log)
+	SLog = Log.Sugar()
 	return
+}
+
+func getWriter(filename string) (io.Writer, error) {
+	hook, err := rotatelogs.New(
+		filename+".%Y-%m-%d",
+		rotatelogs.WithLinkName(filename),
+		rotatelogs.WithMaxAge(time.Hour*24*7),
+		rotatelogs.WithRotationTime(time.Hour*24),
+	)
+
+	if err != nil {
+
+		return nil, err
+	}
+	return hook, nil
 }
 
 func getEncoder() zapcore.Encoder {
 	encoderConfig := zap.NewProductionEncoderConfig()
-	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05")
 	encoderConfig.TimeKey = "time"
 	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
 	encoderConfig.EncodeDuration = zapcore.SecondsDurationEncoder
@@ -63,7 +87,7 @@ func GinLogger() gin.HandlerFunc {
 		c.Next()
 
 		cost := time.Since(start)
-		lg.Info(path,
+		Log.Info(path,
 			zap.Int("status", c.Writer.Status()),
 			zap.String("method", c.Request.Method),
 			zap.String("path", path),
@@ -94,7 +118,7 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
 				if brokenPipe {
-					lg.Error(c.Request.URL.Path,
+					Log.Error(c.Request.URL.Path,
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 					)
@@ -105,13 +129,13 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 				}
 
 				if stack {
-					lg.Error("[Recovery from panic]",
+					Log.Error("[Recovery from panic]",
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 						zap.String("stack", string(debug.Stack())),
 					)
 				} else {
-					lg.Error("[Recovery from panic]",
+					Log.Error("[Recovery from panic]",
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 					)
@@ -122,5 +146,3 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 		c.Next()
 	}
 }
-
-

@@ -183,9 +183,6 @@ func Default() *Engine {
 	engine.Use(Logger(), Recovery())
 	return engine
 }
-func (engine *Engine) RegPreRunFunc(string2 string,string3 string,pm func() error) (m error) {
-	return m
-}
 
 func (engine *Engine) allocateContext() *Context {
 	v := make(Params, 0, engine.maxParams)

@@ -1,0 +1,24 @@
+{
+  "port": 8080,
+  "log" : {
+      "level": "INFO",
+      "filename": "logs/go-web"
+  },
+  "mysql": {
+    "db_host": "localhost",
+    "db_port": 3306,
+    "db_user": "root",
+    "db_pwd": "root",
+    "db_name": "ceshi",
+    "db_max_conn": 10,
+    "db_maxidle": 100
+  },
+  "es": {
+    "host": "http://192.168.1.218",
+    "port": 9200
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379
+  }
+}

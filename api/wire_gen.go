@@ -7,6 +7,7 @@ package api
 import (
 	"github.com/qinsheng99/goWeb/api/handel/ceshi"
 	esHandle "github.com/qinsheng99/goWeb/api/handel/es"
+	"github.com/qinsheng99/goWeb/api/handel/mongo"
 	"github.com/qinsheng99/goWeb/api/handel/mysql"
 	"github.com/qinsheng99/goWeb/api/handel/redis"
 	sortHandler "github.com/qinsheng99/goWeb/api/handel/sort"
@@ -17,10 +18,11 @@ import (
 	ServiceMysql "github.com/qinsheng99/goWeb/internal/service/mysql"
 	"github.com/qinsheng99/goWeb/library/db"
 	"github.com/qinsheng99/goWeb/library/elasticsearch"
+	"github.com/qinsheng99/goWeb/library/mongo"
 	"github.com/qinsheng99/goWeb/library/redisClient"
 )
 
-func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis) (*Entry, error) {
+func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo *mongoClient.Mongo) (*Entry, error) {
 	NewEsDao := persistence.NewEsDao(es)
 	NewCustomerDao := customer.NewCustomerDao(bundleDb, NewEsDao)
 	Drainage := drainage.NewDS(NewCustomerDao)
@@ -32,13 +34,16 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis) (*E
 	NewMysql := mysql.NewMysql(NewMysqlImp)
 	NewSort := sortHandler.NewSort()
 	NewEs := esHandle.NewEsHandle(NewEsDao, NewMysqlImp)
+	NewMgoInterface := mongoClient.NewMongoStruct(mo)
+	NewMgo := mongo.NewMgo(NewMgoInterface)
 
 	e := &Entry{
 		NewHandler: NewHandlerDao,
 		NewH:       NewH,
 		NewMysql:   NewMysql,
-		NewSort: NewSort,
-		NewEs: NewEs,
+		NewSort:    NewSort,
+		NewEs:      NewEs,
+		NewMgo:     NewMgo,
 	}
 
 	return e, nil

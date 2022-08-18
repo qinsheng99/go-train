@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/qinsheng99/goWeb/library/config"
 )
 
 type Redis struct {
@@ -27,9 +28,9 @@ func GetKey(key string, args ...interface{}) string {
 	return fmt.Sprintf(key, args...)
 }
 
-func GetRedis() (*Redis, error) {
+func GetRedis(cfg *config.RedisConfig) (*Redis, error) {
 	conn := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
+		Addr:     fmt.Sprintf("%s:%d", cfg.Host, &cfg.Port),
 		DB:       0,
 		Password: "",
 	})

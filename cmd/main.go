@@ -3,25 +3,26 @@ package main
 import (
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/qinsheng99/goWeb/api"
 	"github.com/qinsheng99/goWeb/api/routes"
 	"github.com/qinsheng99/goWeb/library/config"
 	"github.com/qinsheng99/goWeb/library/db"
 	"github.com/qinsheng99/goWeb/library/elasticsearch"
-	_ "github.com/qinsheng99/goWeb/library/etcd"
-	"github.com/qinsheng99/goWeb/library/logger"
+	mongoClient "github.com/qinsheng99/goWeb/library/mongo"
 	"github.com/qinsheng99/goWeb/library/redisClient"
 
-	"github.com/gin-gonic/gin"
+	//_ "github.com/qinsheng99/goWeb/library/etcd"
+	"github.com/qinsheng99/goWeb/library/logger"
 )
 
-func must(err error)  {
+func must(err error) {
 	if err != nil {
 		panic(err)
 	}
 }
 func main() {
-	if err := config.Init(); err != nil {
+	if err := config.Init(false); err != nil {
 		panic(err)
 	}
 	if err := logger.InitLogger(config.Conf.LogConfig); err != nil {
@@ -32,26 +33,29 @@ func main() {
 
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
-	bundleDB, err := db.GetBundleDb()
+	bundleDB, err := db.GetBundleDb(config.Conf.MysqlConfig)
 
 	if err != nil {
 		fmt.Printf("Mysql connect failed , error is %v\n", err)
 		panic(err)
 	}
-	es, err := elasticsearch.GetES()
+	es, err := elasticsearch.GetES(config.Conf.EsConfig)
 	if err != nil {
 		fmt.Printf("ES connect failed , error is %v\n", err)
 		panic(err)
 	}
-	redis, err := redisClient.GetRedis()
+	redis, err := redisClient.GetRedis(config.Conf.RedisConfig)
 	if err != nil {
 		fmt.Printf("Redis connect failed , error is %v\n", err)
 		panic(err)
 	}
 
-	e, err := api.Init(bundleDB, es, redis)
+	mo, err := mongoClient.InitMongo()
+	must(err)
+
+	e, err := api.Init(bundleDB, es, redis, mo)
 	must(err)
 	routes.Route(e, r)
 
-	must(r.Run(fmt.Sprintf(":%v",config.Conf.Port)))
+	must(r.Run(fmt.Sprintf(":%v", config.Conf.Port)))
 }
