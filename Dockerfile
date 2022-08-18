@@ -1,15 +1,14 @@
-FROM golangweb
+FROM golang:latest
 
-MAINTAINER z
+MAINTAINER zjm
 
 RUN mkdir /app/web
 
 WORKDIR /app/web
 
-ADD . /app/web
+COPY . /app/web
+RUN cd /app/web
 
-RUN go build ./cmd/main.go
+RUN go mod tidy && go build ./cmd/main.go
 
-EXPOSE 111
-
-CMD /app/web/cmd/main
+ENTRYPOINT ["/app/web/cmd/main"]
