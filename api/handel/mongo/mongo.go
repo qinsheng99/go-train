@@ -26,6 +26,13 @@ func NewMgo(mo mongoClient.Mongos, redis redisClient.RedisInterface) *Handle {
 	return &Handle{mo: mo, redis: redis}
 }
 
+// InsertOne @Summary Create
+// @Description create project
+// @Tags  Project
+// @Param	RequestOne 	true	"body of creating project"
+// @Accept json
+// @Produce json
+// @Router /mongo/insert-one [post]
 func (h *Handle) InsertOne(c *gin.Context) {
 	var req mongoRequest.RequestOne
 	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
