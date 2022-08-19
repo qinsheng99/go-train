@@ -1,5 +1,18 @@
 package tools
 
+import (
+	"github.com/huaweicloud/golangsdk"
+	"go.mongodb.org/mongo-driver/bson"
+)
+
+func StructToMap(info interface{}) (bson.M, error) {
+	body, err := golangsdk.BuildRequestBody(info, "")
+	if err != nil {
+		return nil, err
+	}
+	return bson.M(body), nil
+}
+
 // import (
 // 	"github.com/qinsheng99/goWeb/err"
 // 	"net/http"

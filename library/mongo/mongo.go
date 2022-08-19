@@ -15,13 +15,13 @@ type MongoStruct struct {
 	collection *mongo.Collection
 }
 
-func NewMongoStruct(m *Mongo) MongoInterface {
+func NewMongoStruct(m *Mongo) Mongos {
 	return &MongoStruct{
 		mo: m,
 	}
 }
 
-func (m *MongoStruct) Collection(name string, opts ...*options.CollectionOptions) MongoInterface {
+func (m *MongoStruct) Collection(name string, opts ...*options.CollectionOptions) Mongos {
 	if m.mo.database == nil {
 		return m
 	}
@@ -91,14 +91,14 @@ func (m *MongoStruct) validation(data interface{}, flag bool) error {
 	return nil
 }
 
-func (m *MongoStruct) FindOne(ctx context.Context, filter interface{}, data interface{}, cloumn ...string) (err error) {
+func (m *MongoStruct) FindOne(ctx context.Context, filter interface{}, data interface{}, project bson.M) (err error) {
 	if m.collection == nil {
 		err = errors.New("mongo collection is nil")
 		return
 	}
 	var find *mongo.SingleResult
 
-	find = m.collection.FindOne(ctx, filter, &options.FindOneOptions{Projection: m.findOneOpt(cloumn...)})
+	find = m.collection.FindOne(ctx, filter, &options.FindOneOptions{Projection: project})
 
 	if err != nil {
 		return
