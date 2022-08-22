@@ -29,7 +29,13 @@ type MongoCondition interface {
 	FieldIn(field bson.M, column string, data []string) bson.M
 	FilterOrChooseColumn(field bson.M, flag bool, column ...string) bson.M
 	FieldInc(field bson.M, column string, data interface{}) bson.M
+	// FieldSet 用来指定一个键并更新键值，若键不存在并创建
 	FieldSet(field bson.M, column string, data interface{}) bson.M
+	FieldUnSet(field bson.M, column string, data interface{}) bson.M
+	FieldPush(field bson.M, column string, data interface{}) bson.M
+	FieldPushAll(field bson.M, column string, data interface{}) bson.M
+
+	FieldPull(field bson.M, column string, data interface{}) bson.M
 	SetOrInsert(data bson.M) bson.M
 	Filter(data []Filter) bson.M
 }

@@ -144,7 +144,8 @@ func (h *Handle) Update(c *gin.Context) {
 	_, err := h.mo.Collection("").Update(
 		context.Background(),
 		h.mo.Filter([]mongoClient.Filter{{Column: "name", Data: name}}),
-		h.mo.FieldInc(nil, "age", 1),
+		//h.mo.FieldInc(nil, "age", 1),
+		h.mo.FieldSet(nil, "age", 27),
 	)
 	if err != nil {
 		common.Failure(c, err)
