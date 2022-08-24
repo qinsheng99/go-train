@@ -21,11 +21,21 @@ func must(err error) {
 		panic(err)
 	}
 }
+
+var (
+	bundleDB *db.BundleDb
+	err      error
+	es       *elasticsearch.ES
+	redis    *redisClient.Redis
+	mo       *mongoClient.Mongo
+	e        *api.Entry
+)
+
 func main() {
-	if err := config.Init(false); err != nil {
+	if err = config.Init(false); err != nil {
 		panic(err)
 	}
-	if err := logger.InitLogger(config.Conf.LogConfig); err != nil {
+	if err = logger.InitLogger(config.Conf.LogConfig); err != nil {
 		fmt.Printf("init logger failed, err:%v\n", err)
 		return
 	}
@@ -33,27 +43,27 @@ func main() {
 
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
-	bundleDB, err := db.GetBundleDb(config.Conf.MysqlConfig)
+	bundleDB, err = db.GetBundleDb(config.Conf.MysqlConfig)
 
 	if err != nil {
 		fmt.Printf("Mysql connect failed , error is %v\n", err)
 		panic(err)
 	}
-	es, err := elasticsearch.GetES(config.Conf.EsConfig)
+	es, err = elasticsearch.GetES(config.Conf.EsConfig)
 	if err != nil {
 		fmt.Printf("ES connect failed , error is %v\n", err)
 		panic(err)
 	}
-	redis, err := redisClient.GetRedis(config.Conf.RedisConfig)
+	redis, err = redisClient.GetRedis(config.Conf.RedisConfig)
 	if err != nil {
 		fmt.Printf("Redis connect failed , error is %v\n", err)
 		panic(err)
 	}
 
-	mo, err := mongoClient.InitMongo(config.Conf.MongoConfig)
+	mo, err = mongoClient.InitMongo(config.Conf.MongoConfig)
 	must(err)
 
-	e, err := api.Init(bundleDB, es, redis, mo)
+	e, err = api.Init(bundleDB, es, redis, mo)
 	must(err)
 	routes.Route(e, r)
 

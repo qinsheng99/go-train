@@ -15,7 +15,67 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+		"/mongo/insert-one": {
+            "post": {
+                "description": "create project",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "summary": "Create",
+                "parameters": [
+                    {
+                        "description": "RequestOne of creating project",
+                        "name": "RequestOne",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/mongoRequest.RequestOne"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/mongo.insertId"
+                        }
+                    }
+                }
+            }
+        }
+	},
+    "definitions": {
+        "mongoRequest.RequestOne": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type":"string"
+                },
+                "age": {
+                    "type":"string"
+                },
+                "cve": {
+                    "type":"string"
+                },
+                "dep": {
+                    "type":"string"
+                },
+                "repo": {
+                    "type":"string"
+                }
+            }
+        },
+        "mongo.insertId": {
+            "type": "string"
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it

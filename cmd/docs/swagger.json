@@ -1,10 +1,12 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "contact": {},
+        "version": "",
+        "title": ""
     },
     "paths": {
-        "/v1/project": {
+        "/mongo/insert-one": {
             "post": {
                 "description": "create project",
                 "consumes": [
@@ -19,17 +21,49 @@
                 "summary": "Create",
                 "parameters": [
                     {
-                        "description": "body of creating project",
-                        "name": "body",
+                        "description": "RequestOne of creating project",
+                        "name": "RequestOne",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": ""
+                            "$ref": "#/definitions/mongoRequest.RequestOne"
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/mongo.insertId"
+                        }
+                    }
+                }
             }
+        }
+    },
+    "definitions": {
+        "mongoRequest.RequestOne": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type":"string"
+                },
+                "age": {
+                    "type":"string"
+                },
+                "cve": {
+                    "type":"string"
+                },
+                "dep": {
+                    "type":"string"
+                },
+                "repo": {
+                    "type":"string"
+                }
+            }
+        },
+        "mongo.insertId": {
+            "type": "string"
         }
     }
 }

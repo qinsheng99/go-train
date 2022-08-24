@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	mongoRequest "github.com/qinsheng99/goWeb/api/entity/mongo"
-	"github.com/qinsheng99/goWeb/api/tools"
 	"github.com/qinsheng99/goWeb/api/tools/common"
 	"github.com/qinsheng99/goWeb/internal/model"
 	mongoClient "github.com/qinsheng99/goWeb/library/mongo"
@@ -59,15 +58,13 @@ func (h *Handle) InsertOne(c *gin.Context) {
 		},
 	}
 
-	//in, err := h.mo.Collection("cla").InsertOne(context.Background(), data)
-	//if err != nil {
-	//	common.Failure(c, err)
-	//	return
-	//}
-	//
-	//common.Success(c, in.InsertedID)
-	toMap, _ := tools.StructToMap(data)
-	common.Success(c, toMap)
+	in, err := h.mo.Collection("cla").InsertOne(context.Background(), data)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	common.Success(c, in.InsertedID)
 }
 
 func (h *Handle) InsertMany(c *gin.Context) {
