@@ -15,10 +15,10 @@ import (
 
 type Handler struct {
 	m   customer.CeshiMysqlImp
-	boy boy.Boyimpl
+	boy boy.BoyimplService
 }
 
-func NewMysql(m customer.CeshiMysqlImp, boy boy.Boyimpl) *Handler {
+func NewMysql(m customer.CeshiMysqlImp, boy boy.BoyimplService) *Handler {
 	return &Handler{m: m, boy: boy}
 }
 
@@ -65,7 +65,17 @@ func (m *Handler) JoinData(c *gin.Context) {
 }
 
 func (m *Handler) GetPostgresData(c *gin.Context) {
-	res, err := m.boy.Getlist()
+	res, err := m.boy.GetBoylist()
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	common.Success(c, res)
+}
+
+func (m *Handler) GetPostgresFilter(c *gin.Context) {
+	s := c.GetString("address")
+	res, err := m.boy.GetBoyAddress(s)
 	if err != nil {
 		common.Failure(c, err)
 		return

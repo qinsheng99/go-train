@@ -5,5 +5,11 @@ import (
 )
 
 type Boyimpl interface {
-	Getlist() (data []model.Boy, err error)
+	Getlist() ([]*model.Boy, error)
+	GetAddress(string) ([]*model.Boy, error)
+}
+
+type BoyimplService interface {
+	GetBoylist() ([]*model.Boy, error)
+	GetBoyAddress(string) ([]*model.Boy, error)
 }

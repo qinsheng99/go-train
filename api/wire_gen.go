@@ -17,6 +17,7 @@ import (
 	ceshi2 "github.com/qinsheng99/goWeb/internal/service/ceshi"
 	"github.com/qinsheng99/goWeb/internal/service/drainage"
 	ServiceMysql "github.com/qinsheng99/goWeb/internal/service/mysql"
+	servicePostgresql "github.com/qinsheng99/goWeb/internal/service/postgresql"
 	"github.com/qinsheng99/goWeb/library/db"
 	"github.com/qinsheng99/goWeb/library/elasticsearch"
 	"github.com/qinsheng99/goWeb/library/mongo"
@@ -33,7 +34,8 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo 
 	NewH := redis.NewH(NewCeshi, NewRedis)
 	NewMysqlImp := ServiceMysql.NewMysqlService(bundleDb)
 	NewPostgresBoy := boy.NewPostgresBoy()
-	NewMysql := mysql.NewMysql(NewMysqlImp, NewPostgresBoy)
+	NewPostgresqlService := servicePostgresql.NewPostgresqlService(NewPostgresBoy)
+	NewMysql := mysql.NewMysql(NewMysqlImp, NewPostgresqlService)
 	NewSort := sortHandler.NewSort()
 	NewEs := esHandle.NewEsHandle(NewEsDao, NewMysqlImp)
 	NewMgoInterface := mongoClient.NewMongoStruct(mo)

@@ -24,6 +24,7 @@ func Mysql(e *api.Entry, c *gin.Engine) {
 	func(m *mysql.Handler) {
 		{
 			groupPostgres.GET("/get-data", m.GetPostgresData)
+			groupPostgres.GET("/get-filter-data", m.GetPostgresFilter)
 		}
 	}(e.NewMysql)
 }
