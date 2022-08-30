@@ -26,5 +26,14 @@
     "port": 27017,
     "database": "mydb",
     "collection": "dd"
+  },
+  "postgresql": {
+    "db_host": "localhost",
+    "db_port": 5432,
+    "db_user": "postgres",
+    "db_pwd": "root",
+    "db_name": "postgres",
+    "db_max_conn": 10,
+    "db_maxidle": 100
   }
 }

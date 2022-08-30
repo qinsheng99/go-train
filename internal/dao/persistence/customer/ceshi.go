@@ -15,14 +15,14 @@ import (
 )
 
 type CustomerDao struct {
-	Db  *db.BundleDb
-	EsD idao.EsImp
+	db *db.BundleDb
+	es idao.EsImp
 }
 
 func NewCustomerDao(db *db.BundleDb, es idao.EsImp) customer.CustomerImp {
 	return &CustomerDao{
-		Db:  db,
-		EsD: es,
+		db: db,
+		es: es,
 	}
 }
 
@@ -37,7 +37,7 @@ func (c *CustomerDao) GetList() (data []*model.CustomerFollowUser2, err error) {
 	// 	Offset(0).
 	// 	Find(&data).Error
 
-	err = c.Db.Db.Model(model.CustomerFollowUser{}).
+	err = c.db.Db.Model(model.CustomerFollowUser{}).
 		Where("id > ?", 0).
 		Limit(10).
 		Offset(0).
@@ -47,7 +47,7 @@ func (c *CustomerDao) GetList() (data []*model.CustomerFollowUser2, err error) {
 
 func (c *CustomerDao) GetByIds(name string) (ids []int, err error) {
 
-	err = c.Db.Db.
+	err = c.db.Db.
 		Model(&model.Customer{}).
 		Where("name LIKE ?", "%"+name+"%").
 		Scopes(customer.IsDelete()).
@@ -57,7 +57,7 @@ func (c *CustomerDao) GetByIds(name string) (ids []int, err error) {
 
 func (c *CustomerDao) GetData(companyId, gender int) (ids []int, err error) {
 
-	err = c.Db.Db.
+	err = c.db.Db.
 		Model(&model.Customer{}).
 		Where("gender = ?", gender).
 		Where("companyId", companyId).
@@ -73,7 +73,7 @@ func (c *CustomerDao) Refresh() error {
 	begin := time.Now()
 	// 分批插入es
 	for {
-		err := c.Db.Db.Where("id > ?", lastId).Limit(pageSize).Order("id asc").Find(&customerFollowUserList).Error
+		err := c.db.Db.Where("id > ?", lastId).Limit(pageSize).Order("id asc").Find(&customerFollowUserList).Error
 		if err != nil {
 			return err
 		}
@@ -94,7 +94,7 @@ func (c *CustomerDao) Refresh() error {
 		}
 
 		// 批量插入 es
-		c.EsD.InsertElastic(customerFollowerUserEs)
+		c.es.InsertElastic(customerFollowerUserEs)
 
 		if len(customerFollowUserList) < pageSize {
 			break
@@ -109,7 +109,7 @@ func (c *CustomerDao) Refresh() error {
 
 func (c *CustomerDao) getCustomerFollowerUserListForEs(scope func(db *gorm.DB) *gorm.DB) ([]*model.CustomerFollowerUserEs, error) {
 	var customerFollowerUsers []model.CustomerFollowUserWith
-	query := c.Db.Db.
+	query := c.db.Db.
 		Scopes(scope).Model(model.CustomerFollowUser{}).
 		Preload("Customer").
 		Preload("CustomerTags").
@@ -148,7 +148,7 @@ func (c *CustomerDao) getCustomerFollowerUserListForEs(scope func(db *gorm.DB) *
 }
 
 func (c *CustomerDao) GetDrainageList(drainage drequest.DrainageRequest) (data []*model.QyDrainage, err error) {
-	err = c.Db.Db.Table(model.QyDrainage{}.TableName()).
+	err = c.db.Db.Table(model.QyDrainage{}.TableName()).
 		Preload("Staff").
 		Preload("Code").
 		Preload("Group").
@@ -158,11 +158,11 @@ func (c *CustomerDao) GetDrainageList(drainage drequest.DrainageRequest) (data [
 }
 
 func (c *CustomerDao) GetUsers(user []int) (data []*model.QyUser1, err error) {
-	err = c.Db.Db.Model(&model.QyUser{}).Where("staffId in ?", user).Find(&data).Error
+	err = c.db.Db.Model(&model.QyUser{}).Where("staffId in ?", user).Find(&data).Error
 	return
 }
 
 func (c *CustomerDao) GetTags(user []int) (data []*model.QyTag1, err error) {
-	err = c.Db.Db.Model(&model.QyTag{}).Where("id in ?", user).Find(&data).Error
+	err = c.db.Db.Model(&model.QyTag{}).Where("id in ?", user).Find(&data).Error
 	return
 }

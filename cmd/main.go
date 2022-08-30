@@ -43,12 +43,15 @@ func main() {
 
 	r.Use(logger.GinLogger(), logger.GinRecovery(true))
 
-	bundleDB, err = db.GetBundleDb(config.Conf.MysqlConfig)
+	bundleDB, err = db.GetMysql(config.Conf.MysqlConfig)
 
 	if err != nil {
 		fmt.Printf("Mysql connect failed , error is %v\n", err)
 		panic(err)
 	}
+
+	err = db.GetPostgresql(config.Conf.PostgresqlConfig)
+	must(err)
 	es, err = elasticsearch.GetES(config.Conf.EsConfig)
 	if err != nil {
 		fmt.Printf("ES connect failed , error is %v\n", err)

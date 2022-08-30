@@ -13,13 +13,14 @@ import (
 
 // Config 整个项目的配置
 type Config struct {
-	Mode         string `json:"mode"`
-	Port         int    `json:"port"`
-	*LogConfig   `json:"log"`
-	*MysqlConfig `json:"mysql"`
-	*EsConfig    `json:"es"`
-	*RedisConfig `json:"redis"`
-	*MongoConfig `json:"mongo"`
+	Mode              string `json:"mode"`
+	Port              int    `json:"port"`
+	*LogConfig        `json:"log"`
+	*MysqlConfig      `json:"mysql"`
+	*EsConfig         `json:"es"`
+	*RedisConfig      `json:"redis"`
+	*MongoConfig      `json:"mongo"`
+	*PostgresqlConfig `json:"postgresql"`
 }
 
 // LogConfig 日志配置
@@ -32,6 +33,16 @@ type LogConfig struct {
 }
 
 type MysqlConfig struct {
+	DbHost    string `json:"db_host"`
+	DbPort    int64  `json:"db_port"`
+	DbUser    string `json:"db_user"`
+	DbPwd     string `json:"db_pwd"`
+	DbName    string `json:"db_name"`
+	DbMaxConn int    `json:"db_max_conn"`
+	DbMaxidle int    `json:"db_maxidle"`
+}
+
+type PostgresqlConfig struct {
 	DbHost    string `json:"db_host"`
 	DbPort    int64  `json:"db_port"`
 	DbUser    string `json:"db_user"`

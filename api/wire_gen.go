@@ -12,6 +12,7 @@ import (
 	"github.com/qinsheng99/goWeb/api/handel/redis"
 	sortHandler "github.com/qinsheng99/goWeb/api/handel/sort"
 	"github.com/qinsheng99/goWeb/internal/dao/persistence"
+	"github.com/qinsheng99/goWeb/internal/dao/persistence/boy"
 	"github.com/qinsheng99/goWeb/internal/dao/persistence/customer"
 	ceshi2 "github.com/qinsheng99/goWeb/internal/service/ceshi"
 	"github.com/qinsheng99/goWeb/internal/service/drainage"
@@ -31,7 +32,8 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo 
 	NewRedis := redisClient.NewRedisStruct(r)
 	NewH := redis.NewH(NewCeshi, NewRedis)
 	NewMysqlImp := ServiceMysql.NewMysqlService(bundleDb)
-	NewMysql := mysql.NewMysql(NewMysqlImp)
+	NewPostgresBoy := boy.NewPostgresBoy()
+	NewMysql := mysql.NewMysql(NewMysqlImp, NewPostgresBoy)
 	NewSort := sortHandler.NewSort()
 	NewEs := esHandle.NewEsHandle(NewEsDao, NewMysqlImp)
 	NewMgoInterface := mongoClient.NewMongoStruct(mo)

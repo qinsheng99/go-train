@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/qinsheng99/goWeb/api/tools/common"
+	"github.com/qinsheng99/goWeb/internal/dao/idao/boy"
 	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
 	"github.com/qinsheng99/goWeb/internal/model"
 	"github.com/qinsheng99/goWeb/library/pool"
@@ -13,11 +14,12 @@ import (
 )
 
 type Handler struct {
-	m customer.CeshiMysqlImp
+	m   customer.CeshiMysqlImp
+	boy boy.Boyimpl
 }
 
-func NewMysql(m customer.CeshiMysqlImp) *Handler {
-	return &Handler{m: m}
+func NewMysql(m customer.CeshiMysqlImp, boy boy.Boyimpl) *Handler {
+	return &Handler{m: m, boy: boy}
 }
 
 func (m *Handler) GetData(c *gin.Context) {
@@ -55,6 +57,15 @@ func (m *Handler) IntertData(c *gin.Context) {
 
 func (m *Handler) JoinData(c *gin.Context) {
 	res, err := m.m.JoinData()
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	common.Success(c, res)
+}
+
+func (m *Handler) GetPostgresData(c *gin.Context) {
+	res, err := m.boy.Getlist()
 	if err != nil {
 		common.Failure(c, err)
 		return
