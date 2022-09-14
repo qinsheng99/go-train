@@ -118,12 +118,12 @@ func (h *Handle) FindOne(c *gin.Context) {
 		return
 	}
 
-	var data model.User
-	err := h.mo.Collection("").FindOne(
+	var data model.DCLA
+	err := h.mo.Collection("cla").FindOne(
 		context.Background(),
-		h.mo.Filter([]mongoClient.Filter{{Column: "name", Data: name}}),
+		h.mo.Filter([]mongoClient.Filter{{Column: "url", Data: name}}),
 		&data,
-		h.mo.FilterOrChooseColumn(nil, true, "age", "repo"))
+		nil)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -143,6 +143,34 @@ func (h *Handle) Update(c *gin.Context) {
 		h.mo.Filter([]mongoClient.Filter{{Column: "name", Data: name}}),
 		//h.mo.FieldInc(nil, "age", 1),
 		h.mo.FieldSet(nil, "age", 27),
+	)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	common.Success(c, "")
+}
+
+func (h *Handle) Push(c *gin.Context) {
+	name, ok := c.GetQuery("url")
+	if !ok {
+		common.QueryFailure(c, nil)
+		return
+	}
+	_, err := h.mo.Collection("cla").Update(
+		context.Background(),
+		h.mo.Filter([]mongoClient.Filter{{Column: "url", Data: name}}),
+		//h.mo.FieldInc(nil, "age", 1),
+		h.mo.FieldPush(nil, "fields", []model.DField{
+			{
+				ID:          "ID1",
+				Title:       "Title1",
+				Type:        "Type1",
+				Description: "Description1",
+				Required:    false,
+			},
+		}),
 	)
 	if err != nil {
 		common.Failure(c, err)

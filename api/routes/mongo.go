@@ -17,6 +17,7 @@ func Mon(e *api.Entry, c *gin.Engine) {
 			group.GET("/find", e.Find)
 			group.GET("/find-one", e.FindOne)
 			group.GET("/update", e.Update)
+			group.GET("/push", e.Push)
 		}
 	}(e.NewMgo)
 }

@@ -23,6 +23,7 @@ type MongoInterface interface {
 	FindOne(ctx context.Context, filter interface{}, data interface{}, project bson.M) (err error)
 
 	Update(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (updates *mongo.UpdateResult, err error)
+	UpdatePush(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (updates *mongo.UpdateResult, err error)
 }
 
 type MongoCondition interface {
