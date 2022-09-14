@@ -6,6 +6,7 @@ package api
 
 import (
 	"github.com/qinsheng99/goWeb/api/handel/ceshi"
+	"github.com/qinsheng99/goWeb/api/handel/demo"
 	esHandle "github.com/qinsheng99/goWeb/api/handel/es"
 	"github.com/qinsheng99/goWeb/api/handel/mongo"
 	"github.com/qinsheng99/goWeb/api/handel/mysql"
@@ -40,6 +41,7 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo 
 	NewEs := esHandle.NewEsHandle(NewEsDao, NewMysqlImp)
 	NewMgoInterface := mongoClient.NewMongoStruct(mo)
 	NewMgo := mongo.NewMgo(NewMgoInterface, NewRedis)
+	NewDemo := demo.NewDemo()
 
 	e := &Entry{
 		NewHandler: NewHandlerDao,
@@ -48,6 +50,7 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo 
 		NewSort:    NewSort,
 		NewEs:      NewEs,
 		NewMgo:     NewMgo,
+		NewDemo:    NewDemo,
 	}
 
 	return e, nil

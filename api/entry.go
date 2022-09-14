@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/qinsheng99/goWeb/api/handel/ceshi"
+	"github.com/qinsheng99/goWeb/api/handel/demo"
 	esHandle "github.com/qinsheng99/goWeb/api/handel/es"
 	"github.com/qinsheng99/goWeb/api/handel/mongo"
 	"github.com/qinsheng99/goWeb/api/handel/mysql"
@@ -16,5 +17,6 @@ type Entry struct {
 	NewSort    *sortHandler.SortHandler
 	NewEs      *esHandle.EsHandle
 	NewMgo     *mongo.Handle
+	NewDemo    *demo.Handle
 	// NewCustomer customer.CustomerDao
 }

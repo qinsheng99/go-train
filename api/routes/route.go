@@ -20,4 +20,5 @@ func Route(e *api.Entry, c *gin.Engine) {
 	Sort(e, c)
 	Es(e, c)
 	Mon(e, c)
+	Demo(e, c)
 }
