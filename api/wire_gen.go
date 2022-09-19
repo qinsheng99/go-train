@@ -41,7 +41,7 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo 
 	NewEs := esHandle.NewEsHandle(NewEsDao, NewMysqlImp)
 	NewMgoInterface := mongoClient.NewMongoStruct(mo)
 	NewMgo := mongo.NewMgo(NewMgoInterface, NewRedis)
-	NewDemo := demo.NewDemo()
+	NewDemo := demo.NewDemo(NewRedis)
 
 	e := &Entry{
 		NewHandler: NewHandlerDao,

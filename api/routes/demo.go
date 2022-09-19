@@ -13,11 +13,12 @@ import (
 func Demo(e *api.Entry, c *gin.Engine) {
 	c.StaticFS("/images", http.Dir("../images"))
 	c.MaxMultipartMemory = 8 << 15
-	group := c.Group("/public").
+	group := c.Group("/demo").
 		Use(middleware.AuthMiddleware())
 	func(d *demo.Handle) {
 		{
-			group.Any("/file", d.File)
+			group.POST("/file", d.File)
+			group.POST("/text-image", d.TestImage)
 
 		}
 	}(e.NewDemo)
