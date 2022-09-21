@@ -12,6 +12,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	path2 "path"
 	"strings"
 	"sync"
 	"time"
@@ -33,9 +34,14 @@ func NewDemo(red redisClient.RedisInterface) *Handle {
 var (
 	oneimage = []string{
 		"https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/43a04dbe-c94e-41ba-a0e5-9da34efa8ff3/text2image",
-		//"https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/b3433d2a-6320-4171-a687-bce38e3a9eca/text2image",
+		"https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/b3433d2a-6320-4171-a687-bce38e3a9eca/text2image",
 	}
 	threeimage = "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/a55e424e-b4fd-403b-97f9-d406be420f84/text2image"
+
+	vqaimage2 = "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/b6c5cf73-de6a-49ed-ac40-5e943903e010/v2/infer/vqa"
+
+	vqaimage4 = "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/b6c5cf73-de6a-49ed-ac40-5e943903e010/v4/infer/vqa"
+	vqaimage3 = "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/b6c5cf73-de6a-49ed-ac40-5e943903e010/v3/infer/vqa"
 )
 
 var mmap sync.Map
@@ -80,10 +86,18 @@ type testImage struct {
 }
 
 var client *http.Client
+var clientvqa *http.Client
 
 func init() {
 	timeout := time.Duration(2 * time.Minute)
 	client = &http.Client{
+		Timeout: timeout,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		},
+	}
+
+	clientvqa = &http.Client{
 		Timeout: timeout,
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
@@ -95,6 +109,10 @@ func (h *Handle) File(c *gin.Context) {
 	f, err := c.FormFile("file")
 	if err != nil {
 		common.Failure(c, err)
+		return
+	}
+	if f.Size >= 200000 {
+		common.Failure(c, errors.New("the file size cannot be larger than 200kb"))
 		return
 	}
 	path := "../images/" + f.Filename
@@ -251,4 +269,208 @@ func (h *Handle) TestImage(c *gin.Context) {
 		return
 	}
 	common.Success(c, result)
+}
+
+type VqaRes struct {
+	Status    interface{} `json:"status"`
+	InferTime float64     `json:"infer_time"`
+	Msg       string      `json:"msg"`
+	Inference Infer       `json:"inference_result"`
+}
+
+func (v *VqaRes) valication() error {
+	status, ok := v.Status.(float64)
+	if !ok {
+		return nil
+	}
+
+	if int(status) == -1 {
+		return errors.New(v.Msg)
+	}
+	return nil
+}
+
+type Infer struct {
+	Instances string `json:"instances"`
+}
+
+type VqaReq struct {
+	Image    string `json:"image_path"`
+	Question string `json:"question"`
+}
+
+func (h *Handle) vqa2(c *gin.Context) {
+	f, err := c.FormFile("file")
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	if f.Size >= 200000 {
+		common.Failure(c, errors.New("the file size cannot be larger than 200kb"))
+		return
+	}
+	question := c.PostForm("question")
+	s := path2.Ext(f.Filename)
+
+	if !strings.Contains(strings.ToLower(s), "png") && !strings.Contains(strings.ToLower(s), "jpg") {
+		common.Failure(c, errors.New("image not jpg/png"))
+		return
+	}
+	path := "../images/" + f.Filename
+	err = c.SaveUploadedFile(f, path)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	var (
+		req       *http.Request
+		response  *http.Response
+		bys       []byte
+		imageFile *os.File
+		t         string
+	)
+	t, err = h.redis.Get(context.Background(), "modelarts-token")
+	if len(t) == 0 || err != nil {
+		t, err = token()
+		if err != nil {
+			common.Failure(c, err)
+			return
+		}
+		_, _ = h.redis.Set(context.Background(), "modelarts-token", t, time.Hour*24)
+	}
+
+	buf := new(bytes.Buffer)
+	writer := multipart.NewWriter(buf)
+	file, _ := writer.CreateFormFile("file", f.Filename)
+	imageFile, err = os.Open(path)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	_, err = io.Copy(file, imageFile)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	err = writer.WriteField("question", question)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	_ = imageFile.Close()
+	_ = writer.Close()
+
+	req, err = http.NewRequest("POST", vqaimage2, buf)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	req.Header.Set("X-Auth-Token", t)
+
+	response, err = clientvqa.Do(req)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	bys, err = ioutil.ReadAll(response.Body)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	if response.StatusCode >= 300 {
+		common.Failure(c, errors.New(string(bys)))
+		return
+	}
+
+	var ret VqaRes
+	if err = json.Unmarshal(bys, &ret); err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	if err = ret.valication(); err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	common.Success(c, ret)
+}
+
+func (h *Handle) Vqa(c *gin.Context) {
+	v := c.Param("v")
+	if v == "2" {
+		h.vqa2(c)
+	} else {
+		h.vqa4(c, v)
+	}
+}
+
+func (h *Handle) vqa4(c *gin.Context, v string) {
+	var req VqaReq
+	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
+		common.QueryFailure(c, err)
+		return
+	}
+	t, err := h.redis.Get(context.Background(), "modelarts-token")
+	if len(t) == 0 || err != nil {
+		t, err = token()
+		if err != nil {
+			common.Failure(c, err)
+			return
+		}
+		_, _ = h.redis.Set(context.Background(), "modelarts-token", t, time.Hour*24)
+	}
+	var (
+		request *http.Request
+		resp    *http.Response
+		bys     []byte
+		url     string
+	)
+	url = vqaimage4
+	if v == "3" {
+		url = vqaimage3
+	}
+
+	request, err = http.NewRequest("POST", url, strings.NewReader(fmt.Sprintf(`{"image_path":"%s","question":"%s"}`, req.Image, req.Question)))
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	request.Header.Set("X-Auth-Token", t)
+	request.Header.Set("Content-Type", "application/json")
+
+	resp, err = clientvqa.Do(request)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	bys, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	if resp.StatusCode >= 300 {
+		common.Failure(c, errors.New(string(bys)))
+		return
+	}
+
+	var ret VqaRes
+	if err = json.Unmarshal(bys, &ret); err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	if err = ret.valication(); err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	common.Success(c, ret)
+
 }
