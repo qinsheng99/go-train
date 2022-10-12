@@ -28,3 +28,27 @@ func (b *boyDao) GetAddress(s string) (data []*model.Boy, err error) {
 		Error
 	return
 }
+
+func (b *boyDao) GetOne(id int64) (data *model.Boy, err error) {
+	err = db.GetPostgresqlDb().
+		Model(&model.Boy{}).
+		Where("id = ?", id).
+		First(&data).
+		Error
+	return
+}
+
+func (b *boyDao) CreateOne(data *model.Boy) (_ *model.Boy, err error) {
+	//err = db.GetPostgresqlDb().Model(data).Select("id").Last(data).Error
+	//if err != nil {
+	//	return nil, err
+	//}
+	//data.Id++
+	err = db.GetPostgresqlDb().
+		Model(&model.OldBoy{}).
+		Create(&model.OldBoy{
+			Name: data.Name,
+			Arr:  data.Arr,
+		}).Error
+	return data, err
+}

@@ -10,6 +10,7 @@ import (
 	esHandle "github.com/qinsheng99/goWeb/api/handel/es"
 	"github.com/qinsheng99/goWeb/api/handel/mongo"
 	"github.com/qinsheng99/goWeb/api/handel/mysql"
+	"github.com/qinsheng99/goWeb/api/handel/postgresql"
 	"github.com/qinsheng99/goWeb/api/handel/redis"
 	sortHandler "github.com/qinsheng99/goWeb/api/handel/sort"
 	"github.com/qinsheng99/goWeb/internal/dao/persistence"
@@ -36,7 +37,8 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo 
 	NewMysqlImp := ServiceMysql.NewMysqlService(bundleDb)
 	NewPostgresBoy := boy.NewPostgresBoy()
 	NewPostgresqlService := servicePostgresql.NewPostgresqlService(NewPostgresBoy)
-	NewMysql := mysql.NewMysql(NewMysqlImp, NewPostgresqlService)
+	NewMysql := mysql.NewMysql(NewMysqlImp)
+	NewPostgreSql := postgresql.NewPostgreSql(NewPostgresqlService)
 	NewSort := sortHandler.NewSort()
 	NewEs := esHandle.NewEsHandle(NewEsDao, NewMysqlImp)
 	NewMgoInterface := mongoClient.NewMongoStruct(mo)
@@ -44,13 +46,14 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo 
 	NewDemo := demo.NewDemo(NewRedis)
 
 	e := &Entry{
-		NewHandler: NewHandlerDao,
-		NewH:       NewH,
-		NewMysql:   NewMysql,
-		NewSort:    NewSort,
-		NewEs:      NewEs,
-		NewMgo:     NewMgo,
-		NewDemo:    NewDemo,
+		NewHandler:    NewHandlerDao,
+		NewH:          NewH,
+		NewMysql:      NewMysql,
+		NewSort:       NewSort,
+		NewEs:         NewEs,
+		NewMgo:        NewMgo,
+		NewDemo:       NewDemo,
+		NewPostgreSql: NewPostgreSql,
 	}
 
 	return e, nil

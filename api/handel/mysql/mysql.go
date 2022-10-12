@@ -18,8 +18,8 @@ type Handler struct {
 	boy boy.BoyimplService
 }
 
-func NewMysql(m customer.CeshiMysqlImp, boy boy.BoyimplService) *Handler {
-	return &Handler{m: m, boy: boy}
+func NewMysql(m customer.CeshiMysqlImp) *Handler {
+	return &Handler{m: m}
 }
 
 func (m *Handler) GetData(c *gin.Context) {
@@ -57,25 +57,6 @@ func (m *Handler) IntertData(c *gin.Context) {
 
 func (m *Handler) JoinData(c *gin.Context) {
 	res, err := m.m.JoinData()
-	if err != nil {
-		common.Failure(c, err)
-		return
-	}
-	common.Success(c, res)
-}
-
-func (m *Handler) GetPostgresData(c *gin.Context) {
-	res, err := m.boy.GetBoylist()
-	if err != nil {
-		common.Failure(c, err)
-		return
-	}
-	common.Success(c, res)
-}
-
-func (m *Handler) GetPostgresFilter(c *gin.Context) {
-	s := c.GetString("address")
-	res, err := m.boy.GetBoyAddress(s)
 	if err != nil {
 		common.Failure(c, err)
 		return

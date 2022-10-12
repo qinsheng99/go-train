@@ -18,13 +18,4 @@ func Mysql(e *api.Entry, c *gin.Engine) {
 			group.GET("/intert-data", m.IntertData)
 		}
 	}(e.NewMysql)
-
-	groupPostgres := c.Group("/postgres").
-		Use(middleware.AuthMiddleware())
-	func(m *mysql.Handler) {
-		{
-			groupPostgres.GET("/get-data", m.GetPostgresData)
-			groupPostgres.GET("/get-filter-data", m.GetPostgresFilter)
-		}
-	}(e.NewMysql)
 }
