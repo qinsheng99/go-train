@@ -6,6 +6,7 @@ import (
 	"github.com/qinsheng99/goWeb/internal/dao/idao/boy"
 	"github.com/qinsheng99/goWeb/internal/model"
 	"github.com/qinsheng99/goWeb/library/db"
+	"gorm.io/gorm"
 )
 
 type boyDao struct {
@@ -39,16 +40,12 @@ func (b *boyDao) GetOne(id int64) (data *model.Boy, err error) {
 }
 
 func (b *boyDao) CreateOne(data *model.Boy) (_ *model.Boy, err error) {
-	//err = db.GetPostgresqlDb().Model(data).Select("id").Last(data).Error
-	//if err != nil {
-	//	return nil, err
-	//}
-	//data.Id++
-	err = db.GetPostgresqlDb().
-		Model(&model.OldBoy{}).
-		Create(&model.OldBoy{
-			Name: data.Name,
-			Arr:  data.Arr,
-		}).Error
-	return data, err
+	cli := db.GetPostgresqlDb()
+	if err = cli.Exec(cli.ToSQL(func(tx *gorm.DB) *gorm.DB {
+		return tx.Create(data)
+	})).Error; err != nil {
+		return nil, err
+	}
+	cli.Last(data)
+	return data, nil
 }
