@@ -1,61 +1,41 @@
 package model
 
 import (
-	"database/sql/driver"
 	"encoding/json"
-	"errors"
-	"fmt"
-	"time"
 
+	"github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/lib/pq"
+	"github.com/qinsheng99/goWeb/library/db"
+	"gorm.io/gorm"
 )
 
 type Boy struct {
-	Id           int64         `json:"id" gorm:"column:id;type:int8"`
-	Name         string        `json:"name" gorm:"column:name;type:varchar(30)"`
-	Informations Jsonb         `gorm:"column:information;type:jsonb json:"information"`
-	Arr          pq.Int64Array `gorm:"column:arr;type:integer[]" json:"arr"`
-	//Information  Infor         `json:"information" gorm:"-"`
-}
-type Jsonb struct {
-	json.RawMessage
+	Id           int64          `json:"id,omitempty" gorm:"column:id;type:int8"`
+	Name         string         `json:"name,omitempty" gorm:"column:name;type:varchar(30)"`
+	Informations postgres.Jsonb `gorm:"column:information;type:jsonb" json:"information,omitempty"`
+	Arr          pq.Int64Array  `gorm:"column:arr;type:integer[]" json:"arr,omitempty"`
 }
 
-// Value get value of Jsonb
-func (j Jsonb) Value() (driver.Value, error) {
-	if len(j.RawMessage) == 0 {
-		return nil, nil
-	}
-	return j.MarshalJSON()
-}
-
-// Scan scan value into Jsonb
-func (j *Jsonb) Scan(value interface{}) error {
-	bytes, ok := value.([]byte)
-	if !ok {
-		return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
-	}
-
-	return json.Unmarshal(bytes, j)
-}
-
-type OldBoy struct {
-	Id     int64         `json:"id" gorm:"column:id"`
-	Name   string        `json:"name" gorm:"column:name"`
-	Arr    pq.Int64Array `gorm:"column:arr;type:integer[]" json:"arr"`
-	Create time.Time     `gorm:"column:create_time" json:"create"`
-	//Information  Infor         `json:"information" gorm:"-"`
+type BoyArr struct {
+	Boy
+	Arrone int64 `json:"arrone" gorm:"column:arrone"`
 }
 
 func (b *Boy) TableName() string {
 	return "boy"
 }
 
-func (b *OldBoy) TableName() string {
-	return "oldboy"
+type Jsonb struct {
+	json.RawMessage
 }
 
-type Infor struct {
-	Age     int    `json:"age"`
-	Address string `json:"address"`
+func (b *Boy) Insert() (*Boy, error) {
+	cli := db.GetPostgresqlDb()
+	if err := cli.Exec(cli.ToSQL(func(tx *gorm.DB) *gorm.DB {
+		return tx.Create(b)
+	})).Error; err != nil {
+		return nil, err
+	}
+	cli.Last(b)
+	return b, nil
 }

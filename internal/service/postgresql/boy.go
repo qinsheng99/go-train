@@ -3,6 +3,7 @@ package servicePostgresql
 import (
 	"encoding/json"
 
+	"github.com/jinzhu/gorm/dialects/postgres"
 	postgresqlRequest "github.com/qinsheng99/goWeb/api/entity/postgresql"
 	"github.com/qinsheng99/goWeb/internal/dao/idao/boy"
 	"github.com/qinsheng99/goWeb/internal/model"
@@ -24,8 +25,8 @@ func (b *postgresqlService) GetBoylist() (data []*model.Boy, err error) {
 	return
 }
 
-func (b *postgresqlService) GetBoyAddress(s string) (data []*model.Boy, err error) {
-	data, err = b.boy.GetAddress(s)
+func (b *postgresqlService) GetBoyAddress(col, s string) (data []*model.Boy, err error) {
+	data, err = b.boy.GetAddress(col, s)
 	return
 }
 
@@ -42,8 +43,13 @@ func (b *postgresqlService) CreateOne(req postgresqlRequest.Boy) (data *model.Bo
 	}
 	data, err = b.boy.CreateOne(&model.Boy{
 		Name:         req.Name,
-		Informations: model.Jsonb{RawMessage: json.RawMessage(bys)},
+		Informations: postgres.Jsonb{RawMessage: json.RawMessage(bys)},
 		Arr:          req.Arr,
 	})
 	return data, err
+}
+
+func (b *postgresqlService) FindArrOne(index int64) (data []model.BoyArr, err error) {
+	err = b.boy.FindArrOne(index, &data)
+	return
 }

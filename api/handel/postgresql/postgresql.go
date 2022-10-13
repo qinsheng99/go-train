@@ -29,7 +29,7 @@ func (p *Handler) GetPostgresData(c *gin.Context) {
 
 func (p *Handler) GetPostgresFilter(c *gin.Context) {
 	s := c.Query("address")
-	res, err := p.boy.GetBoyAddress(s)
+	res, err := p.boy.GetBoyAddress("address", s)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -61,4 +61,18 @@ func (p *Handler) CreateOne(c *gin.Context) {
 	}
 
 	common.Success(c, data)
+}
+
+func (p *Handler) FindArrOne(c *gin.Context) {
+	i, err := strconv.ParseInt(c.Query("index"), 10, 64)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	arr, err := p.boy.FindArrOne(i)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	common.Success(c, arr)
 }
