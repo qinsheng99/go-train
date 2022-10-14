@@ -77,3 +77,8 @@ CREATE TABLE "public"."boy" (
 ``` sql
     SELECT name,information->>'age' FROM boy 
 ```
+
+- -> 和 ->> 共用
+``` sql
+    SELECT name,information->'address'->>'hunan' FROM boy   //{"age": 27, "address": {"hunan": "changsha"}} 返回changsha 
+```

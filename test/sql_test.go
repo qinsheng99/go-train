@@ -10,14 +10,25 @@ import (
 	"gorm.io/gorm"
 )
 
-func TestPostgreSql(t *testing.T) {
-	if err := d.Create(&model.Boy{
-		Name:         "xiaohu13",
-		Informations: postgres.Jsonb{RawMessage: []byte(`{"age": 23, "repo": "rng"}`)},
-		Arr:          []int64{13, 26, 39},
-	}).Error; err != nil {
+func TestPostgreSqlCreate(t *testing.T) {
+	if err := d.Exec(d.ToSQL(func(tx *gorm.DB) *gorm.DB {
+		return tx.Create(&model.Boy{
+			Name: "xiaohu13",
+			Json: postgres.Jsonb{RawMessage: []byte(`{"age": 23, "repo": "rng"}`)},
+			Arr:  []int64{13, 26, 39},
+		})
+	})).Error; err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestPostgreSqlUpdate(t *testing.T) {
+	b := &model.Boy{
+		Informations: postgres.Jsonb{RawMessage: []byte(`{"age": 233, "repo": "rngay"}`)},
+	}
+	t.Log(d.Exec(d.ToSQL(func(tx *gorm.DB) *gorm.DB {
+		return tx.Model(b).Where("id = 12").Updates(b)
+	})).Error)
 }
 
 var d *gorm.DB
