@@ -154,7 +154,7 @@ func (h *Handle) send(path string) ([]byte, error) {
 		"Content-Type": writer.FormDataContentType(),
 	}
 	u := "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/ef220239-dfeb-4400-96b4-5fe0d4b35735/infer/image"
-	data, err = httprequest.Post(u, buf, head)
+	data, err = httprequest.Post(u, buf, head, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -164,12 +164,12 @@ func (h *Handle) send(path string) ([]byte, error) {
 func (h *Handle) textimage(url, token string, req testImage) ([]byte, error) {
 	var data []byte
 	var err error
-	
+
 	head := map[string]string{
 		"X-Auth-Token": token,
 	}
 
-	data, err = httprequest.Post(url, []byte(fmt.Sprintf(`{"input_text":"%v","user_name":"%v"}`, req.Input, req.User)), head)
+	data, err = httprequest.Post(url, []byte(fmt.Sprintf(`{"input_text":"%v","user_name":"%v"}`, req.Input, req.User)), head, nil)
 	if err != nil {
 		return nil, errors.New(string(data))
 	}

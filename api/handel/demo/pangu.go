@@ -30,7 +30,7 @@ func (h *Handle) Pangu(c *gin.Context) {
 	}
 	var data []byte
 
-	data, err = httprequest.Post(pu, []byte(fmt.Sprintf(`{"question":"%s"}`, q)), head)
+	data, err = httprequest.Post(pu, []byte(fmt.Sprintf(`{"question":"%s"}`, q)), head, nil)
 	if err != nil {
 		common.Failure(c, err)
 		return
