@@ -50,7 +50,7 @@ CREATE TABLE "public"."boy" (
 
 - = <> > >= < <= @>(包含) <@(被包含) [表结构](#sql)
 ``` sql
-    SELECT * FROM boy WHERE '{3}'=arr // 返回数组中有3的
+    SELECT * FROM boy WHERE '{3}'=arr //返回数组等于3的
 ```
 
 - ||(连接) arr||arr arr||col col||arr  [表结构](#sql)
