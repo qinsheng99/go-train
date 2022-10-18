@@ -21,6 +21,8 @@ func Demo(e *api.Entry, c *gin.Engine) {
 			group.POST("/text-image", d.TestImage)
 			group.POST("/vqa/:v", d.Vqa)
 
+			group.POST("/pangu", d.Pangu)
+
 		}
 	}(e.NewDemo)
 }
