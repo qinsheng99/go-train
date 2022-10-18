@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -20,6 +19,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/qinsheng99/goWeb/api/tools/common"
 	"github.com/qinsheng99/goWeb/library/redisClient"
+	httprequest "github.com/qinsheng99/goWeb/library/request"
 )
 
 type Handle struct {
@@ -110,13 +110,11 @@ func (h *Handle) File(c *gin.Context) {
 		common.Failure(c, err)
 		return
 	}
-	resp, err := h.send(path)
+	all, err := h.send(path)
 	if err != nil {
 		common.Failure(c, err)
 		return
 	}
-	//defer os.Remove(path)
-	all, _ := ioutil.ReadAll(resp.Body)
 	var re res
 	if err = json.Unmarshal(all, &re); err != nil {
 		common.Failure(c, err)
@@ -135,7 +133,8 @@ func token() (string, error) {
 	return post.Header.Get("x-subject-token"), nil
 }
 
-func (h *Handle) send(path string) (*http.Response, error) {
+func (h *Handle) send(path string) ([]byte, error) {
+	var data []byte
 	t, err := token()
 	if err != nil {
 		return nil, err
@@ -150,42 +149,28 @@ func (h *Handle) send(path string) (*http.Response, error) {
 	io.Copy(file, imageFile)
 	imageFile.Close()
 	writer.Close()
-	req, err := http.NewRequest("POST", "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/ef220239-dfeb-4400-96b4-5fe0d4b35735/infer/image", buf)
+	head := map[string]string{
+		"X-Auth-Token": t,
+		"Content-Type": writer.FormDataContentType(),
+	}
+	u := "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/ef220239-dfeb-4400-96b4-5fe0d4b35735/infer/image"
+	data, err = httprequest.Post(u, buf, head)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-	req.Header.Set("X-Auth-Token", t)
-
-	response, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	return response, nil
+	return data, nil
 }
 
 func (h *Handle) textimage(url, token string, req testImage) ([]byte, error) {
 	var data []byte
-	bys := []byte(fmt.Sprintf(`{"input_text":"%v","user_name":"%v"}`, req.Input, req.User))
-
-	re, err := http.NewRequest("POST", url, bytes.NewReader(bys))
-	if err != nil {
-		return nil, err
-	}
-	re.Header.Set("Content-Type", "application/json")
-	re.Header.Set("X-Auth-Token", token)
-
-	response, err := client.Do(re)
-	if err != nil {
-		return nil, err
+	var err error
+	
+	head := map[string]string{
+		"X-Auth-Token": token,
 	}
 
-	data, err = ioutil.ReadAll(response.Body)
+	data, err = httprequest.Post(url, []byte(fmt.Sprintf(`{"input_text":"%v","user_name":"%v"}`, req.Input, req.User)), head)
 	if err != nil {
-		return nil, err
-	}
-
-	if response.StatusCode > 200 {
 		return nil, errors.New(string(data))
 	}
 	return data, nil

@@ -2,9 +2,12 @@ package httprequest
 
 import (
 	"bytes"
+	"crypto/tls"
 	"errors"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/qinsheng99/goWeb/library/try"
@@ -17,15 +20,15 @@ var (
 
 func init() {
 	client = &http.Client{
-		Timeout: 2 * time.Second,
 		Transport: &http.Transport{
 			MaxIdleConns:        250,
 			MaxIdleConnsPerHost: 250,
 			IdleConnTimeout:     time.Duration(120) * time.Second,
 			DisableKeepAlives:   false,
+			TLSClientConfig:     &tls.Config{InsecureSkipVerify: true},
 		},
 	}
-	clientNoTry = &http.Client{Timeout: 8 * time.Second,
+	clientNoTry = &http.Client{
 		Transport: &http.Transport{
 			MaxIdleConns:        250,
 			MaxIdleConnsPerHost: 250,
@@ -36,9 +39,22 @@ func init() {
 }
 
 // MainRequest 所有公用的http请求
-func mainRequest(url, method string, bytesData []byte, headers map[string]string) (resByte []byte, err error) {
+func mainRequest(url, method string, bytesData interface{}, headers map[string]string) (resByte []byte, err error) {
+	var body = io.Reader(nil)
+	switch t := bytesData.(type) {
+	case []byte:
+		body = bytes.NewReader(t)
+	case string:
+		body = strings.NewReader(t)
+	case *strings.Reader:
+		body = t
+	case *bytes.Buffer:
+		body = t
+	default:
+		body = nil
+	}
 	err = try.Do(func(attempt int) (retry bool, err error) {
-		req, err := http.NewRequest(method, url, bytes.NewReader(bytesData))
+		req, err := http.NewRequest(method, url, body)
 		if err != nil {
 			//logger.Warnf("reqURL:%s ;http new request err: %v", url, err)
 			return attempt < 3, err
@@ -58,31 +74,27 @@ func mainRequest(url, method string, bytesData []byte, headers map[string]string
 		defer resp.Body.Close()
 		resByte, err = ioutil.ReadAll(resp.Body)
 
-		if resp.StatusCode != http.StatusOK || resp.Body == nil {
-			//logger.Infof("请求reqURL:%s header:%+v 参数:%s 返回:%s", url, headers, string(bytesData), string(resByte))
-			return attempt < 3, errors.New("响应状态码不是200")
+		if resp.StatusCode > http.StatusMultipleChoices || resp.Body == nil {
+			return attempt < 3, errors.New("响应状态码有误")
 		}
 
 		return attempt < 3, err
 	})
-
-	if err != nil {
-		//logger.Errorf("error:%v", err)
-	}
 	return
 }
 
-func Get(url string, bytesData []byte, headers map[string]string) ([]byte, error) {
+func Get(url string, bytesData interface{}, headers map[string]string) ([]byte, error) {
 	return mainRequest(url, "GET", bytesData, headers)
 }
 
-func Post(url string, bytesData []byte, headers map[string]string) ([]byte, error) {
+func Post(url string, bytesData interface{}, headers map[string]string) ([]byte, error) {
 	return mainRequest(url, "POST", bytesData, headers)
 }
 
 // NoTryRequest 所有公用的http请求无重试
-func NoTryRequest(url, method string, bytesData []byte, headers map[string]string) (resByte []byte, err error) {
-	req, err := http.NewRequest(method, url, bytes.NewReader(bytesData))
+func NoTryRequest(url, method string, bytesData interface{}, headers map[string]string) (resByte []byte, err error) {
+	var body = io.Reader(nil)
+	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		//logger.Warnf("reqURL:%s ;http new request err: %v", url, err)
 		return
