@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/qinsheng99/goWeb/internal/model"
 	p "gorm.io/driver/postgres"
@@ -11,11 +12,13 @@ import (
 )
 
 func TestPostgreSqlCreate(t *testing.T) {
+	u, _ := uuid.NewRandom()
 	if err := d.Exec(d.ToSQL(func(tx *gorm.DB) *gorm.DB {
 		return tx.Create(&model.Boy{
 			Name: "xiaohu13",
 			Json: postgres.Jsonb{RawMessage: []byte(`{"age": 23, "repo": "rng"}`)},
 			Arr:  []int64{13, 26, 39},
+			UUid: u,
 		})
 	})).Error; err != nil {
 		t.Fatal(err)

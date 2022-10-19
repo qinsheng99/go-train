@@ -3,6 +3,7 @@ package model
 import (
 	"encoding/json"
 
+	"github.com/google/uuid"
 	"github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/lib/pq"
 	"github.com/qinsheng99/goWeb/library/db"
@@ -15,6 +16,7 @@ type Boy struct {
 	Informations postgres.Jsonb `gorm:"column:information;type:jsonb;default:'{}'" json:"information,omitempty"`
 	Json         postgres.Jsonb `gorm:"column:jsondata;type:json;default:'{}'" json:"json,omitempty"`
 	Arr          pq.Int64Array  `gorm:"column:arr;type:integer[]" json:"arr,omitempty"`
+	UUid         uuid.UUID      `gorm:"column:uuid;type:uuid" json:"uuid,omitempty"`
 }
 
 type BoyArr struct {
