@@ -1,11 +1,9 @@
 package demo
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/qinsheng99/goWeb/api/tools/common"
@@ -17,19 +15,14 @@ const pu = "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/inf
 func (h *Handle) Pangu(c *gin.Context) {
 	q := c.Query("question")
 
-	t, err := h.redis.Get(context.Background(), "modelarts-token")
-	if len(t) == 0 || err != nil {
-		t, err = token()
-		if err != nil {
-			common.Failure(c, err)
-			return
-		}
-		_, _ = h.redis.Set(context.Background(), "modelarts-token", t, time.Hour*24)
-	}
+	t := h.gettoken()
 	head := map[string]string{
 		"X-Auth-Token": t,
 	}
-	var data []byte
+	var (
+		data []byte
+		err  error
+	)
 
 	data, err = httprequest.Post(pu, []byte(fmt.Sprintf(`{"question":"%s"}`, q)), head, nil)
 	if err != nil {

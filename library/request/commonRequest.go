@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -64,7 +65,8 @@ func mainRequest(url, method string, bytesData interface{}, headers map[string]s
 		resByte, err = ioutil.ReadAll(resp.Body)
 
 		if resp.StatusCode > http.StatusMultipleChoices || resp.Body == nil {
-			return attempt < 3, errors.New("响应状态码有误")
+			logger.SLog.Error(fmt.Sprintf("statusCode is %d ,data : %s", resp.StatusCode, string(resByte)))
+			return attempt < 3, errors.New(fmt.Sprintf("statusCode is %d ,data : %s", resp.StatusCode, string(resByte)))
 		}
 
 		return attempt < 3, err

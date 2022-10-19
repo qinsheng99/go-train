@@ -123,7 +123,7 @@ func (h *Handle) File(c *gin.Context) {
 	common.Success(c, re)
 }
 
-func token() (string, error) {
+func (h *Handle) token() (string, error) {
 	body := fmt.Sprintf(`{"auth": {"identity": {"methods": ["password"],"password": {"user": {"name": "%v","password": "%v","domain": {"name": "%v"}}}},"scope": {"project": {"name": "cn-central-221"}}}}`,
 		"wuhanjisuan191", "986%#hwAA1", "wuhanjisuan191")
 	post, err := http.Post("https://iam-pub.cn-central-221.ovaijisuan.com/v3/auth/tokens", "application/json", strings.NewReader(body))
@@ -135,10 +135,7 @@ func token() (string, error) {
 
 func (h *Handle) send(path string) ([]byte, error) {
 	var data []byte
-	t, err := token()
-	if err != nil {
-		return nil, err
-	}
+	t := h.gettoken()
 	buf := new(bytes.Buffer)
 	writer := multipart.NewWriter(buf)
 	file, _ := writer.CreateFormFile("file", "xiaohu.png")
@@ -197,21 +194,14 @@ func (h *Handle) TestImage(c *gin.Context) {
 		return
 	}
 
-	t, err := h.redis.Get(context.Background(), "modelarts-token")
-	if len(t) == 0 || err != nil {
-		t, err = token()
-		if err != nil {
-			common.Failure(c, err)
-			return
-		}
-		_, _ = h.redis.Set(context.Background(), "modelarts-token", t, time.Hour*24)
-	}
-
-	var url string
-	var data []byte
+	var (
+		url  string
+		data []byte
+		err  error
+	)
 	if req.Flag {
 		lockthree.Lock()
-		data, err = h.textimage(threeimage, t, req)
+		data, err = h.textimage(threeimage, h.gettoken(), req)
 		lockthree.Unlock()
 		if err != nil {
 			common.Failure(c, err)
@@ -223,7 +213,7 @@ func (h *Handle) TestImage(c *gin.Context) {
 			common.Failure(c, err)
 			return
 		}
-		data, err = h.textimage(url, t, req)
+		data, err = h.textimage(url, h.gettoken(), req)
 		mmap.Store(url, true)
 		if err != nil {
 			common.Failure(c, err)
@@ -243,4 +233,17 @@ func (h *Handle) TestImage(c *gin.Context) {
 		return
 	}
 	common.Success(c, result)
+}
+
+func (h *Handle) gettoken() string {
+	t, err := h.redis.Get(context.Background(), "modelarts-token")
+	if len(t) == 0 || err != nil {
+		t, err = h.token()
+		if err != nil {
+			return ""
+		}
+		_, _ = h.redis.Set(context.Background(), "modelarts-token", t, time.Hour*24)
+	}
+
+	return t
 }

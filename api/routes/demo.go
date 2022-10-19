@@ -23,6 +23,8 @@ func Demo(e *api.Entry, c *gin.Engine) {
 
 			group.POST("/pangu", d.Pangu)
 
+			group.GET("/luojia", d.Luojia)
+
 		}
 	}(e.NewDemo)
 }

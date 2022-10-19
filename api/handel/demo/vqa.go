@@ -2,7 +2,6 @@ package demo
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -13,7 +12,6 @@ import (
 	"os"
 	path2 "path"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -51,15 +49,7 @@ func (h *Handle) vqa2(c *gin.Context) {
 		imageFile *os.File
 		t         string
 	)
-	t, err = h.redis.Get(context.Background(), "modelarts-token")
-	if len(t) == 0 || err != nil {
-		t, err = token()
-		if err != nil {
-			common.Failure(c, err)
-			return
-		}
-		_, _ = h.redis.Set(context.Background(), "modelarts-token", t, time.Hour*24)
-	}
+	t = h.gettoken()
 
 	buf := new(bytes.Buffer)
 	writer := multipart.NewWriter(buf)
@@ -136,20 +126,13 @@ func (h *Handle) vqa4(c *gin.Context, v string) {
 		common.QueryFailure(c, err)
 		return
 	}
-	t, err := h.redis.Get(context.Background(), "modelarts-token")
-	if len(t) == 0 || err != nil {
-		t, err = token()
-		if err != nil {
-			common.Failure(c, err)
-			return
-		}
-		_, _ = h.redis.Set(context.Background(), "modelarts-token", t, time.Hour*24)
-	}
+	t := h.gettoken()
 	var (
 		request *http.Request
 		resp    *http.Response
 		bys     []byte
 		url     string
+		err     error
 	)
 	url = vqaimage4
 	if v == "3" {
