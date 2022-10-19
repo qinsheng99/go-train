@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -45,6 +46,11 @@ func (h *Handle) Pangu(c *gin.Context) {
 		common.Failure(c, err)
 		return
 	}
+	var result string = pres.Result
 
-	common.Success(c, pres)
+	if i := strings.IndexByte(pres.Result, '\n'); i > 0 && q == pres.Result[:i] {
+		result = pres.Result[i+1:]
+	}
+
+	common.Success(c, result)
 }
