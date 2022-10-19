@@ -25,6 +25,8 @@ func CeShi(e *api.Entry, c *gin.Engine) {
 
 			group.GET("/li-kou", h.LiKou)
 
+			group.POST("/purl", h.Purl)
+
 		}
 	}(e.NewHandler)
 }

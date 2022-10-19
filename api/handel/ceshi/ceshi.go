@@ -5,6 +5,7 @@ import (
 	_ "net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/qinsheng99/goWeb/api/entity"
 	crequest "github.com/qinsheng99/goWeb/api/entity/ceshi/request"
 	drequest "github.com/qinsheng99/goWeb/api/entity/drainage/request"
@@ -14,6 +15,7 @@ import (
 	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
 	"github.com/qinsheng99/goWeb/internal/service/drainage"
 	"github.com/qinsheng99/goWeb/library/pool"
+	"github.com/qinsheng99/goWeb/library/purl"
 	httprequest "github.com/qinsheng99/goWeb/library/request"
 	"github.com/qinsheng99/hello"
 )
@@ -188,40 +190,6 @@ func (h *Handler) GetDrainageList(c *gin.Context) {
 }
 
 func (h *Handler) Http(c *gin.Context) {
-	//url := "http://localhost:111/public/index"
-	//bodyData := make(map[string]interface{})
-	//bodyData["uri"] = "drainage2108242100ldys2u6"
-	//byteData, err := json.Marshal(bodyData)
-	//if err != nil {
-	//	common.Failure(c, err)
-	//	return
-	//}
-	//res, err := http.NewRequest("POST", url, bytes.NewReader(byteData))
-	//if err != nil {
-	//	common.Failure(c, err)
-	//	return
-	//}
-	////res.Header.Set("Content-Type", "application/json")
-	////res.Header.Set("Cookie", "cft-userInfo="+"6cA90jBT1sLu6%2BnJyV9C7t2dM%2FUtQOCmOy74RSrgnhQ"+"FSxNLjFQ2AY77cvkwLpAQyK78PIetKRzHlHcS7gKHaF93cRp"+"h6XcLD1mqWmKrKAj6R7K9ogsaVmHjgZSAu9g6um3BZ2%2F0yfb"+"XTF05Kynw5cOUVK1H4P994jVuFUxrhBXcn2DGEAYtWxbxAey"+"Dwpf97Rz0OvZNBek3vviGhzADgy1yEKUcrbT3A4RBHdtsbXDJR%2"+"FL7nfOCcsCh2aZovVqoo1fuYgjoBQ4emDWPljmPABdCvbHF%2BO"+"oG1C%2Bw8Jby6WU%3D")
-	//resp, err := client.Do(res)
-	//if err != nil || resp == nil {
-	//	common.Failure(c, err)
-	//	return
-	//}
-	//defer resp.Body.Close()
-	//
-	//resByte, err := ioutil.ReadAll(resp.Body)
-	//if err != nil {
-	//	common.Failure(c, err)
-	//	return
-	//}
-	//var data dresponse.Response
-	//err = json.Unmarshal(resByte, &data)
-	//if err != nil {
-	//	common.Failure(c, err)
-	//	return
-	//}
-	//common.Success(c, data)
 	url := "http://localhost:8000/index"
 	bodyData := make(map[string]interface{})
 	bodyData["name"] = "17339911151"
@@ -230,7 +198,7 @@ func (h *Handler) Http(c *gin.Context) {
 		common.Failure(c, err)
 		return
 	}
-	request, err := httprequest.Get(url, byteData, nil)
+	request, err := httprequest.Get(url, byteData, nil, nil)
 	if err != nil {
 		common.Failure(c, err)
 		return
@@ -275,4 +243,25 @@ func (h *Handler) LiKou(c *gin.Context) {
 	// 	}
 	// }
 	// common.Success(c, max)
+}
+
+func (h *Handler) Purl(c *gin.Context) {
+	var req struct {
+		Coordinates []string `json:"coordinates"`
+	}
+
+	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
+		common.QueryFailure(c, err)
+		return
+	}
+
+	p, err := purl.PasePurl(req.Coordinates[0])
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	p["version"], _ = p.GetVersion()
+	p["repo"], _ = p.GetRepo()
+
+	common.Success(c, p)
 }
