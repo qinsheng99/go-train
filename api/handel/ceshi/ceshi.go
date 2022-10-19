@@ -5,7 +5,6 @@ import (
 	_ "net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/qinsheng99/goWeb/api/entity"
 	crequest "github.com/qinsheng99/goWeb/api/entity/ceshi/request"
 	drequest "github.com/qinsheng99/goWeb/api/entity/drainage/request"
@@ -15,7 +14,6 @@ import (
 	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
 	"github.com/qinsheng99/goWeb/internal/service/drainage"
 	"github.com/qinsheng99/goWeb/library/pool"
-	"github.com/qinsheng99/goWeb/library/purl"
 	httprequest "github.com/qinsheng99/goWeb/library/request"
 	"github.com/qinsheng99/hello"
 )
@@ -243,25 +241,4 @@ func (h *Handler) LiKou(c *gin.Context) {
 	// 	}
 	// }
 	// common.Success(c, max)
-}
-
-func (h *Handler) Purl(c *gin.Context) {
-	var req struct {
-		Coordinates []string `json:"coordinates"`
-	}
-
-	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
-		common.QueryFailure(c, err)
-		return
-	}
-
-	p, err := purl.PasePurl(req.Coordinates[0])
-	if err != nil {
-		common.Failure(c, err)
-		return
-	}
-	p["version"], _ = p.GetVersion()
-	p["repo"], _ = p.GetRepo()
-
-	common.Success(c, p)
 }

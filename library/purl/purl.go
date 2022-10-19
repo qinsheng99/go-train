@@ -4,6 +4,8 @@ import (
 	"errors"
 	"regexp"
 	"strings"
+
+	repoMeta "github.com/qinsheng99/goWeb/internal/dao/persistence/repo_meta"
 )
 
 type Purl map[string]interface{}
@@ -28,10 +30,12 @@ func PasePurl(purl string) (result Purl, err error) {
 		result["type"] = purl1[0]
 
 		if len(paks) == 1 || len(paks) > 1 {
+			var meta repoMeta.RepoMeta
 			pkg := strings.Split(paks[0], "@")
 			if len(pkg) > 1 {
 				result["name"] = pkg[0]
 				result["version"] = pkg[1]
+				result["repoName"], _ = meta.GetRepo(pkg[0])
 			}
 			if len(paks) > 1 {
 				var qualifiers = make(map[string]string)
