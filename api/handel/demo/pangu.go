@@ -41,7 +41,7 @@ func (h *Handle) Pangu(c *gin.Context) {
 	}
 	var result string = pres.Result
 
-	if i := strings.IndexByte(pres.Result, '\n'); i > 0 && q == pres.Result[:i] {
+	if i := strings.IndexByte(pres.Result, '\n'); i > 0 && q == pres.Result[:i] && i+1 < len(pres.Result) {
 		result = pres.Result[i+1:]
 	}
 
