@@ -2,6 +2,7 @@ package demo
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -37,6 +38,10 @@ func (h *Handle) Luojia(c *gin.Context) {
 	err = json.Unmarshal(data, &luojiares)
 	if err != nil {
 		common.Failure(c, err)
+		return
+	}
+	if luojiares.Status != 200 {
+		common.Failure(c, errors.New("推理失败"))
 		return
 	}
 
