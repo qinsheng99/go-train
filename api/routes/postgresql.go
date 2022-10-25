@@ -2,9 +2,9 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/qinsheng99/goWeb/api"
-	"github.com/qinsheng99/goWeb/api/handel/postgresql"
-	"github.com/qinsheng99/goWeb/api/middleware"
+	"github.com/qinsheng99/go-train/api"
+	"github.com/qinsheng99/go-train/api/handel/postgresql"
+	"github.com/qinsheng99/go-train/api/middleware"
 )
 
 func Postgresql(e *api.Entry, c *gin.Engine) {

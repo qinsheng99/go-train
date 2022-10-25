@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/qinsheng99/goWeb/library/dataStructure/queue"
-	stack2 "github.com/qinsheng99/goWeb/library/dataStructure/stack"
+	"github.com/qinsheng99/go-train/library/dataStructure/queue"
+	stack2 "github.com/qinsheng99/go-train/library/dataStructure/stack"
 )
 
 // BinaryNode 二叉树
@@ -119,7 +119,7 @@ func NoRecursive3(node *BinaryNode) {
 func getWidthUseMap(node *BinaryNode) {
 	var m = make(map[interface{}]int, 20)
 	var max, level, nodes = -1, 1, 0
-	q:= queue.NewQueue()
+	q := queue.NewQueue()
 	q.Add(node)
 	m[node] = 1
 	for !q.IsEmpty() {
@@ -207,6 +207,7 @@ func souSuoBinaryTree(node *BinaryNode) bool {
 	//}
 	//return souSuoBinaryTree(node.right)
 }
+
 type SouSuo struct {
 	res      bool
 	min, max int

@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"strconv"
 
-	"github.com/qinsheng99/goWeb/internal/model"
+	"github.com/qinsheng99/go-train/internal/model"
 )
 
 func IntSliceToInf(s []int) []interface{} {

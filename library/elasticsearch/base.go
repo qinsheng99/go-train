@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/olivere/elastic/v7"
-	"github.com/qinsheng99/goWeb/library/config"
+	"github.com/qinsheng99/go-train/library/config"
 )
 
 type (

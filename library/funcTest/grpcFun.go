@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/qinsheng99/goWeb/api/entity/grpc/response"
+	"github.com/qinsheng99/go-train/api/entity/grpc/response"
 
 	"github.com/gin-gonic/gin"
 	pb "github.com/qinsheng99/example/grpc-example/route"

@@ -14,7 +14,7 @@ func StructToMap(info interface{}) (bson.M, error) {
 }
 
 // import (
-// 	"github.com/qinsheng99/goWeb/err"
+// 	"github.com/qinsheng99/go-train/err"
 // 	"net/http"
 //
 // 	"github.com/gin-gonic/gin"

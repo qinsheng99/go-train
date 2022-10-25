@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/qinsheng99/goWeb/library/config"
+	"github.com/qinsheng99/go-train/library/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

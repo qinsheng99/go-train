@@ -5,11 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	mongoRequest "github.com/qinsheng99/goWeb/api/entity/mongo"
-	"github.com/qinsheng99/goWeb/api/tools/common"
-	"github.com/qinsheng99/goWeb/internal/model"
-	mongoClient "github.com/qinsheng99/goWeb/library/mongo"
-	"github.com/qinsheng99/goWeb/library/redisClient"
+	mongoRequest "github.com/qinsheng99/go-train/api/entity/mongo"
+	"github.com/qinsheng99/go-train/api/tools/common"
+	"github.com/qinsheng99/go-train/internal/model"
+	mongoClient "github.com/qinsheng99/go-train/library/mongo"
+	"github.com/qinsheng99/go-train/library/redisClient"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

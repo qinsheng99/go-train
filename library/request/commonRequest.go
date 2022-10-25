@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/qinsheng99/goWeb/library/logger"
-	"github.com/qinsheng99/goWeb/library/try"
+	"github.com/qinsheng99/go-train/library/logger"
+	"github.com/qinsheng99/go-train/library/try"
 )
 
 var (

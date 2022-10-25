@@ -4,12 +4,12 @@
 package api
 
 import (
-	"github.com/qinsheng99/goWeb/api/handel"
-	"github.com/qinsheng99/goWeb/internal"
-	"github.com/qinsheng99/goWeb/library/db"
-	"github.com/qinsheng99/goWeb/library/elasticsearch"
-	"github.com/qinsheng99/goWeb/library/mongo"
-	"github.com/qinsheng99/goWeb/library/redisClient"
+	"github.com/qinsheng99/go-train/api/handel"
+	"github.com/qinsheng99/go-train/internal"
+	"github.com/qinsheng99/go-train/library/db"
+	"github.com/qinsheng99/go-train/library/elasticsearch"
+	"github.com/qinsheng99/go-train/library/mongo"
+	"github.com/qinsheng99/go-train/library/redisClient"
 
 	"github.com/google/wire"
 )

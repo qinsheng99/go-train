@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	repoMeta "github.com/qinsheng99/goWeb/internal/dao/persistence/repo_meta"
+	repoMeta "github.com/qinsheng99/go-train/internal/dao/persistence/repo_meta"
 )
 
 type Purl map[string]interface{}

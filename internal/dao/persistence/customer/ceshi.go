@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"time"
 
-	drequest "github.com/qinsheng99/goWeb/api/entity/drainage/request"
-	"github.com/qinsheng99/goWeb/internal/dao/idao"
-	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
-	"github.com/qinsheng99/goWeb/internal/model"
-	"github.com/qinsheng99/goWeb/library/db"
-	"github.com/qinsheng99/goWeb/library/funcTest"
+	drequest "github.com/qinsheng99/go-train/api/entity/drainage/request"
+	"github.com/qinsheng99/go-train/internal/dao/idao"
+	"github.com/qinsheng99/go-train/internal/dao/idao/customer"
+	"github.com/qinsheng99/go-train/internal/model"
+	"github.com/qinsheng99/go-train/library/db"
+	"github.com/qinsheng99/go-train/library/funcTest"
 
 	"gorm.io/gorm"
 )

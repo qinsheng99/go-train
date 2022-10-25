@@ -4,10 +4,10 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	postgresqlRequest "github.com/qinsheng99/goWeb/api/entity/postgresql"
-	"github.com/qinsheng99/goWeb/api/tools/common"
-	"github.com/qinsheng99/goWeb/internal/dao/idao/boy"
-	"github.com/qinsheng99/goWeb/internal/model"
+	postgresqlRequest "github.com/qinsheng99/go-train/api/entity/postgresql"
+	"github.com/qinsheng99/go-train/api/tools/common"
+	"github.com/qinsheng99/go-train/internal/dao/idao/boy"
+	"github.com/qinsheng99/go-train/internal/model"
 )
 
 type Handler struct {

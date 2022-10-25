@@ -2,9 +2,9 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/qinsheng99/goWeb/api"
-	sortHandler "github.com/qinsheng99/goWeb/api/handel/sort"
-	"github.com/qinsheng99/goWeb/api/middleware"
+	"github.com/qinsheng99/go-train/api"
+	sortHandler "github.com/qinsheng99/go-train/api/handel/sort"
+	"github.com/qinsheng99/go-train/api/middleware"
 )
 
 func Sort(e *api.Entry, c *gin.Engine) {

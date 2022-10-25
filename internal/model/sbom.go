@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/qinsheng99/goWeb/library/db"
+	"github.com/qinsheng99/go-train/library/db"
 )
 
 type SbomPackage struct {

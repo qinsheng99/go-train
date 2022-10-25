@@ -1,9 +1,9 @@
 package ServiceMysql
 
 import (
-	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
-	"github.com/qinsheng99/goWeb/internal/model"
-	"github.com/qinsheng99/goWeb/library/db"
+	"github.com/qinsheng99/go-train/internal/dao/idao/customer"
+	"github.com/qinsheng99/go-train/internal/model"
+	"github.com/qinsheng99/go-train/library/db"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -69,9 +69,9 @@ func (m *MysqlService) UpdateData(id int, data string) (err error) {
 }
 
 func (m *MysqlService) GetCeshiEsData() (datas []*model.CeshiEs, err error) {
-	var pageSize , page, id, count = 10 ,1, 0, 200
+	var pageSize, page, id, count = 10, 1, 0, 200
 	var ceshi []*model.Ceshi
-	for  {
+	for {
 		err = m.db.Db.Model(&model.Ceshi{}).
 			Where("id > ?", id).
 			Limit(pageSize).
@@ -82,11 +82,11 @@ func (m *MysqlService) GetCeshiEsData() (datas []*model.CeshiEs, err error) {
 		}
 		for _, v := range ceshi {
 			datas = append(datas, &model.CeshiEs{
-				Id: v.Id,
-				Uri: v.Uri,
-				Tag: v.Tag,
-				BackName: v.BackName,
-				IsDelete: v.IsDelete,
+				Id:         v.Id,
+				Uri:        v.Uri,
+				Tag:        v.Tag,
+				BackName:   v.BackName,
+				IsDelete:   v.IsDelete,
 				CreateTime: v.CreateTime,
 				DeleteTime: v.DeleteTime,
 			})

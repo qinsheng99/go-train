@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/qinsheng99/goWeb/api"
+	"github.com/qinsheng99/go-train/api"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 

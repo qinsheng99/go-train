@@ -3,9 +3,9 @@ package routes
 import (
 	"net/http"
 
-	"github.com/qinsheng99/goWeb/api"
-	"github.com/qinsheng99/goWeb/api/handel/demo"
-	"github.com/qinsheng99/goWeb/api/middleware"
+	"github.com/qinsheng99/go-train/api"
+	"github.com/qinsheng99/go-train/api/handel/demo"
+	"github.com/qinsheng99/go-train/api/middleware"
 
 	"github.com/gin-gonic/gin"
 )

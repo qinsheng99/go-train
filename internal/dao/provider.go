@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/qinsheng99/goWeb/internal/dao/persistence/customer"
+	"github.com/qinsheng99/go-train/internal/dao/persistence/customer"
 
 	"github.com/google/wire"
 )

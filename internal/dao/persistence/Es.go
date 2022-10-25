@@ -6,20 +6,20 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/qinsheng99/goWeb/api/entity/ceshi/request"
-	crequest "github.com/qinsheng99/goWeb/api/entity/ceshi/request"
-	"github.com/qinsheng99/goWeb/api/entity/ceshi/response"
-	Err "github.com/qinsheng99/goWeb/err"
-	"github.com/qinsheng99/goWeb/internal/dao/idao"
-	"github.com/qinsheng99/goWeb/internal/model"
-	"github.com/qinsheng99/goWeb/library/elasticsearch"
+	"github.com/qinsheng99/go-train/api/entity/ceshi/request"
+	crequest "github.com/qinsheng99/go-train/api/entity/ceshi/request"
+	"github.com/qinsheng99/go-train/api/entity/ceshi/response"
+	Err "github.com/qinsheng99/go-train/err"
+	"github.com/qinsheng99/go-train/internal/dao/idao"
+	"github.com/qinsheng99/go-train/internal/model"
+	"github.com/qinsheng99/go-train/library/elasticsearch"
 
 	"github.com/olivere/elastic/v7"
 )
 
 const (
 	EsIndexCustomerFollowerUserListIndex = "customer_follower_user_list_index"
-	EsIndexCeshi = "ceshi_index"
+	EsIndexCeshi                         = "ceshi_index"
 )
 
 type EsDao struct {
@@ -185,7 +185,7 @@ func (e *EsDao) Get(q crequest.CeShiGetRequest) (*elastic.SearchResult, error) {
 	return res, nil
 }
 
-func (e *EsDao) RefreshCeshi(datas []*model.CeshiEs){
+func (e *EsDao) RefreshCeshi(datas []*model.CeshiEs) {
 	for _, v := range datas {
 		_, err := e.Es.Client.Index().
 			Index(EsIndexCeshi).
@@ -198,7 +198,7 @@ func (e *EsDao) RefreshCeshi(datas []*model.CeshiEs){
 	}
 }
 
-func (e *EsDao) GetAllEsData() (datas []model.CeshiEs,err error) {
+func (e *EsDao) GetAllEsData() (datas []model.CeshiEs, err error) {
 	var data model.CeshiEs
 	res, err := e.Es.Client.Search().Index(EsIndexCeshi).
 		Sort("id", true).

@@ -10,13 +10,13 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-redis/redis/v8"
 	pb "github.com/qinsheng99/example/grpc-example/route"
-	"github.com/qinsheng99/goWeb/api/entity/redis/request"
-	"github.com/qinsheng99/goWeb/api/tools/common"
-	"github.com/qinsheng99/goWeb/internal/service/ceshi"
-	"github.com/qinsheng99/goWeb/library/etcd"
-	"github.com/qinsheng99/goWeb/library/funcTest"
-	"github.com/qinsheng99/goWeb/library/redisClient"
-	timeFun "github.com/qinsheng99/goWeb/library/time"
+	"github.com/qinsheng99/go-train/api/entity/redis/request"
+	"github.com/qinsheng99/go-train/api/tools/common"
+	"github.com/qinsheng99/go-train/internal/service/ceshi"
+	"github.com/qinsheng99/go-train/library/etcd"
+	"github.com/qinsheng99/go-train/library/funcTest"
+	"github.com/qinsheng99/go-train/library/redisClient"
+	timeFun "github.com/qinsheng99/go-train/library/time"
 	"google.golang.org/grpc"
 )
 
@@ -49,7 +49,7 @@ func (h *Handle) SetR(c *gin.Context) {
 	//common.Success(c, b)
 	lock, err := redisClient.Lock(context.Background(), "out", 1, time.Second*60)
 	if err != nil {
-		common.Failure(c,err)
+		common.Failure(c, err)
 		return
 	}
 
@@ -63,11 +63,11 @@ func (h *Handle) SetR(c *gin.Context) {
 	unLock, err := redisClient.UnLock(context.Background(), []string{"out"}, 1)
 
 	if err != nil {
-		common.Failure(c,err)
+		common.Failure(c, err)
 		return
 	}
 
-	common.Success(c,unLock)
+	common.Success(c, unLock)
 }
 
 func (h *Handle) GetR(c *gin.Context) {
@@ -377,7 +377,7 @@ func (h *Handle) SetEtcd(c *gin.Context) {
 	_, err := etcd.Put(context.Background(), "conf", "{\"mode\":\"debug\",\"port\":111,\"log\":{\"level\":\"debug\",\"filename\":\"../library/logger/app.log\",\"maxsize\":200,\"max_age\":7,\"max_backups\":10}}")
 
 	if err != nil {
-		common.Failure(c,err)
+		common.Failure(c, err)
 	}
 	common.Success(c, "")
 }
@@ -386,12 +386,12 @@ func (h *Handle) GetEtcd(c *gin.Context) {
 	var m = make(map[string]string)
 	get, err := etcd.Get(context.Background(), "zz")
 	if err != nil {
-		common.Failure(c,err)
+		common.Failure(c, err)
 		return
 	}
 	for _, v := range get.Kvs {
 		m[string(v.Key)] = string(v.Value)
 	}
-	common.Success(c,m)
+	common.Success(c, m)
 
 }

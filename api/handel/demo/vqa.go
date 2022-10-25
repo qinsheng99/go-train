@@ -15,8 +15,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/qinsheng99/goWeb/api/entity/demo"
-	"github.com/qinsheng99/goWeb/api/tools/common"
+	"github.com/qinsheng99/go-train/api/entity/demo"
+	"github.com/qinsheng99/go-train/api/tools/common"
 )
 
 func (h *Handle) vqa2(c *gin.Context) {

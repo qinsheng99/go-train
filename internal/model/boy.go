@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/lib/pq"
-	"github.com/qinsheng99/goWeb/library/db"
+	"github.com/qinsheng99/go-train/library/db"
 	"gorm.io/gorm"
 )
 

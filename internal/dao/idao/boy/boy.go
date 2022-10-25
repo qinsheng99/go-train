@@ -1,8 +1,8 @@
 package boy
 
 import (
-	postgresqlRequest "github.com/qinsheng99/goWeb/api/entity/postgresql"
-	"github.com/qinsheng99/goWeb/internal/model"
+	postgresqlRequest "github.com/qinsheng99/go-train/api/entity/postgresql"
+	"github.com/qinsheng99/go-train/internal/model"
 )
 
 type Boyimpl interface {

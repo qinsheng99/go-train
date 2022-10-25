@@ -17,9 +17,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/qinsheng99/goWeb/api/tools/common"
-	"github.com/qinsheng99/goWeb/library/redisClient"
-	httprequest "github.com/qinsheng99/goWeb/library/request"
+	"github.com/qinsheng99/go-train/api/tools/common"
+	"github.com/qinsheng99/go-train/library/redisClient"
+	httprequest "github.com/qinsheng99/go-train/library/request"
 )
 
 type Handle struct {

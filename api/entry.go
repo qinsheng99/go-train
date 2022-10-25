@@ -1,14 +1,14 @@
 package api
 
 import (
-	"github.com/qinsheng99/goWeb/api/handel/ceshi"
-	"github.com/qinsheng99/goWeb/api/handel/demo"
-	esHandle "github.com/qinsheng99/goWeb/api/handel/es"
-	"github.com/qinsheng99/goWeb/api/handel/mongo"
-	"github.com/qinsheng99/goWeb/api/handel/mysql"
-	"github.com/qinsheng99/goWeb/api/handel/postgresql"
-	"github.com/qinsheng99/goWeb/api/handel/redis"
-	sortHandler "github.com/qinsheng99/goWeb/api/handel/sort"
+	"github.com/qinsheng99/go-train/api/handel/ceshi"
+	"github.com/qinsheng99/go-train/api/handel/demo"
+	esHandle "github.com/qinsheng99/go-train/api/handel/es"
+	"github.com/qinsheng99/go-train/api/handel/mongo"
+	"github.com/qinsheng99/go-train/api/handel/mysql"
+	"github.com/qinsheng99/go-train/api/handel/postgresql"
+	"github.com/qinsheng99/go-train/api/handel/redis"
+	sortHandler "github.com/qinsheng99/go-train/api/handel/sort"
 )
 
 type Entry struct {

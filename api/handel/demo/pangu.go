@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/qinsheng99/goWeb/api/tools/common"
-	httprequest "github.com/qinsheng99/goWeb/library/request"
+	"github.com/qinsheng99/go-train/api/tools/common"
+	httprequest "github.com/qinsheng99/go-train/library/request"
 )
 
 const pu = "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/302dc54c-144f-425d-b0e7-767d07f8d180/infer/text"

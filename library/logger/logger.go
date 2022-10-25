@@ -13,7 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/natefinch/lumberjack"
-	"github.com/qinsheng99/goWeb/library/config"
+	"github.com/qinsheng99/go-train/library/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )

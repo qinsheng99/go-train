@@ -1,6 +1,6 @@
 package response
 
-import "github.com/qinsheng99/goWeb/internal/model"
+import "github.com/qinsheng99/go-train/internal/model"
 
 type DrainageResponse struct {
 	Name      string           `json:"name"`

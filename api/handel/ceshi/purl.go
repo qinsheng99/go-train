@@ -3,8 +3,8 @@ package ceshi
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/qinsheng99/goWeb/api/tools/common"
-	"github.com/qinsheng99/goWeb/library/purl"
+	"github.com/qinsheng99/go-train/api/tools/common"
+	"github.com/qinsheng99/go-train/library/purl"
 )
 
 func (h *Handler) Purl(c *gin.Context) {

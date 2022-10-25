@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/qinsheng99/goWeb/api/tools/common"
-	httprequest "github.com/qinsheng99/goWeb/library/request"
+	"github.com/qinsheng99/go-train/api/tools/common"
+	httprequest "github.com/qinsheng99/go-train/library/request"
 )
 
 const luojia = "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/e3f5d06e-4c1f-4b62-b2f4-123d6c22d244/infer/image"

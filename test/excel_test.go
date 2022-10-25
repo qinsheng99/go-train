@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/qinsheng99/goWeb/library/excel"
+	"github.com/qinsheng99/go-train/library/excel"
 )
 
 func TestExcel(t *testing.T) {

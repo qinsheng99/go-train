@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"github.com/qinsheng99/goWeb/api"
-	"github.com/qinsheng99/goWeb/api/handel/redis"
-	"github.com/qinsheng99/goWeb/api/middleware"
+	"github.com/qinsheng99/go-train/api"
+	"github.com/qinsheng99/go-train/api/handel/redis"
+	"github.com/qinsheng99/go-train/api/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,7 +39,6 @@ func Credis(e *api.Entry, c *gin.Engine) {
 			group.GET("/zrank", h.Zrank)
 
 			group.GET("/grpc", h.Grpc)
-
 
 			group.GET("/putEtcd", h.SetEtcd)
 			group.GET("/getEtcd", h.GetEtcd)

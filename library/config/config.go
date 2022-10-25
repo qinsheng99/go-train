@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/qinsheng99/goWeb/library/etcd"
+	"github.com/qinsheng99/go-train/library/etcd"
 	"go.uber.org/zap"
 )
 

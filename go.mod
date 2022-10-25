@@ -1,4 +1,4 @@
-module github.com/qinsheng99/goWeb
+module github.com/qinsheng99/go-train
 
 go 1.17
 

@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/qinsheng99/goWeb/api/errno"
+	"github.com/qinsheng99/go-train/api/errno"
 
 	"github.com/gin-gonic/gin"
 )

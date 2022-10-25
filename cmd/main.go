@@ -4,16 +4,16 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/qinsheng99/goWeb/api"
-	"github.com/qinsheng99/goWeb/api/routes"
-	"github.com/qinsheng99/goWeb/library/config"
-	"github.com/qinsheng99/goWeb/library/db"
-	"github.com/qinsheng99/goWeb/library/elasticsearch"
-	mongoClient "github.com/qinsheng99/goWeb/library/mongo"
-	"github.com/qinsheng99/goWeb/library/redisClient"
+	"github.com/qinsheng99/go-train/api"
+	"github.com/qinsheng99/go-train/api/routes"
+	"github.com/qinsheng99/go-train/library/config"
+	"github.com/qinsheng99/go-train/library/db"
+	"github.com/qinsheng99/go-train/library/elasticsearch"
+	mongoClient "github.com/qinsheng99/go-train/library/mongo"
+	"github.com/qinsheng99/go-train/library/redisClient"
 
-	//_ "github.com/qinsheng99/goWeb/library/etcd"
-	"github.com/qinsheng99/goWeb/library/logger"
+	//_ "github.com/qinsheng99/go-train/library/etcd"
+	"github.com/qinsheng99/go-train/library/logger"
 )
 
 func must(err error) {

@@ -3,9 +3,9 @@ package boy
 import (
 	"fmt"
 
-	"github.com/qinsheng99/goWeb/internal/dao/idao/boy"
-	"github.com/qinsheng99/goWeb/internal/model"
-	"github.com/qinsheng99/goWeb/library/db"
+	"github.com/qinsheng99/go-train/internal/dao/idao/boy"
+	"github.com/qinsheng99/go-train/internal/model"
+	"github.com/qinsheng99/go-train/library/db"
 )
 
 type boyDao struct {

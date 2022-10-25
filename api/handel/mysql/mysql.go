@@ -4,11 +4,11 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/qinsheng99/goWeb/api/tools/common"
-	"github.com/qinsheng99/goWeb/internal/dao/idao/boy"
-	"github.com/qinsheng99/goWeb/internal/dao/idao/customer"
-	"github.com/qinsheng99/goWeb/internal/model"
-	"github.com/qinsheng99/goWeb/library/pool"
+	"github.com/qinsheng99/go-train/api/tools/common"
+	"github.com/qinsheng99/go-train/internal/dao/idao/boy"
+	"github.com/qinsheng99/go-train/internal/dao/idao/customer"
+	"github.com/qinsheng99/go-train/internal/model"
+	"github.com/qinsheng99/go-train/library/pool"
 
 	"github.com/gin-gonic/gin"
 )

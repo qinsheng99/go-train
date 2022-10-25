@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 
 	"github.com/jinzhu/gorm/dialects/postgres"
-	postgresqlRequest "github.com/qinsheng99/goWeb/api/entity/postgresql"
-	"github.com/qinsheng99/goWeb/internal/dao/idao/boy"
-	"github.com/qinsheng99/goWeb/internal/model"
+	postgresqlRequest "github.com/qinsheng99/go-train/api/entity/postgresql"
+	"github.com/qinsheng99/go-train/internal/dao/idao/boy"
+	"github.com/qinsheng99/go-train/internal/model"
 )
 
 type postgresqlService struct {
