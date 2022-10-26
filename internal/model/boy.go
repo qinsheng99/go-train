@@ -11,12 +11,14 @@ import (
 )
 
 type Boy struct {
-	Id           int64          `json:"id,omitempty" gorm:"column:id;type:int8"`
-	Name         string         `json:"name,omitempty" gorm:"column:name;type:varchar(30)"`
-	Informations postgres.Jsonb `gorm:"column:information;type:jsonb;default:'{}'" json:"information,omitempty"`
-	Json         postgres.Jsonb `gorm:"column:jsondata;type:json;default:'{}'" json:"json,omitempty"`
-	Arr          pq.Int64Array  `gorm:"column:arr;type:integer[]" json:"arr,omitempty"`
-	UUid         uuid.UUID      `gorm:"column:uuid;type:uuid" json:"uuid,omitempty"`
+	Id            int64          `json:"id,omitempty" gorm:"column:id;type:int8"`
+	Name          string         `json:"name,omitempty" gorm:"column:name;type:varchar(30)"`
+	Informations  postgres.Jsonb `gorm:"column:information;type:jsonb;default:'{}'" json:"-"`
+	Informationss string         `gorm:"-" json:"information,omitempty"`
+	Json          postgres.Jsonb `gorm:"column:jsondata;type:json;default:'{}'" json:"-"`
+	Jsons         string         `gorm:"-" json:"json,omitempty"`
+	Arr           pq.Int64Array  `gorm:"column:arr;type:integer[]" json:"arr,omitempty"`
+	UUid          uuid.UUID      `gorm:"column:uuid;type:uuid" json:"uuid,omitempty"`
 }
 
 type BoyArr struct {

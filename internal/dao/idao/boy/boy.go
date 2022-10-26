@@ -9,18 +9,21 @@ type Boyimpl interface {
 	Getlist() ([]*model.Boy, error)
 	GetAddress(string, string) ([]*model.Boy, error)
 
-	GetOne(id int64) (data *model.Boy, err error)
+	GetOne(int64) (*model.Boy, error)
 
-	CreateOne(data *model.Boy) (_ *model.Boy, err error)
+	CreateOne(*model.Boy) (*model.Boy, error)
 
-	FindArrOne(index int64, data interface{}) (err error)
+	FindArrOne(int64, interface{}) error
+	FindJson(string, bool) ([]*model.Boy, error)
 }
 
 type BoyimplService interface {
 	GetBoylist() ([]*model.Boy, error)
 	GetBoyAddress(string, string) ([]*model.Boy, error)
-	GetBoyOne(id int64) (data *model.Boy, err error)
-	FindArrOne(index int64) (data []model.BoyArr, err error)
+	GetBoyOne(int64) (*model.Boy, error)
+	FindArrOne(int64) ([]model.BoyArr, error)
 
-	CreateOne(data postgresqlRequest.Boy) (_ *model.Boy, err error)
+	CreateOne(postgresqlRequest.Boy) (*model.Boy, error)
+
+	FindJson(string, bool) ([]*model.Boy, error)
 }

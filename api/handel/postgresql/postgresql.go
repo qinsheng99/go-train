@@ -76,3 +76,15 @@ func (p *Handler) FindArrOne(c *gin.Context) {
 	}
 	common.Success(c, arr)
 }
+
+func (p *Handler) FindJson(c *gin.Context) {
+	query := c.Query("query")
+
+	data, err := p.boy.FindJson(query, c.Query("flag") == "true")
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	common.Success(c, data)
+}

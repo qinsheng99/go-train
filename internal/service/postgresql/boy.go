@@ -53,3 +53,16 @@ func (b *postgresqlService) FindArrOne(index int64) (data []model.BoyArr, err er
 	err = b.boy.FindArrOne(index, &data)
 	return
 }
+
+func (b *postgresqlService) FindJson(q string, f bool) (data []*model.Boy, err error) {
+	data, err = b.boy.FindJson(q, f)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, datum := range data {
+		datum.Jsons = string(datum.Json.RawMessage)
+		datum.Informationss = string(datum.Informations.RawMessage)
+	}
+	return
+}

@@ -17,6 +17,7 @@ func Postgresql(e *api.Entry, c *gin.Engine) {
 			groupPostgres.GET("/get-filter-data", m.GetPostgresFilter)
 			groupPostgres.GET("/get-one", m.GetPostgresOne)
 			groupPostgres.GET("/find-arr", m.FindArrOne)
+			groupPostgres.GET("/find-json", m.FindJson)
 		}
 	}(e.NewPostgreSql)
 }

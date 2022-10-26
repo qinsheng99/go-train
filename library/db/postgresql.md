@@ -82,3 +82,8 @@ CREATE TABLE "public"."boy" (
 ``` sql
     SELECT name,information->'address'->>'hunan' FROM boy   //{"age": 27, "address": {"hunan": "changsha"}} 返回changsha 
 ```
+
+- @>
+``` sql
+    select * from boy where information @> '[{"operator":"OR1"}]'   //jsonb中包含参数的
+```
