@@ -3,8 +3,8 @@ package pool
 import "sync"
 
 type GoFuncPool struct {
-	MaxLimit  int
-	Gochannel chan struct{}
+	maxLimit  int
+	gochannel chan struct{}
 	sy        sync.WaitGroup
 }
 
@@ -18,12 +18,12 @@ type GoFuncPoolOptions func(pool *GoFuncPool)
 
 func WithMaxLimit(max int) GoFuncPoolOptions {
 	return func(pool *GoFuncPool) {
-		pool.MaxLimit = max
+		pool.maxLimit = max
 
-		pool.Gochannel = make(chan struct{}, pool.MaxLimit)
+		pool.gochannel = make(chan struct{}, pool.maxLimit)
 
-		for i := 0; i < pool.MaxLimit; i++ {
-			pool.Gochannel <- struct{}{}
+		for i := 0; i < pool.maxLimit; i++ {
+			pool.gochannel <- struct{}{}
 		}
 	}
 }
@@ -38,23 +38,23 @@ func NewGoPool(options ...GoFuncPoolOptions) *GoFuncPool {
 }
 
 func (p *GoFuncPool) Submit(fn func()) {
-	channel := <-p.Gochannel
+	channel := <-p.gochannel
 	p.sy.Add(1)
 	go func() {
 		fn()
-		p.Gochannel <- channel
+		p.gochannel <- channel
 		defer p.sy.Done()
 	}()
 	p.sy.Wait()
 }
 
 func (p *GoFuncPool) Close() {
-	for i := 0; i < p.MaxLimit; i++ {
-		<-p.Gochannel
+	for i := 0; i < p.maxLimit; i++ {
+		<-p.gochannel
 	}
-	close(p.Gochannel)
+	close(p.gochannel)
 }
 
 func (p *GoFuncPool) Size() int {
-	return len(p.Gochannel)
+	return len(p.gochannel)
 }
