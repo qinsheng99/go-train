@@ -25,6 +25,8 @@ func Demo(e *api.Entry, c *gin.Engine) {
 
 			group.GET("/luojia", d.Luojia)
 
+			group.POST("/code", d.Code)
+
 		}
 	}(e.NewDemo)
 }
