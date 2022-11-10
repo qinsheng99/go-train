@@ -2,6 +2,7 @@ package demo
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -88,4 +89,60 @@ func (h *Handle) mag(lang string) (m string) {
 		m = `\n// Code generation finished, modify this comment to continue the generation.`
 	}
 	return
+}
+
+func (h *Handle) Code2(c *gin.Context) {
+	//{
+	// "samples": "# quick sort\ndef quick_sort(nums):\n",
+	// "language": "Python"
+	//}
+	const codeurl1 = "https://a2f051d4cabf45f885d7b0108edc9b9c.infer.ovaijisuan.com/v1/infers/468802b4-2b46-48f0-a17e-1f9d75c9490c/codegeex"
+	var (
+		data []byte
+		err  error
+		t    string
+		bys  []byte
+	)
+
+	var req struct {
+		Samples  string `json:"samples"`
+		Language string `json:"language"`
+	}
+
+	if err = c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
+		common.Failure(c, err)
+		return
+	}
+
+	t, err = h.token()
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	head := map[string]string{
+		"X-Auth-Token": t,
+	}
+
+	bys, err = json.Marshal(req)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	data, err = httprequest.Post(codeurl1, bys, head, nil)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	fmt.Println(string(data))
+
+	var pres = struct {
+		Result string
+	}{}
+
+	err = json.Unmarshal(data, &pres)
+	if err != nil {
+		common.Failure(c, err)
+		return
+	}
+	common.Success(c, pres.Result)
 }
