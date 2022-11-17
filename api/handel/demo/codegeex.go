@@ -137,6 +137,7 @@ func (h *Handle) Code2(c *gin.Context) {
 
 	var pres = struct {
 		Result string
+		Finish string
 	}{}
 
 	err = json.Unmarshal(data, &pres)
@@ -144,5 +145,5 @@ func (h *Handle) Code2(c *gin.Context) {
 		common.Failure(c, err)
 		return
 	}
-	common.Success(c, pres.Result)
+	common.Success(c, pres)
 }
