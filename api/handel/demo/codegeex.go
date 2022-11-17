@@ -136,8 +136,8 @@ func (h *Handle) Code2(c *gin.Context) {
 	fmt.Println(string(data))
 
 	var pres = struct {
-		Result string
-		Finish string
+		Result string `json:"result"`
+		Finish string `json:"finish"`
 	}{}
 
 	err = json.Unmarshal(data, &pres)
