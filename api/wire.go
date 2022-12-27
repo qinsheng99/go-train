@@ -6,6 +6,7 @@ package api
 import (
 	"github.com/qinsheng99/go-train/api/handel"
 	"github.com/qinsheng99/go-train/internal"
+	"github.com/qinsheng99/go-train/library"
 	"github.com/qinsheng99/go-train/library/db"
 	"github.com/qinsheng99/go-train/library/elasticsearch"
 	"github.com/qinsheng99/go-train/library/mongo"
@@ -20,6 +21,7 @@ func Init(
 	panic(wire.Build(
 		internal.InternalProvider,
 		handel.HandlerProvider,
+		library.LibraryProvider,
 		wire.Struct(new(Entry), "*"),
 	))
 }

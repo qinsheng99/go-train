@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/qinsheng99/go-train/internal/service/ceshi"
 	"github.com/qinsheng99/go-train/internal/service/drainage"
 	ServiceMysql "github.com/qinsheng99/go-train/internal/service/mysql"
 	servicePostgresql "github.com/qinsheng99/go-train/internal/service/postgresql"
@@ -12,4 +13,5 @@ var ServiceProvider = wire.NewSet(
 	drainage.NewDS,
 	ServiceMysql.NewMysqlService,
 	servicePostgresql.NewPostgresqlService,
+	ceshi.NewCeshi,
 )

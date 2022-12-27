@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/qinsheng99/go-train/api"
 	"github.com/qinsheng99/go-train/api/routes"
 	"github.com/qinsheng99/go-train/library/config"
