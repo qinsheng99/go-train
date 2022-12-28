@@ -30,7 +30,7 @@ import (
 
 // Injectors from wire.go:
 
-func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo *mongoClient.Mongo) (*Entry, error) {
+func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo *mongoClient.Mongo, post *db.BundlePostgresql) (*Entry, error) {
 	esImp := persistence.NewEsDao(es)
 	customerImp := customer.NewCustomerDao(bundleDb, esImp)
 	drainageDrainage := drainage.NewDS(customerImp)
@@ -40,7 +40,7 @@ func Init(bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo 
 	handle := redis.NewH(ceShiService, redisInterface)
 	ceshiMysqlImp := ServiceMysql.NewMysqlService(bundleDb)
 	mysqlHandler := mysql.NewMysql(ceshiMysqlImp)
-	boyimpl := boy.NewPostgresBoy()
+	boyimpl := boy.NewPostgresBoy(post)
 	boyimplService := servicePostgresql.NewPostgresqlService(boyimpl)
 	postgresqlHandler := postgresql.NewPostgreSql(boyimplService)
 	sortHandlerSortHandler := sortHandler.NewSort()

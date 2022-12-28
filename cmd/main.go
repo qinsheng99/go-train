@@ -24,12 +24,13 @@ func must(err error) {
 }
 
 var (
-	bundleDB *db.BundleDb
-	err      error
-	es       *elasticsearch.ES
-	redis    *redisClient.Redis
-	mo       *mongoClient.Mongo
-	e        *api.Entry
+	bundleDB      *db.BundleDb
+	bundlePostgre *db.BundlePostgresql
+	err           error
+	es            *elasticsearch.ES
+	redis         *redisClient.Redis
+	mo            *mongoClient.Mongo
+	e             *api.Entry
 )
 
 func main() {
@@ -51,7 +52,7 @@ func main() {
 		panic(err)
 	}
 
-	err = db.GetPostgresql(config.Conf.PostgresqlConfig)
+	bundlePostgre, err = db.GetPostgresql(config.Conf.PostgresqlConfig)
 	must(err)
 	es, err = elasticsearch.GetES(config.Conf.EsConfig)
 	if err != nil {
@@ -67,7 +68,7 @@ func main() {
 	mo, err = mongoClient.InitMongo(config.Conf.MongoConfig)
 	must(err)
 
-	e, err = api.Init(bundleDB, es, redis, mo)
+	e, err = api.Init(bundleDB, es, redis, mo, bundlePostgre)
 	must(err)
 	routes.Route(e, r)
 

@@ -16,7 +16,7 @@ import (
 )
 
 func Init(
-	bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo *mongoClient.Mongo,
+	bundleDb *db.BundleDb, es *elasticsearch.ES, r *redisClient.Redis, mo *mongoClient.Mongo, post *db.BundlePostgresql,
 ) (*Entry, error) {
 	panic(wire.Build(
 		internal.InternalProvider,
