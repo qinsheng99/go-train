@@ -14,7 +14,7 @@ type Mongos interface {
 }
 
 type MongoInterface interface {
-	Collection(name string, opts ...*options.CollectionOptions) Mongos
+	Collection(name string, opts ...*options.CollectionOptions) MongoInterface
 
 	InsertOne(ctx context.Context, document interface{}, opts ...*options.InsertOneOptions) (insertOne *mongo.InsertOneResult, err error)
 	InsertMany(ctx context.Context, document []interface{}, opts ...*options.InsertManyOptions) (insertOne *mongo.InsertManyResult, err error)
@@ -24,6 +24,8 @@ type MongoInterface interface {
 
 	Update(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (updates *mongo.UpdateResult, err error)
 	UpdatePush(ctx context.Context, filter interface{}, update interface{}, opts ...*options.UpdateOptions) (updates *mongo.UpdateResult, err error)
+
+	Aggregate(ctx context.Context, pipeline interface{}, data interface{}, opts ...*options.AggregateOptions) (err error)
 }
 
 type MongoCondition interface {

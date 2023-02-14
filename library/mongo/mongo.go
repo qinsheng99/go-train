@@ -15,13 +15,23 @@ type MongoStruct struct {
 	collection *mongo.Collection
 }
 
-func NewMongoStruct(m *Mongo) Mongos {
-	return &MongoStruct{
+type Mi struct {
+	I MongoInterface
+	C MongoCondition
+}
+
+func NewMongoStruct(m *Mongo) Mi {
+	mm := &MongoStruct{
 		mo: m,
+	}
+
+	return Mi{
+		I: mm,
+		C: mm,
 	}
 }
 
-func (m *MongoStruct) Collection(name string, opts ...*options.CollectionOptions) Mongos {
+func (m *MongoStruct) Collection(name string, opts ...*options.CollectionOptions) MongoInterface {
 	if m.mo.database == nil {
 		return m
 	}
@@ -30,6 +40,7 @@ func (m *MongoStruct) Collection(name string, opts ...*options.CollectionOptions
 	} else {
 		m.collection = m.mo.database.Collection(name, opts...)
 	}
+
 	return m
 }
 
@@ -39,6 +50,7 @@ func (m *MongoStruct) InsertOne(ctx context.Context, document interface{}, opts 
 		return
 	}
 	insertOne, err = m.collection.InsertOne(ctx, document, opts...)
+
 	return
 }
 
@@ -48,6 +60,7 @@ func (m *MongoStruct) InsertMany(ctx context.Context, document []interface{}, op
 		return
 	}
 	insertOne, err = m.collection.InsertMany(ctx, document, opts...)
+
 	return
 }
 
@@ -70,6 +83,7 @@ func (m *MongoStruct) Find(ctx context.Context, filter interface{}, data interfa
 	if err = m.scanf(ctx, data, find); err != nil {
 		return
 	}
+
 	return
 }
 
@@ -88,6 +102,7 @@ func (m *MongoStruct) validation(data interface{}, flag bool) error {
 			return errors.New("data is not slice")
 		}
 	}
+
 	return nil
 }
 
@@ -111,6 +126,7 @@ func (m *MongoStruct) FindOne(ctx context.Context, filter interface{}, data inte
 	if err = find.Decode(data); err != nil {
 		return
 	}
+
 	return
 }
 
@@ -132,6 +148,7 @@ func (m *MongoStruct) Update(ctx context.Context, filter interface{}, update int
 		return
 	}
 	updates, err = m.collection.UpdateMany(ctx, filter, update, opts...)
+
 	return
 }
 
@@ -141,5 +158,29 @@ func (m *MongoStruct) UpdatePush(ctx context.Context, filter interface{}, update
 		return
 	}
 	updates, err = m.collection.UpdateMany(ctx, filter, update, opts...)
+
+	return
+}
+
+func (m *MongoStruct) Aggregate(ctx context.Context, pipeline interface{}, data interface{}, opts ...*options.AggregateOptions) (err error) {
+	if m.collection == nil {
+		err = errors.New("mongo collection is nil")
+		return
+	}
+	var find *mongo.Cursor
+	find, err = m.collection.Aggregate(ctx, pipeline, opts...)
+
+	if err != nil {
+		return
+	}
+
+	if err = m.validation(data, true); err != nil {
+		return
+	}
+
+	if err = m.scanf(ctx, data, find); err != nil {
+		return
+	}
+
 	return
 }

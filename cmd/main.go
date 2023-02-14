@@ -54,16 +54,16 @@ func main() {
 
 	bundlePostgre, err = db.GetPostgresql(config.Conf.PostgresqlConfig)
 	must(err)
-	es, err = elasticsearch.GetES(config.Conf.EsConfig)
-	if err != nil {
-		fmt.Printf("ES connect failed , error is %v\n", err)
-		panic(err)
-	}
-	redis, err = redisClient.GetRedis(config.Conf.RedisConfig)
-	if err != nil {
-		fmt.Printf("Redis connect failed , error is %v\n", err)
-		panic(err)
-	}
+	//es, err = elasticsearch.GetES(config.Conf.EsConfig)
+	//if err != nil {
+	//	fmt.Printf("ES connect failed , error is %v\n", err)
+	//	panic(err)
+	//}
+	//redis, err = redisClient.GetRedis(config.Conf.RedisConfig)
+	//if err != nil {
+	//	fmt.Printf("Redis connect failed , error is %v\n", err)
+	//	panic(err)
+	//}
 
 	mo, err = mongoClient.InitMongo(config.Conf.MongoConfig)
 	must(err)

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+
 	"github.com/qinsheng99/go-train/api"
 	"github.com/qinsheng99/go-train/api/handel/mongo"
 	"github.com/qinsheng99/go-train/api/middleware"
@@ -18,6 +19,10 @@ func Mon(e *api.Entry, c *gin.Engine) {
 			group.GET("/find-one", e.FindOne)
 			group.GET("/update", e.Update)
 			group.GET("/push", e.Push)
+
+			group.GET("/insert-wukong", e.InsertWukong)
+			group.GET("/find-wukong", e.FindWukong)
+			group.POST("/aggregate-wukong", e.AggregateWukong)
 		}
 	}(e.NewMgo)
 }

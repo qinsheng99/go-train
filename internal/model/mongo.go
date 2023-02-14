@@ -34,3 +34,20 @@ type DField struct {
 	Description string `bson:"desc" json:"desc,omitempty"`
 	Required    bool   `bson:"required" json:"required"`
 }
+
+type DWuKong struct {
+	Id       string        `bson:"id"        json:"id"`
+	Samples  []DSample     `bson:"samples"   json:"samples"`
+	Pictures []DictureInfo `bson:"pictures"  json:"pictures"`
+}
+
+type DSample struct {
+	Num  int    `bson:"num"              json:"num"`
+	Name string `bson:"name"             json:"name"`
+}
+
+type DictureInfo struct {
+	Desc  string `bson:"desc"            json:"desc"`
+	Link  string `bson:"link"            json:"link"`
+	Style string `bson:"style"           json:"style"`
+}
