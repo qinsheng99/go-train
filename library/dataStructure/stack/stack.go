@@ -17,6 +17,7 @@ func CreateStack(size int) *Stack {
 
 func (s *Stack) Push(data interface{}) {
 	if s.IsFull() {
+		s.dilatation()
 	}
 
 	s.top++
@@ -25,6 +26,7 @@ func (s *Stack) Push(data interface{}) {
 
 func (s *Stack) Pop() interface{} {
 	if s.IsEmpty() {
+		return nil
 	}
 	tmp := s.data[s.top]
 	s.top--
@@ -34,6 +36,17 @@ func (s *Stack) Pop() interface{} {
 func (s *Stack) Clear() {
 	s.top = -1
 	s.data = make([]interface{}, s.size)
+}
+
+func (s *Stack) dilatation() {
+	size := s.size * 2
+
+	var res = make([]interface{}, size)
+
+	copy(res, s.data)
+
+	s.data = res
+	s.size = size
 }
 
 func (s *Stack) IsEmpty() bool {
